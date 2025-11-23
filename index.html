@@ -14,70 +14,98 @@
 body{background:var(--bg);color:var(--text);font-family:'Satoshi',sans-serif;overflow-x:hidden;}
 h1,h2,h3,h4,strong{font-family:'Clash Display',sans-serif;font-weight:600;letter-spacing:0.5px;}
 #myVideo{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0.38;filter:brightness(0.45) contrast(1.25);}
-@media (max-width: 768px) {#myVideo{opacity:0.25;}} /* меньше нагрузки на мобиле */
 
-/* Контейнер */
-.container{max-width:1320px;margin:0 auto;padding:100px 20px 120px;}
-@media (max-width: 768px) {.container{padding:80px 16px 100px;}}
-
-.card{background:var(--card);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:36px;padding:70px 60px;
+.container{max-width:1320px;margin:0 auto;padding:130px 20px 140px;}
+.card{background:var(--card);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:36px;padding:90px 80px;
     box-shadow:0 25px 70px rgba(0,0,0,0.6), 0 0 25px rgba(185,28,62,0.35);opacity:0;transform:translateY(70px);
     transition:all 1.4s cubic-bezier(0.23,1,0.32,1);}
-@media (max-width: 768px) {.card{padding:50px 30px;border-radius:28px;}}
 .card.show{opacity:1;transform:none;}
 
-/* Hero */
-.hero{display:flex;align-items:center;gap:60px;flex-wrap:wrap;}
-@media (max-width: 992px) {.hero{gap:40px;flex-direction:column;align-items:flex-start;}}
-.avatar{width:300px;height:300px;border-radius:32px;overflow:hidden;border:6px solid var(--accent);box-shadow:0 0 40px rgba(185,28,62,0.4);flex-shrink:0;}
-@media (max-width: 480px) {.avatar{width:220px;height:220px;border:5px solid var(--accent);}}
+.hero{display:flex;align-items:center;gap:90px;flex-wrap:wrap;}
+.avatar{width:320px;height:320px;border-radius:32px;overflow:hidden;border:7px solid var(--accent);box-shadow:0 0 40px rgba(185,28,62,0.4);flex-shrink:0;}
 .avatar img{width:100%;height:100%;object-fit:cover;}
-.intro{flex:1;min-width:320px;}
-h1{font-size:56px;line-height:1.1;margin-bottom:16px;}
-@media (max-width: 768px) {h1{font-size:42px;}}
-@media (max-width: 480px) {h1{font-size:36px;}}
-.subtitle{font-size:20px;margin-bottom:40px;}
-@media (max-width: 480px) {.subtitle{font-size:18px;}}
-.stats{display:flex;gap:50px;flex-wrap:wrap;margin:40px 0;}
-@media (max-width: 480px) {.stats{gap:30px;}}
-.stat{font-size:36px;}
-@media (max-width: 480px) {.stat{font-size:32px;}}
-.stat small{font-size:16px;margin-top:8px;}
+.intro{flex:1;min-width:360px;}
+h1{font-size:62px;color:#fff;line-height:1.1;margin-bottom:16px;}
+.subtitle{font-size:22px;color:var(--text-light);margin-bottom:48px;}
+.stats{display:flex;gap:70px;flex-wrap:wrap;margin:50px 0;}
+.stat{font-size:40px;font-weight:700;color:var(--accent);}
+.stat small{display:block;font-size:17px;color:var(--text-light);margin-top:10px;font-weight:500;}
 
-/* Кнопки и плеер */
-.cta-wrapper{display:flex;flex-wrap:wrap;gap:30px;margin-top:40px;align-items:center;}
-@media (max-width: 768px) {.cta-wrapper{flex-direction:column;align-items:stretch;}}
-.cta{padding:20px 48px;font-size:20px;border-radius:50px;}
-@media (max-width: 480px) {.cta{padding:18px 40px;font-size:19px;}}
-#music-player{min-width:320px;padding:14px 20px;gap:16px;}
-@media (max-width: 480px) {#music-player{min-width:auto;width:100%;flex-wrap:wrap;justify-content:space-between;}}
-#play-pause-btn{width:48px;height:48px;}
-.track-title{font-size:17px;}
-.progress-container{margin:8px 0;}
+.cta-wrapper{display:flex;align-items:center;gap:40px;margin-top:40px;flex-wrap:wrap;}
+.cta{display:inline-block;background:var(--accent);color:#fff;padding:22px 58px;border-radius:60px;font-weight:600;font-size:21px;
+    text-decoration:none;transition:0.45s;box-shadow:0 18px 40px rgba(185,28,62,0.35);cursor:pointer;}
+.cta:hover{background:var(--accent-hover);transform:translateY(-7px);}
 
-/* Услуги */
-.services h2{font-size:44px;margin:120px 0 60px;}
-@media (max-width: 768px) {.services h2{font-size:36px;margin:100px 0 50px;}}
-.service-list{grid-template-columns:1fr;gap:28px;}
-@media (min-width: 992px) {.service-list{grid-template-columns:repeat(auto-fit,minmax(360px,1fr));}}
-.service{padding:36px;border-radius:24px;}
+.services h2{font-size:48px;color:var(--accent);margin:140px 0 70px;position:relative;display:inline-block;}
+.service-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:36px;}
+.service{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:28px;padding:40px;
+    display:flex;justify-content:space-between;align-items:center;transition:all 0.5s;opacity:0;transform:translateY(30px);}
+.service.show{opacity:1;transform:none;}
+.service:hover{transform:translateY(-16px);border-color:var(--accent);box-shadow:0 35px 70px rgba(0,0,0,0.45), 0 0 25px rgba(185,28,62,0.35);}
+.service strong{color:var(--accent);font-size:24px;}
+.service .desc{font-size:16px;color:var(--text-light);margin-top:12px;}
+.price{font-size:36px;font-weight:700;color:var(--accent);}
 
 /* Язык */
-.lang-master{top:20px;left:20px;width:52px;height:52px;font-size:18px;}
-@media (max-width: 480px) {.lang-master{top:16px;left:16px;width:48px;height:48px;}}
-.lang-popup{top:90px;left:20px;}
-@media (max-width: 480px) {.lang-popup{top:80px;left:16px;}}
+.lang-master{position:fixed;top:40px;left:40px;z-index:1001;width:56px;height:56px;
+    background:linear-gradient(135deg,#0f0f0f,#1a0a0f);border:2px solid var(--accent);
+    border-radius:50%;cursor:pointer;transition:transform 0.3s;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:20px;font-weight:700;font-family:'Clash Display',sans-serif;}
+.lang-master:hover{transform:scale(1.12);}
+
+.lang-popup{position:fixed;top:110px;left:40px;z-index:1000;pointer-events:none;
+    opacity:0;transform:translateY(-20px);transition:all 0.4s;}
+.lang-popup.active{opacity:1;transform:translateY(0);pointer-events:all;}
+.lang-btn{width:52px;height:52px;background:rgba(18,18,28,0.95);backdrop-filter:blur(20px);
+    border:2px solid var(--border);border-radius:50%;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Clash Display';font-size:16px;font-weight:700;
+    cursor:pointer;transition:all 0.4s;transform:translateX(-60px);opacity:0;}
+.lang-popup.active .lang-btn{transform:translateX(0);opacity:1;}
+.lang-popup.active .lang-btn:nth-child(1){transition-delay:0.1s;}
+.lang-popup.active .lang-btn:nth-child(2){transition-delay:0.2s;}
+.lang-btn:hover{background:var(--accent);transform:scale(1.15);}
+
+/* Плеер */
+#music-player{background:rgba(18,18,28,0.94);backdrop-filter:blur(28px);
+    border:1px solid var(--border);border-radius:32px;padding:16px 26px;
+    display:flex;align-items:center;gap:20px;box-shadow:0 25px 60px rgba(0,0,0,0.8), 0 0 35px rgba(185,28,62,0.3);
+    opacity:0;transform:translateY(20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1);min-width:380px;}
+#music-player.visible{opacity:1;transform:none;}
+#play-pause-btn{width:52px;height:52px;background:var(--accent);border:none;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;cursor:pointer;transition:0.3s;}
+#play-pause-btn:hover{background:var(--accent-hover);transform:scale(1.1);}
+#play-pause-btn svg{width:20px;height:20px;fill:#fff;}
+.pause{display:none;}
+.track-info{flex:1;}
+.track-title{font-size:18px;color:var(--accent);font-weight:600;}
+.artist{font-size:13px;color:var(--text-light);}
+.progress-container{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;position:relative;cursor:pointer;margin:10px 0;}
+.progress-fill{height:100%;background:var(--accent);width:0%;border-radius:2px;transition:width 0.1s linear;}
+.progress-knob{position:absolute;top:50%;left:0;width:12px;height:12px;background:var(--accent);border-radius:50%;
+    transform:translate(-50%,-50%);opacity:0;transition:opacity 0.2s;}
+.progress-container:hover .progress-knob{opacity:1;}
+.volume-container{display:flex;align-items:center;gap:10px;}
+.volume-slider{-webkit-appearance:none;width:90px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;outline:none;}
+.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;}
 
 /* Модалка */
-.modal-content{padding:70px 50px;}
-@media (max-width: 480px) {.modal-content{padding:60px 30px;}}
-.contact-links a{font-size:20px;gap:14px;}
-.contact-links img{width:38px;height:38px;}
+#contactModal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:0.5s;z-index:1000;}
+#contactModal.show{opacity:1;pointer-events:auto;}
+.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);padding:80px 70px;border-radius:36px;
+    max-width:560px;width:90%;text-align:center;box-shadow:0 50px 120px rgba(0,0,0,0.8), 0 0 25px rgba(185,28,62,0.35);
+    transform:scale(0.92);transition:0.5s;}
+#contactModal.show .modal-content{transform:scale(1);}
+.modal-content h3{color:var(--accent);font-size:40px;margin-bottom:30px;}
+.contact-links a{display:flex;align-items:center;gap:16px;color:#b91c3e;font-size:22px;text-decoration:none;margin:20px 0;
+    transition:0.3s;}
+.contact-links a:hover{transform:translateX(8px);color:#e0204b;}
+.contact-links img{width:42px;height:42px;border-radius:8px;}
 </style>
 </head>
 <body>
 
-<video autoplay muted loop playsinline id="myVideo"><source src="assets/фон.mp4" type="video/mp4"></video>
+<video autoplay muted loop id="myVideo"><source src="assets/фон.mp4" type="video/mp4"></video>
 <audio id="background-music" loop preload="auto"><source src="assets/песня.mp3" type="audio/mpeg"></audio>
 
 <!-- Язык -->
@@ -134,6 +162,8 @@ h1{font-size:56px;line-height:1.1;margin-bottom:16px;}
         <div class="services">
             <h2 data-en="SERVICES THAT I OFFER" data-ru="Что может предложить мой шоп">SERVICES THAT I OFFER</h2>
             <div class="service-list">
+
+                <!-- Всегда видно -->
                 <div class="service">
                     <div>
                         <strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong>
@@ -142,21 +172,35 @@ h1{font-size:56px;line-height:1.1;margin-bottom:16px;}
                     <div class="price">$10</div>
                 </div>
 
+                <!-- Только на русском -->
                 <div class="service ru-only" style="display:none">
-                    <div><strong>[02] Python / Bot Development</strong><div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div>
+                    <div>
+                        <strong>[02] Python / Bot Development</strong>
+                        <div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div>
+                    </div>
                     <div class="price">Зависит от сложности</div>
                 </div>
 
+                <!-- Только на английском -->
                 <div class="service en-only">
-                    <div><strong>[02] Livery Design (3 variants)</strong><div class="desc">Custom liveries and covers</div></div>
+                    <div>
+                        <strong>[02] Livery Design (3 variants)</strong>
+                        <div class="desc">Custom liveries and covers</div>
+                    </div>
                     <div class="price">$15</div>
                 </div>
                 <div class="service en-only">
-                    <div><strong>[03] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div>
+                    <div>
+                        <strong>[03] Server Network Architecture</strong>
+                        <div class="desc">Full server setup & support</div>
+                    </div>
                     <div class="price">$150/mo</div>
                 </div>
                 <div class="service en-only">
-                    <div><strong>[04] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div>
+                    <div>
+                        <strong>[04] Python / Bot Development</strong>
+                        <div class="desc">Custom scripts & automation</div>
+                    </div>
                     <div class="price">Depends on Difficulty</div>
                 </div>
             </div>
@@ -164,7 +208,7 @@ h1{font-size:56px;line-height:1.1;margin-bottom:16px;}
     </div>
 </div>
 
-<!-- Модалка -->
+<!-- Модалка с твоей иконкой Discord -->
 <div id="contactModal">
     <div class="modal-content">
         <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
@@ -183,14 +227,13 @@ h1{font-size:56px;line-height:1.1;margin-bottom:16px;}
                 TheTrueLiberty
             </a>
         </div>
-        <button id="closeModal">
+        <button id="closeModal" style="margin-top:40px;background:var(--accent);color:#fff;padding:16px 50px;border:none;border-radius:50px;font-size:18px;cursor:pointer;">
             <span data-en="Close" data-ru="Закрыть">Close</span>
         </button>
     </div>
 </div>
 
 <script>
-// Тот же скрипт, что и раньше — он уже идеально работает
 document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('background-music');
     const player = document.getElementById('music-player');
@@ -198,14 +241,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const langPopup = document.getElementById('langPopup');
     let currentLang = 'en';
 
+    // Аудио разблокировка
     const unlockAudio = () => audio.play().catch(() => {});
     document.body.addEventListener('click', unlockAudio, {once: true});
     document.body.addEventListener('touchstart', unlockAudio, {once: true});
     setTimeout(() => player.classList.add('visible'), 800);
 
+    // Плеер
     document.getElementById('play-pause-btn').onclick = () => {
-        if (audio.paused) { audio.play(); document.querySelector('.play').style.display = 'none'; document.querySelector('.pause').style.display = 'block'; }
-        else { audio.pause(); document.querySelector('.play').style.display = 'block'; document.querySelector('.pause').style.display = 'none'; }
+        if (audio.paused) {
+            audio.play();
+            document.querySelector('.play').style.display = 'none';
+            document.querySelector('.pause').style.display = 'block';
+        } else {
+            audio.pause();
+            document.querySelector('.play').style.display = 'block';
+            document.querySelector('.pause').style.display = 'none';
+        }
     };
 
     audio.addEventListener('timeupdate', () => {
@@ -222,29 +274,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('volume-slider').oninput = e => audio.volume = e.target.value / 100;
 
+    // Смена языка
     langMaster.onclick = () => langPopup.classList.toggle('active');
+
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.onclick = e => {
             e.stopPropagation();
             currentLang = btn.dataset.lang;
             langMaster.textContent = currentLang.toUpperCase();
+
+            // Меняем текст
             document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
-                if (el.dataset[currentLang]) el.textContent = el.dataset[currentLang];
+                const text = el.dataset[currentLang];
+                if (text) el.textContent = text;
             });
+
+            // Показываем/скрываем услуги
             document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang === 'ru' ? 'flex' : 'none');
             document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang === 'en' ? 'flex' : 'none');
+
+            // Перезапускаем анимации
             document.querySelectorAll('.service').forEach((s, i) => {
                 s.classList.remove('show');
-                if (getComputedStyle(s).display !== 'none') setTimeout(() => s.classList.add('show'), i * 120);
+                if (getComputedStyle(s).display !== 'none') {
+                    setTimeout(() => s.classList.add('show'), i * 120);
+                }
             });
+
             langPopup.classList.remove('active');
         };
     });
 
+    // Модалка
     document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
     document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
     document.getElementById('contactModal').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('show'); };
 
+    // Анимации при загрузке
     setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
     document.querySelectorAll('.service').forEach((s, i) => {
         if (getComputedStyle(s).display !== 'none') {
