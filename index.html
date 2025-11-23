@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liberty — Professional Portfolio</title>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --bg:#0a0a0a;--card:rgba(18,18,28,0.82);--glass:rgba(28,28,40,0.45);
+    --accent:#b91c3e;--accent-hover:#e0204b;--text:#ececf5;--text-light:#aaaaaa;--border:rgba(185,28,62,0.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Satoshi',sans-serif;overflow-x:hidden;}
+h1,h2,h3,h4,strong{font-family:'Clash Display',sans-serif;font-weight:600;letter-spacing:0.5px;}
+#myVideo{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0.38;filter:brightness(0.45) contrast(1.25);}
+
+.container{max-width:1320px;margin:0 auto;padding:130px 20px 140px;}
+.card{background:var(--card);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:36px;padding:90px 80px;
+    box-shadow:0 25px 70px rgba(0,0,0,0.6), 0 0 25px rgba(185,28,62,0.35);opacity:0;transform:translateY(70px);
+    transition:all 1.4s cubic-bezier(0.23,1,0.32,1);}
+.card.show{opacity:1;transform:none;}
+
+.hero{display:flex;align-items:center;gap:90px;flex-wrap:wrap;}
+.avatar{width:320px;height:320px;border-radius:32px;overflow:hidden;border:7px solid var(--accent);box-shadow:0 0 40px rgba(185,28,62,0.4);flex-shrink:0;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.intro{flex:1;min-width:360px;}
+h1{font-size:62px;color:#fff;line-height:1.1;margin-bottom:16px;}
+.subtitle{font-size:22px;color:var(--text-light);margin-bottom:48px;}
+.stats{display:flex;gap:70px;flex-wrap:wrap;margin:50px 0;}
+.stat{font-size:40px;font-weight:700;color:var(--accent);}
+.stat small{display:block;font-size:17px;color:var(--text-light);margin-top:10px;font-weight:500;}
+
+.cta-wrapper{display:flex;align-items:center;gap:40px;margin-top:40px;flex-wrap:wrap;}
+.cta{display:inline-block;background:var(--accent);color:#fff;padding:22px 58px;border-radius:60px;font-weight:600;font-size:21px;
+    text-decoration:none;transition:0.45s;box-shadow:0 18px 40px rgba(185,28,62,0.35);cursor:pointer;}
+.cta:hover{background:var(--accent-hover);transform:translateY(-7px);}
+
+.services h2{font-size:48px;color:var(--accent);margin:140px 0 70px;position:relative;display:inline-block;}
+.service-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:36px;}
+.service{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:28px;padding:40px;
+    display:flex;justify-content:space-between;align-items:center;transition:all 0.5s;opacity:0;transform:translateY(30px);}
+.service.show{opacity:1;transform:none;}
+.service:hover{transform:translateY(-16px);border-color:var(--accent);box-shadow:0 35px 70px rgba(0,0,0,0.45), 0 0 25px rgba(185,28,62,0.35);}
+.service strong{color:var(--accent);font-size:24px;}
+.service .desc{font-size:16px;color:var(--text-light);margin-top:12px;}
+.price{font-size:36px;font-weight:700;color:var(--accent);}
+
+/* Язык */
+.lang-master{position:fixed;top:40px;left:40px;z-index:1001;width:56px;height:56px;
+    background:linear-gradient(135deg,#0f0f0f,#1a0a0f);border:2px solid var(--accent);
+    border-radius:50%;cursor:pointer;transition:transform 0.3s;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:20px;font-weight:700;font-family:'Clash Display',sans-serif;}
+.lang-master:hover{transform:scale(1.12);}
+
+.lang-popup{position:fixed;top:110px;left:40px;z-index:1000;pointer-events:none;
+    opacity:0;transform:translateY(-20px);transition:all 0.4s;}
+.lang-popup.active{opacity:1;transform:translateY(0);pointer-events:all;}
+.lang-btn{width:52px;height:52px;background:rgba(18,18,28,0.95);backdrop-filter:blur(20px);
+    border:2px solid var(--border);border-radius:50%;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Clash Display';font-size:16px;font-weight:700;
+    cursor:pointer;transition:all 0.4s;transform:translateX(-60px);opacity:0;}
+.lang-popup.active .lang-btn{transform:translateX(0);opacity:1;}
+.lang-popup.active .lang-btn:nth-child(1){transition-delay:0.1s;}
+.lang-popup.active .lang-btn:nth-child(2){transition-delay:0.2s;}
+.lang-btn:hover{background:var(--accent);transform:scale(1.15);}
+
+/* Плеер */
+#music-player{background:rgba(18,18,28,0.94);backdrop-filter:blur(28px);
+    border:1px solid var(--border);border-radius:32px;padding:16px 26px;
+    display:flex;align-items:center;gap:20px;box-shadow:0 25px 60px rgba(0,0,0,0.8), 0 0 35px rgba(185,28,62,0.3);
+    opacity:0;transform:translateY(20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1);min-width:380px;}
+#music-player.visible{opacity:1;transform:none;}
+#play-pause-btn{width:52px;height:52px;background:var(--accent);border:none;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;cursor:pointer;transition:0.3s;}
+#play-pause-btn:hover{background:var(--accent-hover);transform:scale(1.1);}
+#play-pause-btn svg{width:20px;height:20px;fill:#fff;}
+.pause{display:none;}
+.track-info{flex:1;}
+.track-title{font-size:18px;color:var(--accent);font-weight:600;}
+.artist{font-size:13px;color:var(--text-light);}
+.progress-container{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;position:relative;cursor:pointer;margin:10px 0;}
+.progress-fill{height:100%;background:var(--accent);width:0%;border-radius:2px;transition:width 0.1s linear;}
+.progress-knob{position:absolute;top:50%;left:0;width:12px;height:12px;background:var(--accent);border-radius:50%;
+    transform:translate(-50%,-50%);opacity:0;transition:opacity 0.2s;}
+.progress-container:hover .progress-knob{opacity:1;}
+.volume-container{display:flex;align-items:center;gap:10px;}
+.volume-slider{-webkit-appearance:none;width:90px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;outline:none;}
+.volume-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;}
+
+/* Модалка */
+#contactModal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:0.5s;z-index:1000;}
+#contactModal.show{opacity:1;pointer-events:auto;}
+.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);padding:80px 70px;border-radius:36px;
+    max-width:560px;width:90%;text-align:center;box-shadow:0 50px 120px rgba(0,0,0,0.8), 0 0 25px rgba(185,28,62,0.35);
+    transform:scale(0.92);transition:0.5s;}
+#contactModal.show .modal-content{transform:scale(1);}
+.modal-content h3{color:var(--accent);font-size:40px;margin-bottom:30px;}
+.contact-links a{display:flex;align-items:center;gap:16px;color:#b91c3e;font-size:22px;text-decoration:none;margin:20px 0;
+    transition:0.3s;}
+.contact-links a:hover{transform:translateX(8px);color:#e0204b;}
+.contact-links img{width:42px;height:42px;border-radius:8px;}
+</style>
+</head>
+<body>
+
+<video autoplay muted loop id="myVideo"><source src="assets/фон.mp4" type="video/mp4"></video>
+<audio id="background-music" loop preload="auto"><source src="assets/песня.mp3" type="audio/mpeg"></audio>
+
+<!-- Язык -->
+<div class="lang-master" id="langMaster">EN</div>
+<div class="lang-popup" id="langPopup">
+    <div class="lang-btn" data-lang="en">EN</div>
+    <div class="lang-btn" data-lang="ru">RU</div>
+</div>
+
+<div class="container">
+    <div class="card" id="mainCard">
+        <div class="hero">
+            <div class="avatar"><img src="assets/6ad1f8b10c7b2937f056040602fe6f0f.jpg" alt="Liberty"></div>
+            <div class="intro">
+                <h1 data-en="Welcome to my bio :P" data-ru="Ты попал в моё био :P">Welcome to my bio :P</h1>
+                <div class="subtitle" data-en="Certified Cyber Security Analyst • Network Architect • Python Developer" 
+                     data-ru="Сертифицированный специалист в сфере кибербезопасности • Нетворкер • Python-дев">
+                    Certified Cyber Security Analyst • Network Architect • Python Developer
+                </div>
+                <div class="stats">
+                    <div class="stat">2+<small data-en="years experience" data-ru="года в деле">years experience</small></div>
+                    <div class="stat">50+<small data-en="completed projects" data-ru="выполненных заказов">completed projects</small></div>
+                </div>
+
+                <div class="cta-wrapper">
+                    <div class="cta" id="contactBtn">
+                        <span data-en="HIRE ME NOW" data-ru="ОФОРМИТЬ ЗАКАЗ">HIRE ME NOW</span>
+                    </div>
+                    <div id="music-player">
+                        <button id="play-pause-btn">
+                            <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg class="pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+                        </button>
+                        <div class="track-info">
+                            <div class="track-title">You Know You Like It</div>
+                            <div class="artist">DJ Snake</div>
+                        </div>
+                        <div class="volume-container">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                            </svg>
+                            <input type="range" id="volume-slider" min="0" max="100" value="70" class="volume-slider">
+                        </div>
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-fill"></div>
+                            <div class="progress-knob"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="services">
+            <h2 data-en="SERVICES THAT I OFFER" data-ru="Что может предложить мой шоп">SERVICES THAT I OFFER</h2>
+            <div class="service-list">
+
+                <!-- Всегда видно -->
+                <div class="service">
+                    <div>
+                        <strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong>
+                        <div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div>
+                    </div>
+                    <div class="price">$10</div>
+                </div>
+
+                <!-- Только на русском -->
+                <div class="service ru-only" style="display:none">
+                    <div>
+                        <strong>[02] Python / Bot Development</strong>
+                        <div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div>
+                    </div>
+                    <div class="price">Зависит от сложности</div>
+                </div>
+
+                <!-- Только на английском -->
+                <div class="service en-only">
+                    <div>
+                        <strong>[02] Livery Design (3 variants)</strong>
+                        <div class="desc">Custom liveries and covers</div>
+                    </div>
+                    <div class="price">$15</div>
+                </div>
+                <div class="service en-only">
+                    <div>
+                        <strong>[03] Server Network Architecture</strong>
+                        <div class="desc">Full server setup & support</div>
+                    </div>
+                    <div class="price">$150/mo</div>
+                </div>
+                <div class="service en-only">
+                    <div>
+                        <strong>[04] Python / Bot Development</strong>
+                        <div class="desc">Custom scripts & automation</div>
+                    </div>
+                    <div class="price">Depends on Difficulty</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка с твоей иконкой Discord -->
+<div id="contactModal">
+    <div class="modal-content">
+        <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
+        <p data-en="Contact me via:" data-ru="Связаться со мной можно через:">Contact me via:</p>
+        <div class="contact-links">
+            <a href="mailto:interpoldis@gmail.com">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail">
+                interpoldis@gmail.com
+            </a>
+            <a href="https://t.me/TheTrueLiberty" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                @TheTrueLiberty
+            </a>
+            <a href="https://discord.com/users/1084944590898937867" target="_blank">
+                <img src="https://tse4.mm.bing.net/th/id/OIP.GfTLYC8SsgGuITqP1-cBEgHaHk?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Discord">
+                TheTrueLiberty
+            </a>
+        </div>
+        <button id="closeModal" style="margin-top:40px;background:var(--accent);color:#fff;padding:16px 50px;border:none;border-radius:50px;font-size:18px;cursor:pointer;">
+            <span data-en="Close" data-ru="Закрыть">Close</span>
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('background-music');
+    const player = document.getElementById('music-player');
+    const langMaster = document.getElementById('langMaster');
+    const langPopup = document.getElementById('langPopup');
+    let currentLang = 'en';
+
+    // Аудио разблокировка
+    const unlockAudio = () => audio.play().catch(() => {});
+    document.body.addEventListener('click', unlockAudio, {once: true});
+    document.body.addEventListener('touchstart', unlockAudio, {once: true});
+    setTimeout(() => player.classList.add('visible'), 800);
+
+    // Плеер
+    document.getElementById('play-pause-btn').onclick = () => {
+        if (audio.paused) {
+            audio.play();
+            document.querySelector('.play').style.display = 'none';
+            document.querySelector('.pause').style.display = 'block';
+        } else {
+            audio.pause();
+            document.querySelector('.play').style.display = 'block';
+            document.querySelector('.pause').style.display = 'none';
+        }
+    };
+
+    audio.addEventListener('timeupdate', () => {
+        const percent = (audio.currentTime / audio.duration) * 100 || 0;
+        document.querySelector('.progress-fill').style.width = percent + '%';
+        document.querySelector('.progress-knob').style.left = percent + '%';
+    });
+
+    document.getElementById('progress-container').onclick = e => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = pos * audio.duration;
+    };
+
+    document.getElementById('volume-slider').oninput = e => audio.volume = e.target.value / 100;
+
+    // Смена языка
+    langMaster.onclick = () => langPopup.classList.toggle('active');
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.onclick = e => {
+            e.stopPropagation();
+            currentLang = btn.dataset.lang;
+            langMaster.textContent = currentLang.toUpperCase();
+
+            // Меняем текст
+            document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
+                const text = el.dataset[currentLang];
+                if (text) el.textContent = text;
+            });
+
+            // Показываем/скрываем услуги
+            document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang === 'ru' ? 'flex' : 'none');
+            document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang === 'en' ? 'flex' : 'none');
+
+            // Перезапускаем анимации
+            document.querySelectorAll('.service').forEach((s, i) => {
+                s.classList.remove('show');
+                if (getComputedStyle(s).display !== 'none') {
+                    setTimeout(() => s.classList.add('show'), i * 120);
+                }
+            });
+
+            langPopup.classList.remove('active');
+        };
+    });
+
+    // Модалка
+    document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
+    document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
+    document.getElementById('contactModal').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('show'); };
+
+    // Анимации при загрузке
+    setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
+    document.querySelectorAll('.service').forEach((s, i) => {
+        if (getComputedStyle(s).display !== 'none') {
+            setTimeout(() => s.classList.add('show'), 600 + i * 150);
+        }
+    });
+});
+</script>
+</body>
+</html>
