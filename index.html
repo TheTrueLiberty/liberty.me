@@ -161,12 +161,37 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         <div class="services">
             <h2 data-en="SERVICES THAT I OFFER" data-ru="Что может предложить мой шоп">SERVICES THAT I OFFER</h2>
             <div class="service-list">
-                <div class="service"><div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong><div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div></div><div class="price">$10</div></div>
-                <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong><div class="desc" data-en="Order your own website..." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
-                <div class="service ru-only" style="display:none"><div><strong>[03] Python / Bot Development</strong><div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div><div class="price">Зависит от сложности</div></div>
-                <div class="service en-only"><div><strong>[03] Livery Design</strong><div class="desc">Custom liveries and covers</div></div><div class="price">$5 Per one.</div></div>
-                <div class="service en-only"><div><strong>[04] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div><div class="price">$150/mo</div></div>
-                <div class="service en-only"><div><strong>[05] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div><div class="price">Depends on Difficulty</div></div>
+                <div class="service">
+                    <div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong>
+                    <div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div></div>
+                    <div class="price">$10</div>
+                </div>
+
+                <div class="service">
+                    <div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong>
+                    <div class="desc" data-en="Order your own website..." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div>
+                    <div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div>
+                </div>
+
+                <!-- ИСПРАВЛЕНО: убран style="display:none" -->
+                <div class="service ru-only">
+                    <div><strong>[03] Python / Bot Development</strong>
+                    <div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div>
+                    <div class="price">Зависит от сложности</div>
+                </div>
+
+                <div class="service en-only">
+                    <div><strong>[03] Livery Design</strong><div class="desc">Custom liveries and covers</div></div>
+                    <div class="price">$5 Per one.</div>
+                </div>
+                <div class="service en-only">
+                    <div><strong>[04] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div>
+                    <div class="price">$150/mo</div>
+                </div>
+                <div class="service en-only">
+                    <div><strong>[05] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div>
+                    <div class="price">Depends on Difficulty</div>
+                </div>
             </div>
         </div>
 
@@ -236,17 +261,24 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         <h3 data-en="Leave your review" data-ru="Оставить отзыв">Leave your review</h3>
         <div id="googleSignInBtn" class="google-btn">Sign in with Google</div>
         <div id="reviewForm" style="display:none;">
-            <textarea id="reviewText" placeholder="Напиши свой отзыв (до 300 символов)..." maxlength="300" rows="5"></textarea>
+            <textarea id="reviewText"
+                      data-en-placeholder="Write your review (up to 300 characters)..."
+                      data-ru-placeholder="Напиши свой отзыв (до 300 символов)..."
+                      placeholder="Напиши свой отзыв (до 300 символов)..."
+                      maxlength="300" rows="5"></textarea>
+            
             <div style="margin:20px 0;text-align:center;">
                 <div id="ratingStars" style="font-size:32px;letter-spacing:8px;cursor:pointer;">★★★★★</div>
             </div>
-            <button id="submitReviewBtn" class="cta" style="width:100%;">Отправить отзыв</button>
+            
+            <button id="submitReviewBtn" class="cta" style="width:100%;">
+                <span data-en="Submit review" data-ru="Отправить отзыв">Отправить отзыв</span>
+            </button>
         </div>
-        <button id="closeReviewModal">Закрыть</button>
+        <button id="closeReviewModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
     </div>
 </div>
 
-<!-- Firebase + весь скрипт -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
@@ -266,7 +298,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // === ВСЁ ОСТАЛЬНОЕ (плеер, язык, модалки) ===
+  // Музыка
   const audio = document.getElementById('background-music');
   const player = document.getElementById('music-player');
   const playBtn = document.getElementById('play-pause-btn');
@@ -298,16 +330,25 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   // Язык
   let currentLang = 'en';
   document.getElementById('langMaster').onclick = () => document.getElementById('langPopup').classList.toggle('active');
+  
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();
       currentLang = btn.dataset.lang;
       document.getElementById('langMaster').textContent = currentLang.toUpperCase();
+      
       document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
         if (el.dataset[currentLang]) el.textContent = el.dataset[currentLang];
       });
+      
+      document.querySelectorAll('textarea[data-en-placeholder][data-ru-placeholder]').forEach(el => {
+        const key = currentLang === 'en' ? 'enPlaceholder' : 'ruPlaceholder';
+        el.placeholder = el.dataset[key];
+      });
+
       document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang==='ru'?'flex':'none');
       document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang==='en'?'flex':'none');
+      
       document.getElementById('langPopup').classList.remove('active');
     };
   });
@@ -326,7 +367,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
   setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => {if(getComputedStyle(s).display!=='none') setTimeout(()=>s.classList.add('show'),600+i*150);}), 300);
 
-  // === ОТЗЫВЫ ===
+  // Отзывы
   let currentUser = null;
   let currentRating = 5;
 
@@ -337,12 +378,12 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     snapshot.forEach((doc) => {
       const r = doc.data();
       const div = document.createElement("div");
-      div.className = "review-card";
+      div.className = "review-card show";
       div.innerHTML = `
         <div class="review-header">
           <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar" alt="avatar">
-          <div class="review-name">${r.name || 'Аноним'}</div>
-          <div class="review-date">${r.timestamp ? new Date(r.timestamp.toDate()).toLocaleDateString('ru-RU') : ''}</div>
+          <div class="review-name">${r.name || (currentLang === 'ru' ? 'Аноним' : 'Anonymous')}</div>
+          <div class="review-date">${r.timestamp ? new Date(r.timestamp.toDate()).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US') : ''}</div>
         </div>
         <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
         <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
@@ -358,7 +399,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
       currentUser = result.user;
       document.getElementById("googleSignInBtn").style.display = "none";
       document.getElementById("reviewForm").style.display = "block";
-    } catch (err) { alert("Ошибка: " + err.message); }
+    } catch (err) { alert("Error: " + err.message); }
   };
 
   const starsContainer = document.getElementById("ratingStars");
@@ -366,20 +407,19 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     starsContainer.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
   }
   starsContainer.addEventListener("click", e => {
-    const clicked = e.target;
-    if (clicked.tagName !== "DIV") return;
-    const rect = clicked.getBoundingClientRect();
+    const rect = starsContainer.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const width = rect.width;
-    currentRating = Math.min(5, Math.max(1, Math.round((offsetX / width) * 5)));
+    currentRating = Math.round((offsetX / width) * 5) || 1;
+    currentRating = Math.max(1, Math.min(5, currentRating));
     updateStars();
   });
   updateStars();
 
   document.getElementById("submitReviewBtn").onclick = async () => {
     const text = document.getElementById("reviewText").value.trim();
-    if (!text) return alert("Напиши отзыв!");
-    if (!currentUser) return alert("Сначала войди через Google");
+    if (!text) return alert(currentLang === 'ru' ? "Напиши отзыв!" : "Please write a review!");
+    if (!currentUser) return alert(currentLang === 'ru' ? "Сначала войди через Google" : "Sign in with Google first");
 
     try {
       await addDoc(collection(db, "reviews"), {
@@ -389,10 +429,12 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         rating: currentRating,
         timestamp: serverTimestamp()
       });
-      alert("Спасибо за отзыв!");
+      alert(currentLang === 'ru' ? "Спасибо за отзыв!" : "Thank you for your review!");
       document.getElementById("reviewModal").classList.remove("show");
       document.getElementById("reviewText").value = "";
-    } catch (err) { alert("Ошибка отправки: " + err.message); }
+      currentRating = 5;
+      updateStars();
+    } catch (err) { alert("Error: " + err.message); }
   };
 </script>
 </body>
