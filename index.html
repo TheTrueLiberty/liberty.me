@@ -73,59 +73,90 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .service .desc{font-size:15px;color:var(--text-light);opacity:.92;}
 .service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
 
-/* НОВАЯ КРУТАЯ СЕТКА ОТЗЫВОВ — 3–4 в ряд, 2 строки, плавная прокрутка */
-.reviews-section{
-    margin:160px 0 100px;
-    overflow:hidden;
-}
-.reviews-section h2{
-    font-size:42px;
-    background:linear-gradient(90deg,#b91c3e,#ff3366);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-    text-align:center;margin-bottom:70px;font-weight:900;
-}
-.reviews-grid-wrapper{
-    position:relative;
-    height:760px;
-    overflow:hidden;
-}
-.reviews-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:28px;
-    padding:20px 0;
-    animation:scrollGrid 40s linear infinite;
-    will-change:transform;
-}
-.reviews-grid.duplicate{
-    animation:scrollGrid 40s linear infinite reverse;
-}
+/* СЕТКА ОТЗЫВОВ */
+.reviews-section{margin:160px 0 100px;overflow:hidden;}
+.reviews-section h2{font-size:42px;background:linear-gradient(90deg,#b91c3e,#ff3366);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:70px;font-weight:900;}
+.reviews-grid-wrapper{position:relative;height:760px;overflow:hidden;}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:20px 0;animation:scrollGrid 40s linear infinite;will-change:transform;}
+.reviews-grid.duplicate{animation:scrollGrid 40s linear infinite reverse;}
 @media (min-width:1400px){.reviews-grid{grid-template-columns:repeat(4,1fr);}}
 @media (max-width:992px){.reviews-grid{grid-template-columns:repeat(2,1fr);gap:20px;}}
 @media (max-width:640px){.reviews-grid{grid-template-columns:1fr;}}
-@keyframes scrollGrid{
-    0%{transform:translateY(0)}
-    100%{transform:translateY(-50%)}
-}
-.review-card{
-    background:rgba(28,28,40,.75);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(185,28,62,.3);
-    border-radius:26px;
-    padding:28px;
-    box-shadow:0 16px 40px rgba(0,0,0,.5);
-    transition:all .5s;
-    height:340px;
-    display:flex;
-    flex-direction:column;
-}
-.review-card:hover{
-    transform:translateY(-12px) scale(1.03);
-    border-color:var(--accent);
-    box-shadow:0 24px 50px rgba(185,28,62,.3);
-}
+@keyframes scrollGrid{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+.review-card{background:rgba(28,28,40,.75);backdrop-filter:blur(20px);border:1px solid rgba(185,28,62,.3);border-radius:26px;padding:28px;box-shadow:0 16px 40px rgba(0,0,0,.5);transition:all .5s;height:340px;display:flex;flex-direction:column;}
+.review-card:hover{transform:translateY(-12px) scale(1.03);border-color:var(--accent);box-shadow:0 24px 50px rgba(185,28,62,.3);}
 
+/* ПАНЕЛЬ ПОЛЬЗОВАТЕЛЯ */
+#userPanel{position:fixed;top:20px;right:20px;display:flex;align-items:center;gap:12px;z-index:999;background:rgba(18,18,28,.95);padding:10px 16px;border-radius:20px;border:2px solid var(--accent);opacity:0;transition:.4s;pointer-events:none;}
+#userPanel.show{opacity:1;pointer-events:auto;}
+#userPanel img{width:42px;height:42px;border-radius:50%;border:3px solid var(--accent);object-fit:cover;}
+#userPanel span{font-weight:700;color:#fff;}
+#logoutBtn{margin-left:10px;color:#ff3366;cursor:pointer;font-size:14px;}
+
+/* АВТОРИЗАЦИЯ */
+#authModal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;z-index:10000;opacity:0;pointer-events:none;transition:.5s;}
+#authModal.show{opacity:1;pointer-events:auto;}
+.auth-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:32px;width:100%;max-width:460px;padding:50px 40px;text-align:center;position:relative;}
+.auth-content h2{color:var(--accent);font-size:36px;margin-bottom:30px;}
+.auth-toggle{color:var(--text-light);margin-bottom:30px;font-size:14px;}
+.auth-toggle span{cursor:pointer;color:var(--accent);text-decoration:underline;}
+input[type=text],input[type=email],input[type=password]{
+    width:100%;padding:16px 20px;margin:12px 0;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:16px;color:#fff;font-size:16px;transition:.3s;
+}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185,28,62,.3);}
+#closeAuth{position:absolute;top:20px;right:20px;background:none;border:none;color:#777;font-size:28px;cursor:pointer;}
+
+/* КРАСИВЫЙ МЕДИАПЛЕЕР */
+#music-player{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+    width:420px;max-width:calc(100% - 40px);background:rgba(20,20,35,.96);
+    backdrop-filter:blur(32px);border:2px solid rgba(185,28,62,.4);border-radius:32px;
+    padding:20px 28px;box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 40px rgba(185,28,62,.4);
+    z-index:999;opacity:0;transition:all .6s cubic-bezier(.23,1,.32,1);overflow:hidden;
+}
+#music-player.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+#music-player .track-info{margin-bottom:12px;text-align:center;}
+#music-player .track-title{font-size:18px;font-weight:800;color:#fff;}
+#music-player .artist{font-size:14px;color:#bbb;margin-top:4px;}
+.progress-container{display:flex;align-items:center;gap:12px;margin:16px 0;}
+#songProgress{flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden;position:relative;cursor:pointer;}
+#songProgress .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#b91c3e,#ff3366);box-shadow:0 0 20px rgba(255,51,102,.6);}
+#songProgress .progress-knob{position:absolute;top:50%;right:0;width:18px;height:18px;background:var(--accent);border-radius:50%;transform:translate(50%,-50%);opacity:0;transition:all .2s;box-shadow:0 0 25px rgba(185,28,62,.9);}
+#songProgress:hover .progress-knob{opacity:1;transform:translate(50%,-50%) scale(1.3);}
+#currentTime,#duration{font-size:13px;color:#ccc;}
+.controls{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:8px;}
+#play-pause-btn{width:64px;height:64px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:.4s;box-shadow:0 12px 40px rgba(185,28,62,.6);}
+#play-pause-btn:hover{transform:scale(1.1);box-shadow:0 20px 60px rgba(185,28,62,.8);}
+#play-pause-btn svg{width:28px;height:28px;fill:#fff;}
+
+/* МОДАЛКИ */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:.5s;z-index:1000;padding:20px;}
+.modal.show{opacity:1;pointer-events:auto;}
+.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;
+    width:100%;max-width:540px;text-align:center;transform:scale(.92);transition:.5s;padding:50px 30px;}
+.modal.show .modal-content{transform:scale(1);}
+
+/* КОНТЕНТ В МОДАЛКАХ */
+.contact-links a,.payment-methods > div{
+    display:flex;align-items:center;gap:20px;background:rgba(185,28,62,.08);border:1px solid rgba(185,28,62,.2);
+    border-radius:20px;padding:18px 24px;margin:14px 0;transition:.4s;font-weight:600;font-size:18px;color:var(--text);text-decoration:none;
+}
+.contact-links a:hover,.payment-methods > div:hover{
+    background:rgba(185,28,62,.18);border-color:var(--accent);transform:translateY(-6px);
+}
+.contact-links img,.payment-methods img{width:36px;height:36px;border-radius:8px;flex-shrink:0;object-fit:cover;}
+
+/* ОТЗЫВ — КНОПКИ ПО ЦЕНТРУ */
+#reviewModal .modal-content{display:flex;flex-direction:column;gap:24px;align-items:center;}
+#reviewText{width:100%;padding:18px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:20px;color:#fff;font-size:16px;resize:none;}
+#reviewText:focus{outline:none;border-color:var(--accent);box-shadow:0 0 25px rgba(185,28,62,.3);}
+#ratingInput{font-size:42px;letter-spacing:10px;cursor:pointer;transition:.3s;}
+#ratingInput:hover{transform:scale(1.08);}
+#submitReviewBtn{width:100%;max-width:380px;}
+
+/* ЯЗЫК */
 .lang-master{position:fixed;top:20px;left:20px;width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;
     display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.6);}
 .lang-master:hover{transform:scale(1.12);}
@@ -133,46 +164,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .lang-popup.active{display:block;}
 .lang-btn{padding:14px 24px;color:#fff;cursor:pointer;transition:.3s;font-size:17px;}
 .lang-btn:hover{background:var(--accent);}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;
-    opacity:0;pointer-events:none;transition:.5s;z-index:1000;padding:20px;}
-.modal.show{opacity:1;pointer-events:auto;}
-.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;
-    width:100%;max-width:540px;text-align:center;transform:scale(.92);transition:.5s;padding:50px 30px;}
-.modal.show .modal-content{transform:scale(1);}
-.modal-content h3{color:var(--accent);font-size:34px;margin-bottom:28px;}
-.contact-links a,.payment-methods > div{
-    display:flex;align-items:center;gap:20px;background:rgba(185,28,62,.08);border:1px solid rgba(185,28,62,.2);
-    border-radius:20px;padding:18px 24px;margin:14px 0;transition:.4s;font-weight:600;font-size:18px;color:var(--text);text-decoration:none;}
-.contact-links a:hover,.payment-methods > div:hover{background:rgba(185,28,62,.18);border-color:var(--accent);transform:translateY(-6px);}
-.contact-links img,.payment-methods img{width:36px;height:36px;border-radius:8px;flex-shrink:0;object-fit:cover;}
-#closeModal,#closePayment,#closeReviewModal{background:var(--accent);color:#fff;border:none;padding:14px 36px;border-radius:50px;
-    cursor:pointer;font-size:17px;margin-top:28px;transition:.3s;font-weight:600;}
-#closeModal:hover,#closePayment:hover,#closeReviewModal:hover{background:var(--accent-hover);transform:scale(1.06);}
-
-#music-player{
-    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:480px;width:calc(100% - 40px);
-    background:rgba(20,20,35,.96);backdrop-filter:blur(32px);border:1px solid rgba(185,28,62,.35);
-    border-radius:28px;padding:18px 24px;display:flex;flex-direction:column;gap:12px;z-index:999;
-    box-shadow:0 20px 50px rgba(0,0,0,.7);opacity:0;transition:opacity .7s,transform .4s;
-}
-#music-player.visible{opacity:1;transform:translateX(-50%) translateY(0);}
-#music-player .track-info .track-title{font-weight:700;font-size:17px;}
-#music-player .track-info .artist{font-size:13px;opacity:.8;}
-.progress-container{display:flex;align-items:center;gap:12px;font-size:13px;}
-#songProgress{flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;position:relative;cursor:pointer;}
-#songProgress .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#b91c3e,#ff3366);box-shadow:0 0 15px rgba(255,51,102,.6);}
-#songProgress .progress-knob{position:absolute;top:50%;right:0;width:16px;height:16px;background:var(--accent);border-radius:50%;transform:translate(50%,-50%);opacity:0;transition:all .2s;box-shadow:0 0 20px rgba(185,28,62,.8);}
-#songProgress:hover .progress-knob{opacity:1;transform:translate(50%,-50%) scale(1.3);}
-.controls{display:flex;align-items:center;gap:20px;justify-content:center;}
-#play-pause-btn{width:48px;height:48px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;box-shadow:0 8px 25px rgba(185,28,62,.5);}
-#play-pause-btn:hover{transform:scale(1.1);}
-#play-pause-btn svg{width:20px;height:20px;fill:#fff;}
-.volume-container{display:flex;align-items:center;gap:10px;width:120px;}
-#volume-slider{flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;position:relative;cursor:pointer;}
-#volume-slider::before{content:'';position:absolute;top:0;left:0;height:100%;width:var(--vol,70%);background:var(--accent);transition:width .2s;}
-#volume-icon{cursor:pointer;opacity:.7;transition:.3s;}
-#volume-icon:hover{opacity:1;transform:scale(1.15);}
 </style>
 </head>
 <body>
@@ -195,6 +186,12 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <div class="lang-popup" id="langPopup">
     <div class="lang-btn" data-lang="en">EN</div>
     <div class="lang-btn" data-lang="ru">RU</div>
+</div>
+
+<div id="userPanel">
+    <img id="userAvatar" src="" alt="">
+    <span id="userName">User</span>
+    <span id="logoutBtn">Выйти</span>
 </div>
 
 <div class="container">
@@ -238,7 +235,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
             </div>
         </div>
 
-        <!-- НОВАЯ СЕТКА ОТЗЫВОВ -->
         <div class="reviews-section">
             <h2 data-en="CLIENT REVIEWS" data-ru="ОТЗЫВЫ КЛИЕНТОВ">CLIENT REVIEWS</h2>
             <div class="reviews-grid-wrapper">
@@ -252,15 +248,37 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- МУЗЫКАЛЬНАЯ ПАНЕЛЬ -->
+<!-- МОДАЛ АВТОРИЗАЦИИ -->
+<div id="authModal">
+    <div class="auth-content">
+        <button id="closeAuth">x</button>
+        <h2 id="authTitle">Sign In</h2>
+        <div class="auth-toggle">
+            <span id="toggleToRegister">Create account</span> | <span id="toggleToLogin">Sign in</span>
+        </div>
+        <div id="emailAuthFields">
+            <input type="text" id="displayName" placeholder="Your nickname" style="display:none;">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password (6+ chars)" required>
+            <button class="cta-btn" id="authSubmit">Continue</button>
+        </div>
+        <div style="margin:25px 0;color:#777;font-size:14px;">or</div>
+        <button class="cta-btn" id="authGoogleBtn">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/google.svg" style="filter:invert(1);width:28px;height:28px;margin-right:12px;">
+            Continue with Google
+        </button>
+    </div>
+</div>
+
+<!-- КРАСИВЫЙ МЕДИАПЛЕЕР -->
 <div id="music-player">
     <div class="track-info">
         <div class="track-title">Friday</div>
-        <div class="artist">Riton x NightCrawlers</div>
+        <div class="artist">Riton x Nightcrawlers</div>
     </div>
     <div class="progress-container">
         <span id="currentTime">0:00</span>
-        <div class="progress-bar" id="songProgress">
+        <div id="songProgress">
             <div class="progress-fill"></div>
             <div class="progress-knob"></div>
         </div>
@@ -271,51 +289,50 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
             <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <svg class="pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
         </button>
-        <div class="volume-container">
-            <svg id="volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            <div id="volume-slider" style="--vol:70%"></div>
-        </div>
     </div>
 </div>
 
 <!-- МОДАЛКИ -->
-<div id="contactModal" class="modal"><div class="modal-content">
-    <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
-    <div class="contact-links">
-        <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt=""> interpoldis@gmail.com</a>
-        <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @TheTrueLiberty</a>
-        <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt=""> TheTrueLiberty</a>
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
+        <div class="contact-links">
+            <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt=""> interpoldis@gmail.com</a>
+            <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @TheTrueLiberty</a>
+            <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt=""> TheTrueLiberty</a>
+        </div>
+        <button id="closeModal">Close</button>
     </div>
-    <button id="closeModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
-</div></div>
+</div>
 
-<div id="paymentModal" class="modal"><div class="modal-content">
-    <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
-    <div class="payment-methods">
-        <div><img src="https://cryptologos.cc/logos/toncoin-ton-logo.svg?v=034" alt=""> Tonkeeper</div>
-        <div><img src="https://cryptologos.cc/logos/tether-usdt-logo.svg?v=034" alt=""> USDT TRC20</div>
-        <div><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=034" alt=""> Bitcoin</div>
-        <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @CryptoBot</div>
-        <div><img src="https://www.uponarriving.com/wp-content/uploads/2018/02/Mastercard-Black-Card-8-490x315.png" alt="Mastercard"> Bank transfers [EU]</div>
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
+        <div class="payment-methods">
+            <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/ton.svg" alt=""> Tonkeeper</div>
+            <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/tether.svg" alt=""> USDT TRC20</div>
+            <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/bitcoin.svg" alt=""> Bitcoin</div>
+            <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @CryptoBot</div>
+            <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/mastercard.svg" alt=""> Bank transfers [EU]</div>
+        </div>
+        <p style="margin-top:28px;opacity:.85;" data-en="DM me for details" data-ru="Напиши — пришлю реквизиты">DM me for details</p>
+        <button id="closePayment">Close</button>
     </div>
-    <p style="margin-top:28px;opacity:.85;" data-en="DM me for details" data-ru="Напиши — пришлю реквизиты">DM me for details</p>
-    <button id="closePayment"><span data-en="Close" data-ru="Закрыть">Close</span></button>
-</div></div>
+</div>
 
-<div id="reviewModal" class="modal"><div class="modal-content">
-    <h3 data-en="Leave a review" data-ru="Оставить отзыв">Leave a review</h3>
-    <div id="googleSignInBtn" class="cta-btn" style="margin:20px auto;display:inline-flex;">Sign in with Google</div>
-    <div id="reviewForm" style="display:none;">
-        <textarea id="reviewText" data-en-placeholder="Your review..." data-ru-placeholder="Ваш отзыв..." maxlength="300" rows="5" style="width:100%;padding:16px;background:rgba(255,255,255,.1);border:1px solid var(--border);border-radius:16px;color:#fff;margin-top:20px;"></textarea>
-        <div style="margin:28px 0;text-align:center;font-size:36px;letter-spacing:8px;cursor:pointer;" id="ratingInput">★★★★★</div>
-        <button id="submitReviewBtn" class="cta-btn" style="width:100%;margin-top:10px;"><span data-en="Submit" data-ru="Отправить">Submit</span></button>
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <h3 data-en="Leave a review" data-ru="Оставить отзыв">Leave a review</h3>
+        <textarea id="reviewText" data-en-placeholder="Your review..." data-ru-placeholder="Ваш отзыв..." maxlength="300" rows="5"></textarea>
+        <div id="ratingInput">★★★★★</div>
+        <button id="submitReviewBtn" class="cta-btn">Submit</button>
+        <button id="closeReviewModal">Close</button>
     </div>
-    <button id="closeReviewModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
-</div></div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -334,8 +351,9 @@ const db = getFirestore(app);
 let currentLang = 'en';
 let currentUser = null;
 let currentRating = 5;
+let audioUnlocked = false;
 
-// Язык
+// ЯЗЫК
 const switchLang = () => {
     document.getElementById('langMaster').textContent = currentLang.toUpperCase();
     document.querySelectorAll('[data-en], [data-ru]').forEach(el => {
@@ -347,10 +365,10 @@ const switchLang = () => {
 };
 document.getElementById('langMaster').onclick = e => { e.stopPropagation(); document.getElementById('langPopup').classList.toggle('active'); document.addEventListener('click', closeLangPopup, true); };
 function closeLangPopup(e) { if (!e.target.closest('.lang-master') && !e.target.closest('.lang-popup')) { document.getElementById('langPopup').classList.remove('active'); document.removeEventListener('click', closeLangPopup, true); }}
-document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => { e.stopPropagation(); currentLang = btn.dataset.lang; switchLang(); document.getElementById('langPopup').classList.remove('active'); document.removeEventListener('click', closeLangPopup, true); });
+document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => { e.stopPropagation(); currentLang = btn.dataset.lang; switchLang(); document.getElementById('langPopup').classList.remove('active'); });
 switchLang();
 
-// Прелоадер + анимации
+// ПРЕЛОАДЕР
 (() => {
     const preloader = document.getElementById('preloader');
     const fill = document.getElementById('progressFill');
@@ -368,8 +386,12 @@ switchLang();
     setTimeout(() => { preloader.classList.add('hidden'); document.body.classList.add('loaded'); }, 5500);
 })();
 
-// Музыка
+// МУЗЫКА
 const audio = document.getElementById('background-music');
+const unlockAudio = () => { if (audioUnlocked) return; audio.play().catch(()=>{}); document.getElementById('myVideo').play().catch(()=>{}); audioUnlocked = true; document.removeEventListener('click', unlockAudio); document.removeEventListener('touchstart', unlockAudio); };
+document.addEventListener('click', unlockAudio, {once: true});
+document.addEventListener('touchstart', unlockAudio, {once: true});
+
 const playPauseBtn = document.getElementById('play-pause-btn');
 const playIcon = playPauseBtn.querySelector('.play');
 const pauseIcon = playPauseBtn.querySelector('.pause');
@@ -377,103 +399,140 @@ const progressFill = document.querySelector('#songProgress .progress-fill');
 const progressKnob = document.querySelector('#songProgress .progress-knob');
 const currentTimeEl = document.getElementById('currentTime');
 const durationEl = document.getElementById('duration');
-const volumeSlider = document.getElementById('volume-slider');
 
 const formatTime = s => { const m = Math.floor(s/60); const secs = Math.floor(s%60); return `${m}:${secs<10?'0':''}${secs}`; };
 audio.addEventListener('loadedmetadata', () => durationEl.textContent = formatTime(audio.duration));
-audio.addEventListener('timeupdate', () => { if(audio.duration){ const percent = (audio.currentTime/audio.duration)*100; progressFill.style.width = percent + '%'; progressKnob.style.left = percent + '%'; currentTimeEl.textContent = formatTime(audio.currentTime); }});
-document.getElementById('songProgress').addEventListener('click', e => { const rect = e.currentTarget.getBoundingClientRect(); const pos = (e.clientX - rect.left)/rect.width; audio.currentTime = pos * audio.duration; });
-playPauseBtn.addEventListener('click', () => { if(audio.paused){audio.play(); playIcon.style.display='none'; pauseIcon.style.display='block';} else {audio.pause(); playIcon.style.display='block'; pauseIcon.style.display='none';}});
-volumeSlider.addEventListener('click', e => { const rect = volumeSlider.getBoundingClientRect(); const pos = (e.clientX - rect.left)/rect.width; const vol = Math.max(0, Math.min(1, pos)); audio.volume = vol; volumeSlider.style.setProperty('--vol', (vol*100)+'%'); });
-const unlock = () => { audio.play().catch(()=>{}); document.getElementById('myVideo').play().catch(()=>{}); document.removeEventListener('click', unlock); document.removeEventListener('touchstart', unlock); };
-document.addEventListener('click', unlock, {once:true}); document.addEventListener('touchstart', unlock, {once:true});
+audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = percent + '%';
+        progressKnob.style.left = percent + '%';
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+    }
+});
+document.getElementById('songProgress').addEventListener('click', e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+});
+playPauseBtn.addEventListener('click', () => {
+    if (audio.paused) { audio.play(); playIcon.style.display = 'none'; pauseIcon.style.display = 'block'; }
+    else { audio.pause(); playIcon.style.display = 'block'; pauseIcon.style.display = 'none'; }
+});
 setTimeout(() => document.getElementById('music-player').classList.add('visible'), 1800);
 
-// Модалки
-document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
-document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
-document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
-document.querySelectorAll('#closeModal, #closePayment, #closeReviewModal').forEach(b => b.onclick = () => b.closest('.modal').classList.remove('show'));
-document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target === m && m.classList.remove('show'));
+// АВТОРИЗАЦИЯ
+const authModal = document.getElementById('authModal');
+let isRegister = false;
+document.getElementById('toggleToRegister').onclick = () => { isRegister = true; document.getElementById('authTitle').textContent = 'Create Account'; document.getElementById('displayName').style.display = 'block'; };
+document.getElementById('toggleToLogin').onclick = () => { isRegister = false; document.getElementById('authTitle').textContent = 'Sign In'; document.getElementById('displayName').style.display = 'none'; };
+document.getElementById('leaveReviewBtn').onclick = () => { if (!currentUser) authModal.classList.add('show'); else document.getElementById('reviewModal').classList.add('show'); };
+document.getElementById('closeAuth').onclick = () => authModal.classList.remove('show');
+authModal.onclick = e => e.target === authModal && authModal.classList.remove('show');
 
-// НОВАЯ СЕТКА ОТЗЫВОВ
+document.getElementById('authGoogleBtn').onclick = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+};
+
+document.getElementById('authSubmit').onclick = async () => {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const displayName = document.getElementById('displayName').value.trim();
+    if (!email || !password || (isRegister && !displayName)) return alert('Заполни все поля!');
+    try {
+        let userCred;
+        if (isRegister) {
+            userCred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCred.user, { displayName });
+        } else {
+            userCred = await signInWithEmailAndPassword(auth, email, password);
+        }
+        authModal.classList.remove('show');
+    } catch (err) {
+        alert(err.message);
+    }
+};
+
+onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (user) {
+        document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/64';
+        document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
+        document.getElementById('userPanel').classList.add('show');
+    } else {
+        document.getElementById('userPanel').classList.remove('show');
+    }
+});
+document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
+// ОТЗЫВЫ
 const reviewsGrid = document.getElementById('reviewsGrid');
 const reviewsGridDupe = document.getElementById('reviewsGridDuplicate');
 
 function renderReviews(snap) {
     const reviews = [];
     snap.forEach(doc => reviews.push({id: doc.id, ...doc.data()}));
-
-    reviewsGrid.innerHTML = '';
-    reviewsGridDupe.innerHTML = '';
-
+    reviewsGrid.innerHTML = reviewsGridDupe.innerHTML = '';
     if (reviews.length === 0) {
-        const placeholder = `<div class="review-card"><div style="text-align:center;padding:100px 20px;color:#777;font-size:18px;">${currentLang==='ru'?'Пока нет отзывов :(':'No reviews yet :('}<br><br>${currentLang==='ru'?'Будь первым!':'Be the first!'}</div></div>`;
-        const block = placeholder.repeat(12);
-        reviewsGrid.innerHTML = block; reviewsGridDupe.innerHTML = block;
+        const msg = currentLang === 'ru' ? 'Пока нет отзывов :(' : 'No reviews yet :(';
+        const ph = `<div class="review-card"><div style="text-align:center;padding:100px 20px;color:#777;font-size:18px;">${msg}<br><br>Будь первым!</div></div>`;
+        reviewsGrid.innerHTML = reviewsGridDupe.innerHTML = ph.repeat(12);
         return;
     }
-
     while (reviews.length < 24) reviews.push(...reviews);
     reviews.length = 24;
-
     const frag1 = document.createDocumentFragment();
     const frag2 = document.createDocumentFragment();
-
     reviews.forEach(r => {
         const card = document.createElement('div');
         card.className = 'review-card';
         card.innerHTML = `
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
                 <img src="${r.photoURL || 'https://via.placeholder.com/64'}" style="width:64px;height:64px;border-radius:50%;border:4px solid #b91c3e;object-fit:cover;">
-                <div>
-                    <div style="font-weight:700;color:#fff;font-size:17px;">${r.name || 'Anonymous'}</div>
-                    <div style="font-size:13px;color:#aaa;">${r.timestamp?.toDate?.().toLocaleDateString() || ''}</div>
-                </div>
+                <div><div style="font-weight:700;color:#fff;font-size:17px;">${r.name || 'Anonymous'}</div>
+                <div style="font-size:13px;color:#aaa;">${r.timestamp?.toDate?.().toLocaleDateString() || ''}</div></div>
             </div>
-            <div style="display:flex;gap:6px;font-size:30px;color:#b91c3e;margin:8px 0;">
-                ${'★'.repeat(r.rating || 5)}${'☆'.repeat(5-(r.rating || 5))}
-            </div>
-            <div style="color:#ddd;line-height:1.6;font-size:15px;flex:1;overflow:hidden;">
-                ${(r.text || (currentLang==='ru'?'Отличная работа!':'Great job!')).replace(/\n/g,'<br>')}
-            </div>
+            <div style="display:flex;gap:6px;font-size:30px;color:#b91c3e;margin:8px 0;">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5-(r.rating || 5))}</div>
+            <div style="color:#ddd;line-height:1.6;font-size:15px;flex:1;overflow:hidden;">${(r.text || '').replace(/\n/g,'<br>')}</div>
         `;
         frag1.appendChild(card);
         frag2.appendChild(card.cloneNode(true));
     });
-
     reviewsGrid.appendChild(frag1);
     reviewsGridDupe.appendChild(frag2);
 }
-
 const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
 onSnapshot(q, renderReviews);
 
-// Оставить отзыв
+// ОТПРАВКА ОТЗЫВА
 document.getElementById('ratingInput').onclick = e => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     currentRating = Math.ceil((x / rect.width) * 5);
     e.currentTarget.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
 };
-document.getElementById('googleSignInBtn').onclick = async () => {
-    const p = new GoogleAuthProvider();
-    const res = await signInWithPopup(auth, p);
-    currentUser = res.user;
-    document.getElementById('googleSignInBtn').style.display = 'none';
-    document.getElementById('reviewForm').style.display = 'block';
-};
 document.getElementById('submitReviewBtn').onclick = async () => {
+    if (!currentUser) return alert('Войди сначала!');
     const text = document.getElementById('reviewText').value.trim();
-    if (!text) return alert(currentLang==='ru'?'Напиши отзыв!' : 'Write a review!');
-    if (!currentUser) return alert(currentLang==='ru'?'Войди через Google' : 'Sign in with Google');
-    await addDoc(collection(db, "reviews"), { name: currentUser.displayName, photoURL: currentUser.photoURL, text, rating: currentRating, timestamp: serverTimestamp() });
-    alert(currentLang==='ru'?'Спасибо!' : 'Thank you!');
+    if (!text) return alert('Напиши отзыв!');
+    await addDoc(collection(db, "reviews"), {
+        name: currentUser.displayName || currentUser.email.split('@')[0],
+        photoURL: currentUser.photoURL || 'https://via.placeholder.com/64',
+        text, rating: currentRating, timestamp: serverTimestamp()
+    });
+    alert('Спасибо!');
     document.getElementById('reviewModal').classList.remove('show');
-    document.getElementById('reviewText').value = ''; currentRating = 5;
+    document.getElementById('reviewText').value = '';
+    currentRating = 5;
     document.getElementById('ratingInput').innerHTML = '★★★★★';
 };
-onAuthStateChanged(auth, u => currentUser = u);
+
+// МОДАЛКИ
+document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
+document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
+document.querySelectorAll('#closeModal, #closePayment, #closeReviewModal').forEach(b => b.onclick = () => b.closest('.modal').classList.remove('show'));
+document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target === m && m.classList.remove('show'));
 </script>
 </body>
 </html>
