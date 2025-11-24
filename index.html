@@ -44,7 +44,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     display:inline-block;min-width:220px;text-align:center;font-weight:600;}
 .cta:hover{background:var(--accent-hover);transform:translateY(-6px);}
 
-/* Плеер */
 #music-player{
     position:fixed;bottom:20px;left:20px;right:20px;max-width:440px;margin:0 auto;left:50%;transform:translateX(-50%);
     background:rgba(20,20,35,0.96);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
@@ -71,7 +70,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     background:#fff;border-radius:50%;opacity:0;box-shadow:0 0 20px rgba(185,28,62,0.9);transition:opacity 0.2s;}
 .progress-container:hover .progress-knob{opacity:1;}
 
-/* Язык */
 .lang-master{position:fixed;top:16px;left:16px;width:50px;height:50px;background:rgba(18,18,28,0.95);border:2px solid var(--accent);border-radius:50%;
     display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:700;cursor:pointer;z-index:1001;
     box-shadow:0 8px 30px rgba(0,0,0,0.6);transition:all 0.3s;}
@@ -83,7 +81,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     box-shadow:0 6px 20px rgba(0,0,0,0.5);}
 .lang-btn:hover{border-color:var(--accent);transform:scale(1.1);background:var(--accent);}
 
-/* Услуги и отзывы */
 .services h2,.reviews-section h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
 @media (max-width:480px){.services h2,.reviews-section h2{font-size:32px;margin:80px 0 40px;}}
 .service-list,.reviews-list{display:grid;gap:24px;grid-template-columns:1fr;}
@@ -103,7 +100,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .review-stars{color:#ffd700;margin-top:8px;font-size:20px;}
 .review-text{font-size:16px;line-height:1.5;margin-top:8px;}
 
-/* Модальные окна */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
     opacity:0;pointer-events:none;transition:0.5s;z-index:1000;padding:20px;}
 .modal.show{opacity:1;pointer-events:auto;}
@@ -126,7 +122,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <video autoplay muted loop playsinline id="myVideo"><source src="assets/фон.mp4" type="video/mp4"></video>
 <audio id="background-music" loop preload="auto"><source src="assets/песня.mp3" type="audio/mpeg"></audio>
 
-<!-- Язык -->
 <div class="lang-master" id="langMaster">EN</div>
 <div class="lang-popup" id="langPopup">
     <div class="lang-btn" data-lang="en">EN</div>
@@ -161,40 +156,15 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         <div class="services">
             <h2 data-en="SERVICES THAT I OFFER" data-ru="Что может предложить мой шоп">SERVICES THAT I OFFER</h2>
             <div class="service-list">
-                <div class="service">
-                    <div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong>
-                    <div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div></div>
-                    <div class="price">$10</div>
-                </div>
-
-                <div class="service">
-                    <div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong>
-                    <div class="desc" data-en="Order your own website..." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div>
-                    <div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div>
-                </div>
-
-                <div class="service ru-only">
-                    <div><strong>[03] Python / Bot Development</strong>
-                    <div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div>
-                    <div class="price">Зависит от сложности</div>
-                </div>
-
-                <div class="service en-only">
-                    <div><strong>[03] Livery Design</strong><div class="desc">Custom liveries and covers</div></div>
-                    <div class="price">$5 Per one.</div>
-                </div>
-                <div class="service en-only">
-                    <div><strong>[04] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div>
-                    <div class="price">$150/mo</div>
-                </div>
-                <div class="service en-only">
-                    <div><strong>[05] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div>
-                    <div class="price">Depends on Difficulty</div>
-                </div>
+                <div class="service"><div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong><div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div></div><div class="price">$10</div></div>
+                <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong><div class="desc" data-en="Order your own website..." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
+                <div class="service ru-only"><div><strong>[03] Python / Bot Development</strong><div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div><div class="price">Зависит от сложности</div></div>
+                <div class="service en-only"><div><strong>[03] Livery Design</strong><div class="desc">Custom liveries and covers</div></div><div class="price">$5 Per one.</div></div>
+                <div class="service en-only"><div><strong>[04] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div><div class="price">$150/mo</div></div>
+                <div class="service en-only"><div><strong>[05] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div><div class="price">Depends on Difficulty</div></div>
             </div>
         </div>
 
-        <!-- ОТЗЫВЫ -->
         <div class="reviews-section">
             <h2 data-en="CLIENT REVIEWS" data-ru="ОТЗЫВЫ КЛИЕНТОВ">CLIENT REVIEWS</h2>
             <div id="reviewsList" class="reviews-list"></div>
@@ -207,7 +177,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- Плеер -->
 <div id="music-player">
     <button id="play-pause-btn">
         <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -224,61 +193,47 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 </div>
 
 <!-- Модалки -->
-<div id="contactModal" class="modal">
-    <div class="modal-content">
-        <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
-        <div class="contact-links">
-            <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt="Gmail"> interpoldis@gmail.com</a>
-            <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt="Telegram"> @TheTrueLiberty</a>
-            <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt="Discord"> TheTrueLiberty</a>
-        </div>
-        <button id="closeModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
+<div id="contactModal" class="modal"><div class="modal-content">
+    <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
+    <div class="contact-links">
+        <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt="Gmail"> interpoldis@gmail.com</a>
+        <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt="Telegram"> @TheTrueLiberty</a>
+        <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt="Discord"> TheTrueLiberty</a>
     </div>
-</div>
+    <button id="closeModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
+</div></div>
 
-<div id="paymentModal" class="modal">
-    <div class="modal-content">
-        <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
-        <div class="payment-methods">
-            <div><img src="https://play-lh.googleusercontent.com/JBFEfcBlEhgL-QEP-Vw_drnPVLUcaxJQt_io9wxntkEJ-YBp1pXn3XQI1eiyzc-SQw=w240-h480-rw" alt="Tonkeeper"><strong>Tonkeeper</strong></div>
-            <div><img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet"><strong>Trust Wallet</strong></div>
-            <div><img src="https://logos.telegram-store.com/bots/cryptobot/telegram_bot_logo.jpg" alt="CryptoBot"><strong>@cryptobot</strong></div>
-            <div><img src="https://img.freepik.com/premium-photo/three-stacked-bank-cards-dark-background_1219282-1018.jpg?w=740" alt="Bank Transfer">
-                <strong data-en="European bank transfer" data-ru="Банковский перевод (EU)">European bank transfer</strong>
-            </div>
+<div id="paymentModal" class="modal"><div class="modal-content">
+    <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
+    <div class="payment-methods">
+        <div><img src="https://play-lh.googleusercontent.com/JBFEfcBlEhgL-QEP-Vw_drnPVLUcaxJQt_io9wxntkEJ-YBp1pXn3XQI1eiyzc-SQw=w240-h480-rw" alt="Tonkeeper"><strong>Tonkeeper</strong></div>
+        <div><img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet"><strong>Trust Wallet</strong></div>
+        <div><img src="https://logos.telegram-store.com/bots/cryptobot/telegram_bot_logo.jpg" alt="CryptoBot"><strong>@cryptobot</strong></div>
+        <div><img src="https://img.freepik.com/premium-photo/three-stacked-bank-cards-dark-background_1219282-1018.jpg?w=740" alt="Bank Transfer">
+            <strong data-en="European bank transfer" data-ru="Банковский перевод (EU)">European bank transfer</strong>
         </div>
-        <p style="margin-top:28px;opacity:0.85;font-size:16px;" data-en="DM me for wallet address" data-ru="Напиши мне — пришлю реквизиты">
-            DM me for wallet address
-        </p>
-        <button id="closePayment"><span data-en="Close" data-ru="Закрыть">Close</span></button>
     </div>
-</div>
+    <p style="margin-top:28px;opacity:0.85;font-size:16px;" data-en="DM me for wallet address" data-ru="Напиши мне — пришлю реквизиты">
+        DM me for wallet address
+    </p>
+    <button id="closePayment"><span data-en="Close" data-ru="Закрыть">Close</span></button>
+</div></div>
 
-<!-- Модалка отзыва -->
-<div id="reviewModal" class="modal">
-    <div class="modal-content">
-        <h3 data-en="Leave your review" data-ru="Оставить отзыв">Leave your review</h3>
-        <div id="googleSignInBtn" class="google-btn">Sign in with Google</div>
-        <div id="reviewForm" style="display:none;">
-            <textarea id="reviewText"
-                      data-en-placeholder="Write your review (up to 300 characters)..."
-                      data-ru-placeholder="Напиши свой отзыв (до 300 символов)..."
-                      placeholder="Напиши свой отзыв (до 300 символов)..."
-                      maxlength="300" rows="5"></textarea>
-            <div style="margin:20px 0;text-align:center;">
-                <div id="ratingStars" style="font-size:32px;letter-spacing:8px;cursor:pointer;">★★★★★</div>
-            </div>
-            <button id="submitReviewBtn" class="cta" style="width:100%;">
-                <span data-en="Submit review" data-ru="Отправить отзыв">Отправить отзыв</span>
-            </button>
-        </div>
-        <button id="closeReviewModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
+<div id="reviewModal" class="modal"><div class="modal-content">
+    <h3 data-en="Leave your review" data-ru="Оставить отзыв">Leave your review</h3>
+    <div id="googleSignInBtn" class="google-btn">Sign in with Google</div>
+    <div id="reviewForm" style="display:none;">
+        <textarea id="reviewText" data-en-placeholder="Write your review (up to 300 characters)..."
+                  data-ru-placeholder="Напиши свой отзыв (до 300 символов)..." placeholder="Напиши свой отзыв (до 300 символов)..." maxlength="300" rows="5"></textarea>
+        <div style="margin:20px 0;text-align:center;"><div id="ratingStars" style="font-size:32px;letter-spacing:8px;cursor:pointer;">★★★★★</div></div>
+        <button id="submitReviewBtn" class="cta" style="width:100%;"><span data-en="Submit review" data-ru="Отправить отзыв">Отправить отзыв</span></button>
     </div>
-</div>
+    <button id="closeReviewModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
+</div></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -295,185 +250,127 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Музыка + остальное (без изменений)
   const audio = document.getElementById('background-music');
   const player = document.getElementById('music-player');
-  const playBtn = document.getElementById('play-pause-btn');
-  const playIcon = playBtn.querySelector('.play');
-  const pauseIcon = playBtn.querySelector('.pause');
-
   document.body.addEventListener('click', () => audio.play().catch(()=>{}), {once:true});
   setTimeout(() => player.classList.add('visible'), 1000);
-
-  player.onclick = () => {
-    if (audio.paused) { audio.play(); player.classList.add('playing'); playIcon.style.display='none'; pauseIcon.style.display='block'; }
-    else { audio.pause(); player.classList.remove('playing'); playIcon.style.display='block'; pauseIcon.style.display='none'; }
-  };
-
+  player.onclick = () => { audio.paused ? audio.play() && player.classList.add('playing') : audio.pause() && player.classList.remove('playing'); };
   audio.addEventListener('timeupdate', () => {
-    if (!audio.duration) return;
-    const percent = (audio.currentTime / audio.duration) * 100;
+    const percent = (audio.currentTime / audio.duration) * 100 || 0;
     document.querySelector('.progress-fill').style.width = percent + '%';
     document.querySelector('.progress-knob').style.left = percent + '%';
   });
-
   document.getElementById('progress-container').onclick = e => {
     e.stopPropagation();
     const rect = e.currentTarget.getBoundingClientRect();
-    const pos = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = pos * audio.duration;
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
   };
 
-  // Язык
   let currentLang = 'en';
   document.getElementById('langMaster').onclick = () => document.getElementById('langPopup').classList.toggle('active');
-  
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.onclick = e => {
-      e.stopPropagation();
-      currentLang = btn.dataset.lang;
-      document.getElementById('langMaster').textContent = currentLang.toUpperCase();
-      
-      document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
-        if (el.dataset[currentLang]) el.textContent = el.dataset[currentLang];
-      });
-      
-      document.querySelectorAll('textarea[data-en-placeholder][data-ru-placeholder]').forEach(el => {
-        const key = currentLang === 'en' ? 'enPlaceholder' : 'ruPlaceholder';
-        el.placeholder = el.dataset[key];
-      });
-
-      document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang==='ru'?'flex':'none');
-      document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang==='en'?'flex':'none');
-      
-      document.getElementById('langPopup').classList.remove('active');
-    };
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => {
+    e.stopPropagation();
+    currentLang = btn.dataset.lang;
+    document.getElementById('langMaster').textContent = currentLang.toUpperCase();
+    document.querySelectorAll('[data-en],[data-ru]').forEach(el => el.dataset[currentLang] && (el.textContent = el.dataset[currentLang]));
+    document.querySelectorAll('textarea[data-en-placeholder]').forEach(el => el.placeholder = el.dataset[currentLang === 'en' ? 'enPlaceholder' : 'ruPlaceholder']);
+    document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang==='ru'?'flex':'none');
+    document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang==='en'?'flex':'none');
+    document.getElementById('langPopup').classList.remove('active');
   });
 
-  // Модалки
   document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
   document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
   document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
   document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
   document.getElementById('closePayment').onclick = () => document.getElementById('paymentModal').classList.remove('show');
   document.getElementById('closeReviewModal').onclick = () => document.getElementById('reviewModal').classList.remove('show');
-  document.querySelectorAll('.modal').forEach(m => m.onclick = e => {if(e.target===m) m.classList.remove('show');});
-  document.addEventListener('keydown', e => {if(e.key==='Escape') document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'));});
+  document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target===m && m.classList.remove('show'));
+  document.addEventListener('keydown', e => e.key==='Escape' && document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show')));
 
-  // Анимации
   setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
-  setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => {if(getComputedStyle(s).display!=='none') setTimeout(()=>s.classList.add('show'),600+i*150);}), 300);
+  setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => getComputedStyle(s).display!=='none' && setTimeout(()=>s.classList.add('show'),600+i*150)), 300);
 
-  // === ОТЗЫВЫ + АДМИНКА ===
+  // ОТЗЫВЫ + АДМИНКА
   let currentUser = null;
   let currentRating = 5;
-  const MY_UID = "EowDTxvpMhTcKhsV7x6kEpDAuyc2"; // ← твой настоящий UID
+  const MY_UID = "EowDTxvpMhTcKhsV7x6kEpDAuyc2";
 
   const reviewsList = document.getElementById("reviewsList");
-  const q = query(collection(db, "reviews"), orderBy("pinned", "desc"), orderBy("timestamp", "desc"));
+  const reviewsQuery = query(collection(db, "reviews"), orderBy("pinned", "desc"), orderBy("timestamp", "desc"));
 
-  onSnapshot(q, (snapshot) => {
-    reviewsList.innerHTML = "";
-    snapshot.forEach((doc) => {
-      const r = doc.data();
-      const isOwner = currentUser && currentUser.uid === MY_UID;
-
-      const div = document.createElement("div");
-      div.className = "review-card show";
-      div.innerHTML = `
-        <div class="review-header">
-          <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar" alt="avatar">
-          <div class="review-name">${r.name || (currentLang === 'ru' ? 'Аноним' : 'Anonymous')}</div>
-          ${r.pinned ? '<div style="color:#b91c3e;font-weight:900;margin-left:8px;">PINNED</div>' : ''}
-          <div class="review-date">${r.timestamp ? new Date(r.timestamp.toDate()).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US') : ''}</div>
-        </div>
-        <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
-        <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
-
-        ${isOwner ? `
-          <div style="margin-top:14px;display:flex;gap:12px;justify-content:flex-end;font-size:13px;">
-            <button class="pin-btn" data-id="${doc.id}" style="background:${r.pinned ? '#333' : 'rgba(185,28,62,0.2)'}; padding:8px 14px; border-radius:12px; border:none; cursor:pointer; color:#fff;">
+  function renderReviews() {
+    onSnapshot(reviewsQuery, snap => {
+      reviewsList.innerHTML = "";
+      snap.forEach(d => {
+        const r = d.data();
+        const isOwner = currentUser && currentUser.uid === MY_UID;
+        const div = document.createElement("div");
+        div.className = "review-card show";
+        div.innerHTML = `
+          <div class="review-header">
+            <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar">
+            <div class="review-name">${r.name || (currentLang==='ru'?'Аноним':'Anonymous')}</div>
+            ${r.pinned ? '<div style="color:#b91c3e;font-weight:900;margin-left:8px;">PINNED</div>' : ''}
+            <div class="review-date">${r.timestamp?.toDate?.().toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US') || ''}</div>
+          </div>
+          <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
+          ${isOwner ? `<div style="margin-top:14px;display:flex;gap:10px;justify-content:flex-end;">
+            <button class="pin-btn" data-id="${d.id}" style="background:${r.pinned?'#444':'rgba(185,28,62,0.3)'};padding:8px 14px;border-radius:8px;color:#fff;border:none;cursor:pointer;">
               ${r.pinned ? (currentLang==='ru'?'Открепить':'Unpin') : (currentLang==='ru'?'Закрепить':'Pin')}
             </button>
-            <button class="delete-btn" data-id="${doc.id}" style="background:#b91c3e; padding:8px 14px; border-radius:12px; border:none; cursor:pointer; color:#fff;">
+            <button class="delete-btn" data-id="${d.id}" style="background:#b91c3e;padding:8px 14px;border-radius:8px;color:#fff;border:none;cursor:pointer;">
               ${currentLang==='ru'?'Удалить':'Delete'}
             </button>
-          </div>
-        ` : ''}
-      `;
-      reviewsList.appendChild(div);
+          </div>` : ''}
+        `;
+        reviewsList.appendChild(div);
+      });
+
+      if (currentUser && currentUser.uid === MY_UID) {
+        document.querySelectorAll('.delete-btn').forEach(b => b.onclick = () => confirm(currentLang==='ru'?'Удалить навсегда?':'Delete forever?') && deleteDoc(doc(db, "reviews", b.dataset.id)));
+        document.querySelectorAll('.pin-btn').forEach(b => b.onclick = async () => {
+          const id = b.dataset.id;
+          const wasPinned = b.textContent.includes(currentLang==='ru'?'Открепить':'Unpin');
+          snap.docs.forEach(d => d.data().pinned && d.id !== id && updateDoc(doc(db, "reviews", d.id), {pinned:false}));
+          await updateDoc(doc(db, "reviews", id), {pinned: !wasPinned});
+        });
+      }
     });
+  }
 
-    if (currentUser && currentUser.uid === MY_UID) {
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.onclick = async () => {
-          if (confirm(currentLang === 'ru' ? "Удалить отзыв навсегда?" : "Delete review permanently?")) {
-            await deleteDoc(doc(db, "reviews", btn.dataset.id));
-          }
-        };
-      });
-
-      document.querySelectorAll('.pin-btn').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.dataset.id;
-          const wasPinned = btn.textContent.includes(currentLang==='ru'?'Открепить':'Unpin');
-
-          snapshot.docs.forEach(d => {
-            if (d.data().pinned && d.id !== id) {
-              updateDoc(doc(db, "reviews", d.id), { pinned: false });
-            }
-          });
-
-          await updateDoc(doc(db, "reviews", id), { pinned: !wasPinned });
-        };
-      });
-    }
-  });
+  onAuthStateChanged(auth, user => { currentUser = user; renderReviews(); });
 
   document.getElementById("googleSignInBtn").onclick = async () => {
     const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      currentUser = result.user;
-      document.getElementById("googleSignInBtn").style.display = "none";
-      document.getElementById("reviewForm").style.display = "block";
-    } catch (err) { alert("Error: " + err.message); }
+    const result = await signInWithPopup(auth, provider);
+    currentUser = result.user;
+    document.getElementById("googleSignInBtn").style.display = "none";
+    document.getElementById("reviewForm").style.display = "block";
   };
 
-  const starsContainer = document.getElementById("ratingStars");
-  function updateStars() {
-    starsContainer.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
-  }
-  starsContainer.addEventListener("click", e => {
-    const rect = starsContainer.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const width = rect.width;
-    currentRating = Math.round((offsetX / width) * 5) || 1;
-    currentRating = Math.max(1, Math.min(5, currentRating));
-    updateStars();
+  document.getElementById("ratingStars").addEventListener("click", e => {
+    const rect = e.target.getBoundingClientRect();
+    currentRating = Math.max(1, Math.min(5, Math.round((e.clientX - rect.left) / rect.width * 5)));
+    e.target.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
   });
-  updateStars();
 
   document.getElementById("submitReviewBtn").onclick = async () => {
     const text = document.getElementById("reviewText").value.trim();
-    if (!text) return alert(currentLang === 'ru' ? "Напиши отзыв!" : "Please write a review!");
-    if (!currentUser) return alert(currentLang === 'ru' ? "Сначала войди через Google" : "Sign in with Google first");
+    if (!text) return alert(currentLang==='ru'?'Напиши отзыв!':'Write a review!');
+    if (!currentUser) return alert(currentLang==='ru'?'Войди через Google':'Sign in with Google');
 
-    try {
-      await addDoc(collection(db, "reviews"), {
-        name: currentUser.displayName,
-        photoURL: currentUser.photoURL,
-        text: text,
-        rating: currentRating,
-        pinned: false,
-        timestamp: serverTimestamp()
-      });
-      alert(currentLang === 'ru' ? "Спасибо за отзыв!" : "Thank you for your review!");
-      document.getElementById("reviewModal").classList.remove("show");
-      document.getElementById("reviewText").value = "";
-      currentRating = 5;
-      updateStars();
-    } catch (err) { alert("Error: " + err.message); }
+    await addDoc(collection(db, "reviews"), {
+      name: currentUser.displayName,
+      photoURL: currentUser.photoURL,
+      text, rating: currentRating, pinned: false, timestamp: serverTimestamp()
+    });
+    alert(currentLang==='ru'?'Спасибо за отзыв!':'Thank you!');
+    document.getElementById("reviewModal").classList.remove("show");
+    document.getElementById("reviewText").value = "";
+    currentRating = 5;
+    document.getElementById("ratingStars").innerHTML = '★★★★★';
   };
 </script>
 </body>
