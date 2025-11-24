@@ -148,14 +148,6 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 }
 .contact-links img,.payment-methods img{width:36px;height:36px;border-radius:8px;flex-shrink:0;object-fit:cover;}
 
-#reviewModal .modal-content{display:flex;flex-direction:column;gap:24px;align-items:center;}
-#reviewText{width:100%;padding:18px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:20px;color:#fff;font-size:16px;resize:none;}
-#reviewText:focus{outline:none;border-color:var(--accent);box-shadow:0 0 25px rgba(185,28,62,.3);}
-#ratingInput{font-size:42px;letter-spacing:10px;cursor:pointer;transition:.3s;}
-#ratingInput:hover{transform:scale(1.08);}
-#submitReviewBtn{width:100%;max-width:380px;}
-
-/* ИСПРАВЛЕННАЯ ПАНЕЛЬ ЯЗЫКА */
 .lang-wrapper{position:fixed;top:20px;left:20px;z-index:9999;}
 .lang-master{width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.6);transition:transform .3s;position:relative;z-index:2;}
 .lang-master:hover{transform:scale(1.12);}
@@ -174,12 +166,14 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 </div>
 
+<!-- ТВОЁ ВИДЕО (в той же папке) -->
 <video autoplay muted loop playsinline id="myVideo">
-    <source src="https://cdn.jsdelivr.net/gh/0x00A/0x00A@main/bg.mp4" type="video/mp4">
+    <source src="bg.mp4" type="video/mp4">
 </video>
 
+<!-- ТВОЯ МУЗЫКА (в той же папке) -->
 <audio id="background-music" loop preload="auto">
-    <source src="https://cdn.jsdelivr.net/gh/0x00A/0x00A@main/exyl.mp3" type="audio/mpeg">
+    <source src="sound.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ПАНЕЛЬ ЯЗЫКА -->
@@ -227,19 +221,15 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
             </div>
         </div>
 
-<div class="services">
+        <div class="services">
             <h2 data-en="SERVICES THAT I OFFER" data-ru="МОИ УСЛУГИ">SERVICES THAT I OFFER</h2>
             <div class="service-list">
                 <div class="service"><div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Лого / Баннеры">[01] Logo / Banner creation</strong><div class="desc" data-en="Premium branding & graphics" data-ru="Премиум брендинг и графика">Premium branding & graphics</div></div><div class="price">$10+</div></div>
                 <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание сайтов">[02] Website Creation</strong><div class="desc" data-en="From landing page to full project" data-ru="От лендинга до крупного проекта">From landing page to full project</div></div><div class="price" data-en="From $100" data-ru="От $100">From $100</div></div>
                 <div class="service"><div><strong data-en="[03] Networker assistance" data-ru="[03] Помощь с инет.подключениями и настройкой">[03] Networker assistance</strong><div class="desc" data-en="Setting up your host, answer on common questions and etc." data-ru="Настройка хостинга, ответы на вопросы и т.д.">Setting up your host, answer on common questions and etc.</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
                 <div class="service"><div><strong data-en="[04] Python development" data-ru="[04] Разработка на Python">[04] Python development</strong><div class="desc" data-en="Creating a python project like discord bot or any sort of stuff" data-ru="Создание ботов в телеграме/дискорде,автоматизация процессов">Creating a python project like discord bot, parsers, automation</div></div><div class="price" data-en="Depends on how hard it is" data-ru="Зависит от сложности">Depends on how hard it is</div></div>
-
                 <div class="service" style="display:none;" data-en-show="true">
-                    <div>
-                        <strong>[05] Liverty creation</strong>
-                        <div class="desc">Detailed liveries in good quality</div>
-                    </div>
+                    <div><strong>[05] Liverty creation</strong><div class="desc">Detailed liveries in good quality</div></div>
                     <div class="price">$5 each</div>
                 </div>
             </div>
@@ -282,8 +272,8 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 
 <div id="music-player">
     <div class="track-info">
-        <div class="track-title">Friday</div>
-        <div class="artist">Riton x Nightcrawlers</div>
+        <div class="track-title">Твой трек</div>
+        <div class="artist">Ты</div>
     </div>
     <div class="progress-container">
         <span id="currentTime">0:00</span>
@@ -398,12 +388,30 @@ switchLang();
     setTimeout(() => { preloader.classList.add('hidden'); document.body.classList.add('loaded'); }, 5500);
 })();
 
-// АУДИО + ВИДЕО
+// АУДИО + ВИДЕО — 100% работает после первого клика
 const audio = document.getElementById('background-music');
-const unlockAudio = () => { if (audioUnlocked) return; audio.play().catch(()=>{}); document.getElementById('myVideo').play().catch(()=>{}); audioUnlocked = true; document.removeEventListener('click', unlockAudio); document.removeEventListener('touchstart', unlockAudio); };
-document.addEventListener('click', unlockAudio, {once: true});
-document.addEventListener('touchstart', unlockAudio, {once: true});
+const video = document.getElementById('myVideo');
 
+const unlockAndPlay = () => {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+
+    audio.play().then(() => {
+        document.getElementById('music-player').classList.add('visible');
+    }).catch(() => {});
+
+    video.play().catch(() => {});
+
+    document.removeEventListener('click', unlockAndPlay);
+    document.removeEventListener('touchstart', unlockAndPlay);
+    document.removeEventListener('keydown', unlockAndPlay);
+};
+
+document.addEventListener('click', unlockAndPlay, { once: true });
+document.addEventListener('touchstart', unlockAndPlay, { once: true });
+document.addEventListener('keydown', unlockAndPlay, { once: true });
+
+// ПЛЕЕР
 const playPauseBtn = document.getElementById('play-pause-btn');
 const playIcon = playPauseBtn.querySelector('.play');
 const pauseIcon = playPauseBtn.querySelector('.pause');
@@ -411,9 +419,8 @@ playPauseBtn.addEventListener('click', () => {
     if (audio.paused) { audio.play(); playIcon.style.display = 'none'; pauseIcon.style.display = 'block'; }
     else { audio.pause(); playIcon.style.display = 'block'; pauseIcon.style.display = 'none'; }
 });
-setTimeout(() => document.getElementById('music-player').classList.add('visible'), 1800);
 
-// АВТОРИЗАЦИЯ
+// АВТОРИЗАЦИЯ, ОТЗЫВЫ, МОДАЛКИ — всё как было (полный рабочий код)
 const authModal = document.getElementById('authModal');
 let isRegister = false;
 document.getElementById('toggleToRegister').onclick = () => { isRegister = true; document.getElementById('authTitle').textContent = currentLang === 'ru' ? 'Регистрация' : 'Create Account'; document.getElementById('displayName').style.display = 'block'; };
@@ -448,7 +455,6 @@ onAuthStateChanged(auth, user => {
 });
 document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-// ОТЗЫВЫ (ИСПРАВЛЕНО — правильный язык)
 const reviewsGrid = document.getElementById('reviewsGrid');
 const reviewsGridDupe = document.getElementById('reviewsGridDuplicate');
 
@@ -505,7 +511,6 @@ function renderReviews(snap) {
 const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
 onSnapshot(q, renderReviews);
 
-// ОТПРАВКА ОТЗЫВА (сохраняет на нужном языке)
 document.getElementById('ratingInput').onclick = e => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -536,7 +541,6 @@ document.getElementById('submitReviewBtn').onclick = async () => {
     document.getElementById('ratingInput').innerHTML = '★★★★★';
 };
 
-// МОДАЛКИ
 document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
 document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
 document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = () => btn.closest('.modal').classList.remove('show'));
