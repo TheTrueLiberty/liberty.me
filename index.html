@@ -93,12 +93,37 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .service strong{font-size:21px;color:var(--accent);font-weight:700;}
 .service .desc{font-size:15px;color:var(--text-light);opacity:0.92;}
 .service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
+
+/* НОВЫЕ КРУТЫЕ ЗВЁЗДЫ */
+.rating {
+    display: inline-flex;
+    gap: 6px;
+    font-size: 26px;
+    line-height: 1;
+}
+.rating span {
+    color: #444;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    text-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+.rating span.filled {
+    color: transparent;
+    background: linear-gradient(90deg, #b91c3e, #ff3366);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(185, 28, 62, 0.7);
+    animation: starGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes starGlow {
+    from { text-shadow: 0 0 20px rgba(185, 28, 62, 0.7); }
+    to   { text-shadow: 0 0 30px rgba(255, 51, 102, 0.9); }
+}
+
 .review-header{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
 .review-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);}
 .review-name{font-weight:700;color:#fff;font-size:17px;}
 .review-date{font-size:13px;color:var(--text-light);opacity:0.7;margin-left:auto;}
-.review-stars{color:#ffd700;margin-top:8px;font-size:20px;}
-.review-text{font-size:16px;line-height:1.5;margin-top:8px;}
+.review-text{font-size:16px;line-height:1.5;margin-top:12px;color:var(--text-light);}
 
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
     opacity:0;pointer-events:none;transition:0.5s;z-index:1000;padding:20px;}
@@ -225,7 +250,9 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     <div id="reviewForm" style="display:none;">
         <textarea id="reviewText" data-en-placeholder="Write your review (up to 300 characters)..."
                   data-ru-placeholder="Напиши свой отзыв (до 300 символов)..." placeholder="Напиши свой отзыв (до 300 символов)..." maxlength="300" rows="5"></textarea>
-        <div style="margin:20px 0;text-align:center;"><div id="ratingStars" style="font-size:32px;letter-spacing:8px;cursor:pointer;">★★★★★</div></div>
+        <div style="margin:28px 0;text-align:center;">
+            <div id="ratingInput" class="rating" style="font-size:36px;letter-spacing:8px;cursor:pointer;">☆☆☆☆☆</div>
+        </div>
         <button id="submitReviewBtn" class="cta" style="width:100%;"><span data-en="Submit review" data-ru="Отправить отзыв">Отправить отзыв</span></button>
     </div>
     <button id="closeReviewModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
@@ -250,6 +277,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // Музыка
   const audio = document.getElementById('background-music');
   const player = document.getElementById('music-player');
   document.body.addEventListener('click', () => audio.play().catch(()=>{}), {once:true});
@@ -266,6 +294,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
   };
 
+  // Язык
   let currentLang = 'en';
   document.getElementById('langMaster').onclick = () => document.getElementById('langPopup').classList.toggle('active');
   document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => {
@@ -279,6 +308,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     document.getElementById('langPopup').classList.remove('active');
   });
 
+  // Модалки
   document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
   document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
   document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
@@ -286,18 +316,31 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   document.getElementById('closePayment').onclick = () => document.getElementById('paymentModal').classList.remove('show');
   document.getElementById('closeReviewModal').onclick = () => document.getElementById('reviewModal').classList.remove('show');
   document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target===m && m.classList.remove('show'));
-  document.addEventListener('keydown', e => e.key==='Escape' && document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show')));
+  document.addEventListener('keydown', e => e.key==='Escape' && document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show')));
 
+  // Анимации появления
   setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
   setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => getComputedStyle(s).display!=='none' && setTimeout(()=>s.classList.add('show'),600+i*150)), 300);
 
-  // ОТЗЫВЫ + АДМИНКА
+  // === НОВЫЕ ЗВЁЗДЫ + ОТЗЫВЫ ===
   let currentUser = null;
   let currentRating = 5;
   const MY_UID = "EowDTxvpMhTcKhsV7x6kEpDAuyc2";
 
   const reviewsList = document.getElementById("reviewsList");
   const reviewsQuery = query(collection(db, "reviews"), orderBy("pinned", "desc"), orderBy("timestamp", "desc"));
+
+  function createStars(rating) {
+    const div = document.createElement('div');
+    div.className = 'rating';
+    for(let i=1;i<=5;i++){
+      const s = document.createElement('span');
+      s.textContent = '★';
+      if(i <= rating) s.classList.add('filled');
+      div.appendChild(s);
+    }
+    return div.outerHTML;
+  }
 
   function renderReviews() {
     onSnapshot(reviewsQuery, snap => {
@@ -306,21 +349,21 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         const r = d.data();
         const isOwner = currentUser && currentUser.uid === MY_UID;
         const div = document.createElement("div");
-        div.className = "review-card show";
+        div.className = "review-card";
         div.innerHTML = `
           <div class="review-header">
-            <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar">
+            <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar" alt="avatar">
             <div class="review-name">${r.name || (currentLang==='ru'?'Аноним':'Anonymous')}</div>
             ${r.pinned ? '<div style="color:#b91c3e;font-weight:900;margin-left:8px;">PINNED</div>' : ''}
             <div class="review-date">${r.timestamp?.toDate?.().toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US') || ''}</div>
           </div>
-          <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          <div class="rating-display">${createStars(r.rating)}</div>
           <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
-          ${isOwner ? `<div style="margin-top:14px;display:flex;gap:10px;justify-content:flex-end;">
-            <button class="pin-btn" data-id="${d.id}" style="background:${r.pinned?'#444':'rgba(185,28,62,0.3)'};padding:8px 14px;border-radius:8px;color:#fff;border:none;cursor:pointer;">
+          ${isOwner ? `<div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;">
+            <button class="pin-btn" data-id="${d.id}" style="background:${r.pinned?'#444':'rgba(185,28,62,0.3)'};padding:8px 16px;border-radius:10px;color:#fff;border:none;cursor:pointer;font-size:14px;">
               ${r.pinned ? (currentLang==='ru'?'Открепить':'Unpin') : (currentLang==='ru'?'Закрепить':'Pin')}
             </button>
-            <button class="delete-btn" data-id="${d.id}" style="background:#b91c3e;padding:8px 14px;border-radius:8px;color:#fff;border:none;cursor:pointer;">
+            <button class="delete-btn" data-id="${d.id}" style="background:#b91c3e;padding:8px 16px;border-radius:10px;color:#fff;border:none;cursor:pointer;font-size:14px;">
               ${currentLang==='ru'?'Удалить':'Delete'}
             </button>
           </div>` : ''}
@@ -328,6 +371,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         reviewsList.appendChild(div);
       });
 
+      // Админка
       if (currentUser && currentUser.uid === MY_UID) {
         document.querySelectorAll('.delete-btn').forEach(b => b.onclick = () => confirm(currentLang==='ru'?'Удалить навсегда?':'Delete forever?') && deleteDoc(doc(db, "reviews", b.dataset.id)));
         document.querySelectorAll('.pin-btn').forEach(b => b.onclick = async () => {
@@ -342,6 +386,19 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 
   onAuthStateChanged(auth, user => { currentUser = user; renderReviews(); });
 
+  // Ввод рейтинга при оставлении отзыва
+  const ratingInput = document.getElementById('ratingInput');
+  ratingInput.addEventListener('click', e => {
+    const rect = ratingInput.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    currentRating = Math.round(offsetX / rect.width * 5) || 1;
+    currentRating = Math.max(1, Math.min(5, currentRating));
+    ratingInput.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
+    ratingInput.querySelectorAll('span').forEach((s,i) => {
+      s.classList.toggle('filled', i < currentRating);
+    });
+  });
+
   document.getElementById("googleSignInBtn").onclick = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
@@ -349,12 +406,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     document.getElementById("googleSignInBtn").style.display = "none";
     document.getElementById("reviewForm").style.display = "block";
   };
-
-  document.getElementById("ratingStars").addEventListener("click", e => {
-    const rect = e.target.getBoundingClientRect();
-    currentRating = Math.max(1, Math.min(5, Math.round((e.clientX - rect.left) / rect.width * 5)));
-    e.target.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
-  });
 
   document.getElementById("submitReviewBtn").onclick = async () => {
     const text = document.getElementById("reviewText").value.trim();
@@ -366,11 +417,12 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
       photoURL: currentUser.photoURL,
       text, rating: currentRating, pinned: false, timestamp: serverTimestamp()
     });
+
     alert(currentLang==='ru'?'Спасибо за отзыв!':'Thank you!');
     document.getElementById("reviewModal").classList.remove("show");
     document.getElementById("reviewText").value = "";
     currentRating = 5;
-    document.getElementById("ratingStars").innerHTML = '★★★★★';
+    ratingInput.innerHTML = '☆☆☆☆☆';
   };
 </script>
 </body>
