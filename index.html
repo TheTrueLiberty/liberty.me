@@ -45,9 +45,9 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     display:inline-block;min-width:220px;text-align:center;font-weight:600;}
 .cta:hover{background:var(--accent-hover);transform:translateY(-6px);}
 
-/* Плеер — идеально на телефоне */
+/* Плеер — красиво на всех экранах */
 #music-player{
-    position:fixed;bottom:20px;right:20px;left:20px;width:auto;max-width:420px;margin:0 auto;left:50%;transform:translateX(-50%);
+    position:fixed;bottom:20px;left:20px;right:20px;max-width:440px;margin:0 auto;left:50%;transform:translateX(-50%);
     background:rgba(20,20,35,0.96);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
     border:1px solid rgba(185,28,62,0.35);border-radius:28px;padding:16px 20px;
     display:flex;align-items:center;gap:16px;z-index:999;
@@ -57,10 +57,9 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 }
 #music-player.visible{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
 #play-pause-btn{width:60px;height:60px;background:var(--accent);border:none;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    box-shadow:0 12px 30px rgba(185,28,62,0.5);}
-#play-pause-btn:hover{background:var(--accent-hover);}
-#play-pause-btn svg{width:26px;height:26px;fill:#fff;}
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 12px 30px rgba(185,28,62,0.5);}
+#play-pause-btn:hover{background:var(--accent-hover);transform:scale(1.1);}
+#play-pause-btn svg{width:26px;height:26px;fill:#fff;transition:all 0.3s;}
 #music-player.playing #play-pause-btn{animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{box-shadow:0 12px 30px rgba(185,28,62,0.5);}50%{box-shadow:0 12px 45px rgba(185,28,62,0.8);}}
 .track-info{flex:1;overflow:hidden;}
@@ -74,27 +73,54 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     background:#fff;border-radius:50%;opacity:0;box-shadow:0 0 20px rgba(185,28,62,0.9);transition:opacity 0.2s;}
 .progress-container:hover .progress-knob{opacity:1;}
 
-/* Язык и модалки — адаптив */
-.lang-master{top:16px;left:16px;width:50px;height:50px;font-size:17px;}
-.lang-popup{top:76px;left:16px;}
-.lang-btn{width:48px;height:48px;font-size:16px;}
+/* Язык */
+.lang-master{position:fixed;top:16px;left:16px;width:50px;height:50px;background:rgba(18,18,28,0.95);border:2px solid var(--accent);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:700;cursor:pointer;z-index:1001;
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);transition:all 0.3s;}
+.lang-master:hover{transform:scale(1.08);border-color:var(--accent-hover);}
+.lang-popup{position:fixed;top:76px;left:16px;z-index:1000;opacity:0;pointer-events:none;transition:all 0.4s;display:flex;flex-direction:column;gap:10px;}
+.lang-popup.active{opacity:1;pointer-events:all;}
+.lang-btn{width:48px;height:48px;background:rgba(18,18,28,0.95);border:2px solid var(--border);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;cursor:pointer;transition:all 0.3s;
+    box-shadow:0 6px 20px rgba(0,0,0,0.5);}
+.lang-btn:hover{border-color:var(--accent);transform:scale(1.1);background:var(--accent);}
 
 /* Услуги */
-.services h2{font-size:38px;margin:100px 0 50px;}
+.services h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
 @media (max-width:480px){.services h2{font-size:32px;margin:80px 0 40px;}}
-.service-list{grid-template-columns:1fr;gap:20px;}
-.service{padding:28px;border-radius:20px;}
-.service strong{font-size:21px;}
-.service .desc{font-size:15px;}
-.service .price{font-size:19px;}
+.service-list{display:grid;grid-template-columns:1fr;gap:20px;}
+@media (min-width:992px){.service-list{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));}}
+.service{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;
+    padding:28px;display:flex;flex-direction:column;gap:12px;transition:all 0.5s;opacity:0;transform:translateY(30px);}
+.service.show{opacity:1;transform:none;}
+.service:hover{transform:translateY(-10px);border-color:var(--accent);}
+.service strong{font-size:21px;color:var(--accent);font-weight:700;}
+.service .desc{font-size:15px;color:var(--text-light);opacity:0.92;}
+.service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
 
-/* Модалки */
-.modal-content{padding:50px 30px;border-radius:28px;}
+/* Модальные окна */
+#contactModal, #paymentModal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:0.5s;z-index:1000;padding:20px;}
+#contactModal.show, #paymentModal.show{opacity:1;pointer-events:auto;}
+.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);padding:50px 30px;border-radius:28px;
+    width:100%;max-width:540px;text-align:center;transform:scale(0.92);transition:0.5s;}
+#contactModal.show .modal-content, #paymentModal.show .modal-content{transform:scale(1);}
 @media (max-width:480px){.modal-content{padding:40px 24px;}}
-.modal-content h3{font-size:34px;}
-.contact-links a{font-size:18px;padding:14px 20px;}
-.payment-methods > div{padding:16px 20px;font-size:18px;gap:16px;}
-.payment-methods img{width:56px;height:56px;}
+.modal-content h3{color:var(--accent);font-size:34px;margin-bottom:28px;font-weight:800;}
+.contact-links a{display:flex;align-items:center;gap:18px;color:var(--text);font-size:18px;margin:18px 0;text-decoration:none;
+    transition:0.3s;padding:14px 20px;background:rgba(185,28,62,0.08);border-radius:18px;font-weight:500;}
+.contact-links a:hover{background:rgba(185,28,62,0.16);transform:translateY(-4px);}
+.contact-links img{width:46px;height:46px;filter:brightness(0) invert(1);}
+.payment-methods > div{display:flex;align-items:center;gap:20px;background:rgba(185,28,62,0.08);border:1px solid rgba(185,28,62,0.2);
+    border-radius:20px;padding:16px 20px;margin:14px 0;transition:all 0.4s;font-weight:600;font-size:18px;color:var(--text);}
+.payment-methods > div:hover{background:rgba(185,28,62,0.18);border-color:var(--accent);transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(185,28,62,0.25);}
+.payment-methods img{width:56px;height:56px;border-radius:50%;object-fit:contain;background:#111;padding:6px;
+    border:3px solid rgba(185,28,62,0.3);box-shadow:0 6px 20px rgba(0,0,0,0.5);}
+.payment-methods > div:hover img{border-color:var(--accent);transform:scale(1.15);box-shadow:0 0 28px rgba(185,28,62,0.6);}
+#closeModal,#closePayment{background:var(--accent);color:#fff;border:none;padding:14px 36px;border-radius:50px;
+    cursor:pointer;font-size:17px;margin-top:28px;transition:0.3s;font-weight:600;}
+#closeModal:hover,#closePayment:hover{background:var(--accent-hover);transform:scale(1.06);}
 </style>
 </head>
 <body>
@@ -102,6 +128,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <video autoplay muted loop playsinline id="myVideo"><source src="assets/фон.mp4" type="video/mp4"></video>
 <audio id="background-music" loop preload="auto"><source src="assets/песня.mp3" type="audio/mpeg"></audio>
 
+<!-- Язык -->
 <div class="lang-master" id="langMaster">EN</div>
 <div class="lang-popup" id="langPopup">
     <div class="lang-btn" data-lang="en">EN</div>
@@ -147,7 +174,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- Плеер (теперь по центру снизу на телефоне) -->
+<!-- Плеер -->
 <div id="music-player">
     <button id="play-pause-btn">
         <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -163,8 +190,20 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- Контакты и оплата — без изменений, но адаптивны -->
-<div id="contactModal">…</div>
+<!-- Контакты -->
+<div id="contactModal">
+    <div class="modal-content">
+        <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
+        <div class="contact-links">
+            <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt="Gmail"> interpoldis@gmail.com</a>
+            <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt="Telegram"> @TheTrueLiberty</a>
+            <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt="Discord"> TheTrueLiberty</a>
+        </div>
+        <button id="closeModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
+    </div>
+</div>
+
+<!-- Оплата -->
 <div id="paymentModal">
     <div class="modal-content">
         <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
@@ -184,7 +223,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 </div>
 
 <script>
-// Тот же скрипт, что и раньше — полностью рабочий
 document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('background-music');
     const player = document.getElementById('music-player');
@@ -192,14 +230,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const playIcon = playBtn.querySelector('.play');
     const pauseIcon = playBtn.querySelector('.pause');
 
+    // Автозапуск после первого клика (обход политики браузеров)
     document.body.addEventListener('click', () => audio.play().catch(()=>{}), {once:true});
     setTimeout(() => player.classList.add('visible'), 1000);
 
+    // Плей/пауза
     player.onclick = () => {
-        if (audio.paused) { audio.play(); player.classList.add('playing'); playIcon.style.display = 'none'; pauseIcon.style.display = 'block'; }
-        else { audio.pause(); player.classList.remove('playing'); playIcon.style.display = 'block'; pauseIcon.style.display = 'none'; }
+        if (audio.paused) {
+            audio.play();
+            player.classList.add('playing');
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        } else {
+            audio.pause();
+            player.classList.remove('playing');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        }
     };
 
+    // Прогресс-бар
     audio.addEventListener('timeupdate', () => {
         if (!audio.duration) return;
         const percent = (audio.currentTime / audio.duration) * 100;
@@ -214,8 +264,50 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.currentTime = pos * audio.duration;
     };
 
-    // Язык + модалки + анимации — всё как раньше
-    // (вставь сюда весь скрипт из предыдущего сообщения — он полностью рабочий)
+    // Переключение языка
+    const langMaster = document.getElementById('langMaster');
+    const langPopup = document.getElementById('langPopup');
+    let currentLang = 'en';
+    langMaster.onclick = () => langPopup.classList.toggle('active');
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.onclick = e => {
+            e.stopPropagation();
+            currentLang = btn.dataset.lang;
+            langMaster.textContent = currentLang.toUpperCase();
+            document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
+                if (el.dataset[currentLang]) el.textContent = el.dataset[currentLang];
+            });
+            document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang === 'ru' ? 'flex' : 'none');
+            document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang === 'en' ? 'flex' : 'none');
+            document.querySelectorAll('.service').forEach(s => s.classList.remove('show'));
+            setTimeout(() => {
+                document.querySelectorAll('.service').forEach((s, i) => {
+                    if (getComputedStyle(s).display !== 'none') setTimeout(() => s.classList.add('show'), i * 150);
+                });
+            }, 100);
+            langPopup.classList.remove('active');
+        };
+    });
+
+    // Модальные окна
+    document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
+    document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
+    document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
+    document.getElementById('closePayment').onclick = () => document.getElementById('paymentModal').classList.remove('show');
+    document.getElementById('contactModal').onclick = e => { if (e.target === e.currentTarget) document.getElementById('contactModal').classList.remove('show'); };
+    document.getElementById('paymentModal').onclick = e => { if (e.target === e.currentTarget) document.getElementById('paymentModal').classList.remove('show'); };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') {
+        document.getElementById('contactModal').classList.remove('show');
+        document.getElementById('paymentModal').classList.remove('show');
+    }});
+
+    // Анимации появления
+    setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
+    setTimeout(() => {
+        document.querySelectorAll('.service').forEach((s, i) => {
+            if (getComputedStyle(s).display !== 'none') setTimeout(() => s.classList.add('show'), 600 + i * 150);
+        });
+    }, 300);
 });
 </script>
 </body>
