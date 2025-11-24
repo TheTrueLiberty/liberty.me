@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-    --bg:#0a0a0a;--card:rgba(18,18,28,0.82);--glass:rgba(28,28,40,0.45);
+    --bg:#0a0a0a;--card:rgba(18,18,28,0.82);--glass:rgba(28,28,28,0.45);
     --accent:#b91c3e;--accent-hover:#e0204b;--text:#ececf5;--text-light:#aaaaaa;--border:rgba(185,28,62,0.28);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -35,7 +35,6 @@ h1,h2,h3,h4,h5,h6,strong{font-weight:700;letter-spacing:-0.3px;}
 h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 @media (max-width:480px){h1{font-size:38px;}}
 .subtitle{font-size:18px;margin-bottom:36px;color:var(--text-light);opacity:0.9;}
-@media (max-width:480px){.subtitle{font-size:16px;}}
 .stats{display:flex;gap:32px;flex-wrap:wrap;justify-content:center;margin:36px 0;}
 .stat{font-size:32px;color:var(--accent);font-weight:800;}
 .stat small{font-size:14px;margin-top:4px;color:var(--text-light);display:block;opacity:0.9;font-weight:500;}
@@ -45,7 +44,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     display:inline-block;min-width:220px;text-align:center;font-weight:600;}
 .cta:hover{background:var(--accent-hover);transform:translateY(-6px);}
 
-/* Плеер — красиво на всех экранах */
+/* Плеер */
 #music-player{
     position:fixed;bottom:20px;left:20px;right:20px;max-width:440px;margin:0 auto;left:50%;transform:translateX(-50%);
     background:rgba(20,20,35,0.96);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
@@ -53,8 +52,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     display:flex;align-items:center;gap:16px;z-index:999;
     box-shadow:0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(185,28,62,0.2);
     opacity:0;transform:translateX(-50%) translateY(40px) scale(0.94);
-    transition:all 0.7s cubic-bezier(0.23,1,0.32,1);
-}
+    transition:all 0.7s cubic-bezier(0.23,1,0.32,1);}
 #music-player.visible{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
 #play-pause-btn{width:60px;height:60px;background:var(--accent);border:none;border-radius:50%;
     display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 12px 30px rgba(185,28,62,0.5);}
@@ -85,42 +83,42 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     box-shadow:0 6px 20px rgba(0,0,0,0.5);}
 .lang-btn:hover{border-color:var(--accent);transform:scale(1.1);background:var(--accent);}
 
-/* Услуги */
-.services h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
-@media (max-width:480px){.services h2{font-size:32px;margin:80px 0 40px;}}
-.service-list{display:grid;grid-template-columns:1fr;gap:20px;}
+/* Услуги и отзывы */
+.services h2,.reviews-section h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
+@media (max-width:480px){.services h2,.reviews-section h2{font-size:32px;margin:80px 0 40px;}}
+.service-list,.reviews-list{display:grid;gap:24px;grid-template-columns:1fr;}
 @media (min-width:992px){.service-list{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));}}
-.service{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;
+@media (min-width:768px){.reviews-list{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));}}
+.service,.review-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;
     padding:28px;display:flex;flex-direction:column;gap:12px;transition:all 0.5s;opacity:0;transform:translateY(30px);}
-.service.show{opacity:1;transform:none;}
-.service:hover{transform:translateY(-10px);border-color:var(--accent);}
+.service.show,.review-card{opacity:1;transform:none;}
+.service:hover,.review-card:hover{transform:translateY(-10px);border-color:var(--accent);}
 .service strong{font-size:21px;color:var(--accent);font-weight:700;}
 .service .desc{font-size:15px;color:var(--text-light);opacity:0.92;}
 .service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
+.review-header{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
+.review-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);}
+.review-name{font-weight:700;color:#fff;font-size:17px;}
+.review-date{font-size:13px;color:var(--text-light);opacity:0.7;margin-left:auto;}
+.review-stars{color:#ffd700;margin-top:8px;font-size:20px;}
+.review-text{font-size:16px;line-height:1.5;margin-top:8px;}
 
 /* Модальные окна */
-#contactModal, #paymentModal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
     opacity:0;pointer-events:none;transition:0.5s;z-index:1000;padding:20px;}
-#contactModal.show, #paymentModal.show{opacity:1;pointer-events:auto;}
+.modal.show{opacity:1;pointer-events:auto;}
 .modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);padding:50px 30px;border-radius:28px;
     width:100%;max-width:540px;text-align:center;transform:scale(0.92);transition:0.5s;}
-#contactModal.show .modal-content, #paymentModal.show .modal-content{transform:scale(1);}
-@media (max-width:480px){.modal-content{padding:40px 24px;}}
-.modal-content h3{color:var(--accent);font-size:34px;margin-bottom:28px;font-weight:800;}
-.contact-links a{display:flex;align-items:center;gap:18px;color:var(--text);font-size:18px;margin:18px 0;text-decoration:none;
-    transition:0.3s;padding:14px 20px;background:rgba(185,28,62,0.08);border-radius:18px;font-weight:500;}
-.contact-links a:hover{background:rgba(185,28,62,0.16);transform:translateY(-4px);}
-.contact-links img{width:46px;height:46px;filter:brightness(0) invert(1);}
-.payment-methods > div{display:flex;align-items:center;gap:20px;background:rgba(185,28,62,0.08);border:1px solid rgba(185,28,62,0.2);
-    border-radius:20px;padding:16px 20px;margin:14px 0;transition:all 0.4s;font-weight:600;font-size:18px;color:var(--text);}
-.payment-methods > div:hover{background:rgba(185,28,62,0.18);border-color:var(--accent);transform:translateY(-6px);
-    box-shadow:0 15px 35px rgba(185,28,62,0.25);}
-.payment-methods img{width:56px;height:56px;border-radius:50%;object-fit:contain;background:#111;padding:6px;
-    border:3px solid rgba(185,28,62,0.3);box-shadow:0 6px 20px rgba(0,0,0,0.5);}
-.payment-methods > div:hover img{border-color:var(--accent);transform:scale(1.15);box-shadow:0 0 28px rgba(185,28,62,0.6);}
-#closeModal,#closePayment{background:var(--accent);color:#fff;border:none;padding:14px 36px;border-radius:50px;
+.modal.show .modal-content{transform:scale(1);}
+.modal-content h3{color:var(--accent);font-size:34px;margin-bottom:28px;}
+.contact-links a,.payment-methods > div,.google-btn{display:flex;align-items:center;gap:20px;background:rgba(185,28,62,0.08);border:1px solid rgba(185,28,62,0.2);
+    border-radius:20px;padding:16px 20px;margin:14px 0;transition:all 0.4s;font-weight:600;font-size:18px;color:var(--text);text-decoration:none;cursor:pointer;}
+.contact-links a:hover,.payment-methods > div:hover,.google-btn:hover{background:rgba(185,28,62,0.18);border-color:var(--accent);transform:translateY(-6px);}
+.contact-links img,.payment-methods img{width:56px;height:56px;border-radius:50%;object-fit:contain;}
+#closeModal,#closePayment,#closeReviewModal{background:var(--accent);color:#fff;border:none;padding:14px 36px;border-radius:50px;
     cursor:pointer;font-size:17px;margin-top:28px;transition:0.3s;font-weight:600;}
-#closeModal:hover,#closePayment:hover{background:var(--accent-hover);transform:scale(1.06);}
+#closeModal:hover,#closePayment:hover,#closeReviewModal:hover{background:var(--accent-hover);transform:scale(1.06);}
+#reviewText{width:100%;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:16px;padding:16px;color:#fff;font-size:16px;margin-top:20px;resize:vertical;}
 </style>
 </head>
 <body>
@@ -164,11 +162,22 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
             <h2 data-en="SERVICES THAT I OFFER" data-ru="Что может предложить мой шоп">SERVICES THAT I OFFER</h2>
             <div class="service-list">
                 <div class="service"><div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong><div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div></div><div class="price">$10</div></div>
-                <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong><div class="desc" data-en="Order your own website which is gonna be designed and made for your business." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
+                <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong><div class="desc" data-en="Order your own website..." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
                 <div class="service ru-only" style="display:none"><div><strong>[03] Python / Bot Development</strong><div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div><div class="price">Зависит от сложности</div></div>
                 <div class="service en-only"><div><strong>[03] Livery Design</strong><div class="desc">Custom liveries and covers</div></div><div class="price">$5 Per one.</div></div>
                 <div class="service en-only"><div><strong>[04] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div><div class="price">$150/mo</div></div>
                 <div class="service en-only"><div><strong>[05] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div><div class="price">Depends on Difficulty</div></div>
+            </div>
+        </div>
+
+        <!-- ОТЗЫВЫ -->
+        <div class="reviews-section">
+            <h2 data-en="CLIENT REVIEWS" data-ru="ОТЗЫВЫ КЛИЕНТОВ">CLIENT REVIEWS</h2>
+            <div id="reviewsList" class="reviews-list"></div>
+            <div class="cta-wrapper" style="margin-top:50px;">
+                <a href="javascript:void(0)" class="cta" id="leaveReviewBtn">
+                    <span data-en="LEAVE A REVIEW" data-ru="ОСТАВИТЬ ОТЗЫВ">LEAVE A REVIEW</span>
+                </a>
             </div>
         </div>
     </div>
@@ -182,7 +191,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </button>
     <div class="track-info">
         <div class="track-title">Nice logo</div>
-        <div class="artist">Exyl & Dalux</div>
+        <div class="artist">Exyl</div>
     </div>
     <div class="progress-container" id="progress-container">
         <div class="progress-fill"></div>
@@ -190,8 +199,8 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- Контакты -->
-<div id="contactModal">
+<!-- Модалки -->
+<div id="contactModal" class="modal">
     <div class="modal-content">
         <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
         <div class="contact-links">
@@ -203,8 +212,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- Оплата -->
-<div id="paymentModal">
+<div id="paymentModal" class="modal">
     <div class="modal-content">
         <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
         <div class="payment-methods">
@@ -222,93 +230,170 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const audio = document.getElementById('background-music');
-    const player = document.getElementById('music-player');
-    const playBtn = document.getElementById('play-pause-btn');
-    const playIcon = playBtn.querySelector('.play');
-    const pauseIcon = playBtn.querySelector('.pause');
+<!-- Модалка отзыва -->
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <h3 data-en="Leave your review" data-ru="Оставить отзыв">Leave your review</h3>
+        <div id="googleSignInBtn" class="google-btn">Sign in with Google</div>
+        <div id="reviewForm" style="display:none;">
+            <textarea id="reviewText" placeholder="Напиши свой отзыв (до 300 символов)..." maxlength="300" rows="5"></textarea>
+            <div style="margin:20px 0;text-align:center;">
+                <div id="ratingStars" style="font-size:32px;letter-spacing:8px;cursor:pointer;">★★★★★</div>
+            </div>
+            <button id="submitReviewBtn" class="cta" style="width:100%;">Отправить отзыв</button>
+        </div>
+        <button id="closeReviewModal">Закрыть</button>
+    </div>
+</div>
 
-    // Автозапуск после первого клика (обход политики браузеров)
-    document.body.addEventListener('click', () => audio.play().catch(()=>{}), {once:true});
-    setTimeout(() => player.classList.add('visible'), 1000);
+<!-- Firebase + весь скрипт -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // Плей/пауза
-    player.onclick = () => {
-        if (audio.paused) {
-            audio.play();
-            player.classList.add('playing');
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
-        } else {
-            audio.pause();
-            player.classList.remove('playing');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-        }
+  const firebaseConfig = {
+    apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
+    authDomain: "liberty-bio.firebaseapp.com",
+    projectId: "liberty-bio",
+    storageBucket: "liberty-bio.firebasestorage.app",
+    messagingSenderId: "498591653250",
+    appId: "1:498591653250:web:e634097c5fe0034212839b",
+    measurementId: "G-3W98LCQK1X"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // === ВСЁ ОСТАЛЬНОЕ (плеер, язык, модалки) ===
+  const audio = document.getElementById('background-music');
+  const player = document.getElementById('music-player');
+  const playBtn = document.getElementById('play-pause-btn');
+  const playIcon = playBtn.querySelector('.play');
+  const pauseIcon = playBtn.querySelector('.pause');
+
+  document.body.addEventListener('click', () => audio.play().catch(()=>{}), {once:true});
+  setTimeout(() => player.classList.add('visible'), 1000);
+
+  player.onclick = () => {
+    if (audio.paused) { audio.play(); player.classList.add('playing'); playIcon.style.display='none'; pauseIcon.style.display='block'; }
+    else { audio.pause(); player.classList.remove('playing'); playIcon.style.display='block'; pauseIcon.style.display='none'; }
+  };
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const percent = (audio.currentTime / audio.duration) * 100;
+    document.querySelector('.progress-fill').style.width = percent + '%';
+    document.querySelector('.progress-knob').style.left = percent + '%';
+  });
+
+  document.getElementById('progress-container').onclick = e => {
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+  };
+
+  // Язык
+  let currentLang = 'en';
+  document.getElementById('langMaster').onclick = () => document.getElementById('langPopup').classList.toggle('active');
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.onclick = e => {
+      e.stopPropagation();
+      currentLang = btn.dataset.lang;
+      document.getElementById('langMaster').textContent = currentLang.toUpperCase();
+      document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
+        if (el.dataset[currentLang]) el.textContent = el.dataset[currentLang];
+      });
+      document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang==='ru'?'flex':'none');
+      document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang==='en'?'flex':'none');
+      document.getElementById('langPopup').classList.remove('active');
     };
+  });
 
-    // Прогресс-бар
-    audio.addEventListener('timeupdate', () => {
-        if (!audio.duration) return;
-        const percent = (audio.currentTime / audio.duration) * 100;
-        document.querySelector('.progress-fill').style.width = percent + '%';
-        document.querySelector('.progress-knob').style.left = percent + '%';
+  // Модалки
+  document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
+  document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
+  document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
+  document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
+  document.getElementById('closePayment').onclick = () => document.getElementById('paymentModal').classList.remove('show');
+  document.getElementById('closeReviewModal').onclick = () => document.getElementById('reviewModal').classList.remove('show');
+  document.querySelectorAll('.modal').forEach(m => m.onclick = e => {if(e.target===m) m.classList.remove('show');});
+  document.addEventListener('keydown', e => {if(e.key==='Escape') document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'));});
+
+  // Анимации
+  setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
+  setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => {if(getComputedStyle(s).display!=='none') setTimeout(()=>s.classList.add('show'),600+i*150);}), 300);
+
+  // === ОТЗЫВЫ ===
+  let currentUser = null;
+  let currentRating = 5;
+
+  const reviewsList = document.getElementById("reviewsList");
+  const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
+  onSnapshot(q, (snapshot) => {
+    reviewsList.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const r = doc.data();
+      const div = document.createElement("div");
+      div.className = "review-card";
+      div.innerHTML = `
+        <div class="review-header">
+          <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar" alt="avatar">
+          <div class="review-name">${r.name || 'Аноним'}</div>
+          <div class="review-date">${r.timestamp ? new Date(r.timestamp.toDate()).toLocaleDateString('ru-RU') : ''}</div>
+        </div>
+        <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+        <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
+      `;
+      reviewsList.appendChild(div);
     });
+  });
 
-    document.getElementById('progress-container').onclick = e => {
-        e.stopPropagation();
-        const rect = e.currentTarget.getBoundingClientRect();
-        const pos = (e.clientX - rect.left) / rect.width;
-        audio.currentTime = pos * audio.duration;
-    };
+  document.getElementById("googleSignInBtn").onclick = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      currentUser = result.user;
+      document.getElementById("googleSignInBtn").style.display = "none";
+      document.getElementById("reviewForm").style.display = "block";
+    } catch (err) { alert("Ошибка: " + err.message); }
+  };
 
-    // Переключение языка
-    const langMaster = document.getElementById('langMaster');
-    const langPopup = document.getElementById('langPopup');
-    let currentLang = 'en';
-    langMaster.onclick = () => langPopup.classList.toggle('active');
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.onclick = e => {
-            e.stopPropagation();
-            currentLang = btn.dataset.lang;
-            langMaster.textContent = currentLang.toUpperCase();
-            document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
-                if (el.dataset[currentLang]) el.textContent = el.dataset[currentLang];
-            });
-            document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang === 'ru' ? 'flex' : 'none');
-            document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang === 'en' ? 'flex' : 'none');
-            document.querySelectorAll('.service').forEach(s => s.classList.remove('show'));
-            setTimeout(() => {
-                document.querySelectorAll('.service').forEach((s, i) => {
-                    if (getComputedStyle(s).display !== 'none') setTimeout(() => s.classList.add('show'), i * 150);
-                });
-            }, 100);
-            langPopup.classList.remove('active');
-        };
-    });
+  const starsContainer = document.getElementById("ratingStars");
+  function updateStars() {
+    starsContainer.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
+  }
+  starsContainer.addEventListener("click", e => {
+    const clicked = e.target;
+    if (clicked.tagName !== "DIV") return;
+    const rect = clicked.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const width = rect.width;
+    currentRating = Math.min(5, Math.max(1, Math.round((offsetX / width) * 5)));
+    updateStars();
+  });
+  updateStars();
 
-    // Модальные окна
-    document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
-    document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
-    document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
-    document.getElementById('closePayment').onclick = () => document.getElementById('paymentModal').classList.remove('show');
-    document.getElementById('contactModal').onclick = e => { if (e.target === e.currentTarget) document.getElementById('contactModal').classList.remove('show'); };
-    document.getElementById('paymentModal').onclick = e => { if (e.target === e.currentTarget) document.getElementById('paymentModal').classList.remove('show'); };
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') {
-        document.getElementById('contactModal').classList.remove('show');
-        document.getElementById('paymentModal').classList.remove('show');
-    }});
+  document.getElementById("submitReviewBtn").onclick = async () => {
+    const text = document.getElementById("reviewText").value.trim();
+    if (!text) return alert("Напиши отзыв!");
+    if (!currentUser) return alert("Сначала войди через Google");
 
-    // Анимации появления
-    setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
-    setTimeout(() => {
-        document.querySelectorAll('.service').forEach((s, i) => {
-            if (getComputedStyle(s).display !== 'none') setTimeout(() => s.classList.add('show'), 600 + i * 150);
-        });
-    }, 300);
-});
+    try {
+      await addDoc(collection(db, "reviews"), {
+        name: currentUser.displayName,
+        photoURL: currentUser.photoURL,
+        text: text,
+        rating: currentRating,
+        timestamp: serverTimestamp()
+      });
+      alert("Спасибо за отзыв!");
+      document.getElementById("reviewModal").classList.remove("show");
+      document.getElementById("reviewText").value = "";
+    } catch (err) { alert("Ошибка отправки: " + err.message); }
+  };
 </script>
 </body>
 </html>
