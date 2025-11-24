@@ -74,7 +74,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 @media (max-width:640px){.reviews-grid{grid-template-columns:1fr;}}
 @keyframes scrollGrid{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
 .review-card{background:rgba(28,28,40,.75);backdrop-filter:blur(20px);border:1px solid rgba(185,28,62,.3);border-radius:26px;padding:28px;box-shadow:0 16px 40px rgba(0,0,0,.5);transition:all .5s;height:340px;display:flex;flex-direction:column;}
-.review-card:hover{transform:translateY(-12px) scale(1.03);border-color:var(--accent);box-shadow:0 24px 50px rgba(185,28,62,.3);}
+.review-card:hover{transform:translateY(-12px) scale(1.03);border-color:var(--accent);box-shadow:0 24px 50px RGBA(185,28,62,.3);}
 #userPanel{position:fixed;top:20px;right:20px;display:flex;align-items:center;gap:12px;z-index:999;background:rgba(18,18,28,.95);padding:10px 16px;border-radius:20px;border:2px solid var(--accent);opacity:0;transition:.4s;pointer-events:none;}
 #userPanel.show{opacity:1;pointer-events:auto;}
 #userPanel img{width:42px;height:42px;border-radius:50%;border:3px solid var(--accent);object-fit:cover;}
@@ -96,8 +96,8 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 .lang-master{width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.6);transition:transform .3s;position:relative;z-index:2;}
 .lang-master:hover{transform:scale(1.12);}
 .lang-popup{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:rgba(18,18,28,.98);border:2px solid var(--accent);border-radius:16px;overflow:hidden;display:none;min-width:80px;box-shadow:0 15px 40px rgba(0,0,0,.7);z-index:1;}
-.lang-popup.active{display:block;animation:open .3s ease-out;}
-@keyframes open{from{transform:translateX(-50%) scale(.9);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+.lang-popup.active{display:block;animation:pop .3s ease-out;}
+@keyframes pop{from{transform:translateX(-50%) scale(.9);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
 .lang-btn{padding:14px 24px;color:#fff;cursor:pointer;transition:.3s;font-size:17px;text-align:center;}
 .lang-btn:hover{background:var(--accent);}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.5s;z-index:1000;padding:20px;}
@@ -114,8 +114,13 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     background:rgba(185,28,62,.18);border-color:var(--accent);transform:translateY(-6px);
 }
 .contact-links img,.payment-methods img{width:36px;height:36px;border-radius:8px;flex-shrink:0;object-fit:cover;}
+textarea{
+    width:100%;padding:18px 20px;margin:20px 0 10px;background:rgba(255,255,255,.08);border:1px solid var(--border);
+    border-radius:16px;color:#fff;font-size:16px;resize:none;font-family:'Inter',sans-serif;transition:.3s;
+}
+textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185,28,62,.3);}
 
-/* ─────── ДВИГАЕМЫЙ + СВОРАЧИВАЕМЫЙ ПЛЕЕР ─────── */
+/* ПЛЕЕР — ДВИГАЕМЫЙ + СВОРАЧИВАЕМЫЙ */
 #music-player{
     position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
     width:460px;max-width:calc(100% - 40px);
@@ -134,12 +139,10 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 #music-player.minimized .progress-container,
 #music-player.minimized #minimizeBtn{display:none;}
 #music-player.minimized #play-pause-btn{width:100%;height:100%;border-radius:50%;}
-
 #playerDragHandle{position:absolute;top:0;left:0;width:100%;height:40px;cursor:move;cursor:grab;border-radius:36px 36px 0 0;}
 #playerDragHandle:active{cursor:grabbing;}
 #minimizeBtn{position:absolute;top:12px;right:16px;width:36px;height:36px;background:rgba(0,0,0,.5);border-radius:50%;color:#ff3366;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:.3s;}
 #minimizeBtn:hover{background:rgba(255,51,102,.4);transform:scale(1.1);}
-
 #music-player .track-info{text-align:center;margin-bottom:18px;}
 #music-player .track-title{font-size:24px;font-weight:900;color:#fff;letter-spacing:1px;text-shadow:0 0 20px rgba(185,28,62,.9);}
 #music-player .artist{font-size:16px;color:#ff3366;margin-top:6px;opacity:.95;font-weight:700;}
@@ -165,8 +168,6 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 #play-pause-btn{width:76px;height:76px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .4s;box-shadow:0 15px 50px rgba(185,28,62,.8);border:4px solid rgba(255,255,255,.18);}
 #play-pause-btn:hover{transform:scale(1.14);background:#e0204b;}
 #play-pause-btn svg{width:34px;height:34px;fill:#fff;}
-
-/* На мобильных — по умолчанию свёрнут */
 @media (max-width:768px){
     #music-player{bottom:20px;right:20px;left:auto;transform:none !important;}
     #music-player:not(.minimized){width:90%;max-width:380px;right:20px;}
@@ -259,7 +260,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     </div>
 </div>
 
-<!-- ДВИГАЕМЫЙ ПЛЕЕР -->
+<!-- ПЛЕЕР -->
 <div id="music-player">
     <div id="playerDragHandle"></div>
     <div id="minimizeBtn">−</div>
@@ -339,10 +340,12 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 <div id="reviewModal" class="modal">
     <div class="modal-content">
         <button class="modal-close">x</button>
-        <h3 data-en="Leave a review" data-ru="Оставить отзыв">Leave a review</h3>
-        <textarea id="reviewText" data-en-placeholder="Your review..." data-ru-placeholder="Ваш отзыв..." maxlength="300" rows="5"></textarea>
-        <div id="ratingInput">★★★★★</div>
-        <button id="submitReviewBtn" class="cta-btn"><span data-en="Submit" data-ru="Отправить">Submit</span></button>
+        <h3 data-en="Leave a review" data-ru="Оставить отзыв">Оставить отзыв</h3>
+        <textarea id="reviewText" placeholder="Ваш отзыв..." data-en-placeholder="Your review..." data-ru-placeholder="Ваш отзыв..." maxlength="300" rows="5"></textarea>
+        <div id="ratingInput" style="font-size:36px;letter-spacing:4px;margin:20px 0;cursor:pointer;color:#b91c3e;">★★★★★</div>
+        <button id="submitReviewBtn" class="cta-btn" style="margin-top:10px;width:100%;max-width:360px;">
+            <span data-en="Submit" data-ru="Отправить">Отправить</span>
+        </button>
     </div>
 </div>
 
@@ -381,7 +384,7 @@ const pauseIcon = playPauseBtn.querySelector('.pause');
 let isDragging = false;
 let offsetX = 0, offsetY = 0;
 
-// ЯЗЫК
+// Язык
 const switchLang = () => {
     document.getElementById('langMaster').textContent = currentLang.toUpperCase();
     document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
@@ -399,7 +402,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.lang-wrapper')
 document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => { e.stopPropagation(); currentLang = btn.dataset.lang; switchLang(); document.getElementById('langPopup').classList.remove('active'); });
 switchLang();
 
-// ПРЕЛОАДЕР
+// Прелоадер
 (() => {
     const preloader = document.getElementById('preloader');
     const fill = document.getElementById('progressFill');
@@ -417,7 +420,7 @@ switchLang();
     setTimeout(() => { preloader.classList.add('hidden'); document.body.classList.add('loaded'); }, 5500);
 })();
 
-// ПЕРЕТАСКИВАНИЕ ПЛЕЕРА
+// Перетаскивание плеера
 const startDrag = (e) => {
     if (player.classList.contains('minimized')) return;
     isDragging = true;
@@ -445,13 +448,13 @@ document.addEventListener('touchmove', drag);
 document.addEventListener('mouseup', stopDrag);
 document.addEventListener('touchend', stopDrag);
 
-// СВОРАЧИВАНИЕ
+// Сворачивание
 minimizeBtn.addEventListener('click', () => {
     player.classList.toggle('minimized');
-    minimizeBtn.textContent = player.classList.contains('minimized') ? '▶' : '−';
+    minimizeBtn.textContent = player.classList.contains('minimized') ? 'Play' : '−';
 });
 
-// АУДИО + ВОЛНЫ
+// Аудио + плеер
 const unlockAndPlay = () => {
     if (audioUnlocked) return;
     audioUnlocked = true;
@@ -481,7 +484,6 @@ playPauseBtn.onclick = () => {
     }
 };
 
-// ПРОГРЕСС
 audio.addEventListener('timeupdate', () => {
     const progress = (audio.currentTime / audio.duration) * 100 || 0;
     document.querySelector('#songProgress .progress-fill').style.width = progress + '%';
@@ -501,8 +503,7 @@ document.getElementById('songProgress').onclick = e => {
     audio.currentTime = percent * audio.duration;
 };
 
-// АВТОРИЗАЦИЯ, ОТЗЫВЫ, МОДАЛКИ
-// (весь твой оригинальный код авторизации и отзывов — оставляем без изменений)
+// Авторизация, отзывы, модалки — всё как у тебя было
 const authModal = document.getElementById('authModal');
 let isRegister = false;
 document.getElementById('toggleToRegister').onclick = () => { isRegister = true; document.getElementById('authTitle').textContent = currentLang === 'ru' ? 'Регистрация' : 'Create Account'; document.getElementById('displayName').style.display = 'block'; };
@@ -611,10 +612,10 @@ document.getElementById('paymentBtn').onclick = () => document.getElementById('p
 document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = () => btn.closest('.modal').classList.remove('show'));
 document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target === m && m.classList.remove('show'));
 
-// На телефоне по умолчанию свёрнут
+// На мобильных по умолчанию свёрнут
 if (window.innerWidth <= 768) {
     player.classList.add('minimized');
-    minimizeBtn.textContent = '▶';
+    minimizeBtn.textContent = 'Play';
 }
 </script>
 </body>
