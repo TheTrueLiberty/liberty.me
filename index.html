@@ -173,7 +173,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
                     <div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div>
                 </div>
 
-                <!-- ИСПРАВЛЕНО: убран style="display:none" -->
                 <div class="service ru-only">
                     <div><strong>[03] Python / Bot Development</strong>
                     <div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div>
@@ -266,11 +265,9 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
                       data-ru-placeholder="Напиши свой отзыв (до 300 символов)..."
                       placeholder="Напиши свой отзыв (до 300 символов)..."
                       maxlength="300" rows="5"></textarea>
-            
             <div style="margin:20px 0;text-align:center;">
                 <div id="ratingStars" style="font-size:32px;letter-spacing:8px;cursor:pointer;">★★★★★</div>
             </div>
-            
             <button id="submitReviewBtn" class="cta" style="width:100%;">
                 <span data-en="Submit review" data-ru="Отправить отзыв">Отправить отзыв</span>
             </button>
@@ -282,7 +279,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
@@ -298,7 +295,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Музыка
+  // Музыка + остальное (без изменений)
   const audio = document.getElementById('background-music');
   const player = document.getElementById('music-player');
   const playBtn = document.getElementById('play-pause-btn');
@@ -367,29 +364,70 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
   setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
   setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => {if(getComputedStyle(s).display!=='none') setTimeout(()=>s.classList.add('show'),600+i*150);}), 300);
 
-  // Отзывы
+  // === ОТЗЫВЫ + АДМИНКА ===
   let currentUser = null;
   let currentRating = 5;
+  const MY_UID = "EowDTxvpMhTcKhsV7x6kEpDAuyc2"; // ← твой настоящий UID
 
   const reviewsList = document.getElementById("reviewsList");
-  const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
+  const q = query(collection(db, "reviews"), orderBy("pinned", "desc"), orderBy("timestamp", "desc"));
+
   onSnapshot(q, (snapshot) => {
     reviewsList.innerHTML = "";
     snapshot.forEach((doc) => {
       const r = doc.data();
+      const isOwner = currentUser && currentUser.uid === MY_UID;
+
       const div = document.createElement("div");
       div.className = "review-card show";
       div.innerHTML = `
         <div class="review-header">
           <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar" alt="avatar">
           <div class="review-name">${r.name || (currentLang === 'ru' ? 'Аноним' : 'Anonymous')}</div>
+          ${r.pinned ? '<div style="color:#b91c3e;font-weight:900;margin-left:8px;">PINNED</div>' : ''}
           <div class="review-date">${r.timestamp ? new Date(r.timestamp.toDate()).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US') : ''}</div>
         </div>
         <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
         <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
+
+        ${isOwner ? `
+          <div style="margin-top:14px;display:flex;gap:12px;justify-content:flex-end;font-size:13px;">
+            <button class="pin-btn" data-id="${doc.id}" style="background:${r.pinned ? '#333' : 'rgba(185,28,62,0.2)'}; padding:8px 14px; border-radius:12px; border:none; cursor:pointer; color:#fff;">
+              ${r.pinned ? (currentLang==='ru'?'Открепить':'Unpin') : (currentLang==='ru'?'Закрепить':'Pin')}
+            </button>
+            <button class="delete-btn" data-id="${doc.id}" style="background:#b91c3e; padding:8px 14px; border-radius:12px; border:none; cursor:pointer; color:#fff;">
+              ${currentLang==='ru'?'Удалить':'Delete'}
+            </button>
+          </div>
+        ` : ''}
       `;
       reviewsList.appendChild(div);
     });
+
+    if (currentUser && currentUser.uid === MY_UID) {
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = async () => {
+          if (confirm(currentLang === 'ru' ? "Удалить отзыв навсегда?" : "Delete review permanently?")) {
+            await deleteDoc(doc(db, "reviews", btn.dataset.id));
+          }
+        };
+      });
+
+      document.querySelectorAll('.pin-btn').forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.id;
+          const wasPinned = btn.textContent.includes(currentLang==='ru'?'Открепить':'Unpin');
+
+          snapshot.docs.forEach(d => {
+            if (d.data().pinned && d.id !== id) {
+              updateDoc(doc(db, "reviews", d.id), { pinned: false });
+            }
+          });
+
+          await updateDoc(doc(db, "reviews", id), { pinned: !wasPinned });
+        };
+      });
+    }
   });
 
   document.getElementById("googleSignInBtn").onclick = async () => {
@@ -427,6 +465,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         photoURL: currentUser.photoURL,
         text: text,
         rating: currentRating,
+        pinned: false,
         timestamp: serverTimestamp()
       });
       alert(currentLang === 'ru' ? "Спасибо за отзыв!" : "Thank you for your review!");
