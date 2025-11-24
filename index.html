@@ -4,149 +4,170 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liberty — Professional Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-    --bg:#0a0a0a;--card:rgba(18,18,28,0.82);--glass:rgba(28,28,28,0.45);
-    --accent:#b91c3e;--accent-hover:#e0204b;--text:#ececf5;--text-light:#aaaaaa;--border:rgba(185,28,62,0.28);
+    --bg:#0a0a0a;--card:rgba(18,18,28,0.88);--glass:rgba(28,28,45,0.55);
+    --accent:#b91c3e;--accent-hover:#e0204b;--text:#ececf5;--text-light:#aaaaaa;--border:rgba(185,28,62,0.32);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.5;font-weight:400;}
-h1,h2,h3,h4,h5,h6,strong{font-weight:700;letter-spacing:-0.3px;}
-#myVideo{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0.38;filter:brightness(0.45) contrast(1.25);}
-@media (max-width:768px){#myVideo{opacity:0.22;}}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.5;font-weight:400;position:relative;opacity:0;transition:opacity 1s;}
+body.loaded{opacity:1;}
+
+#myVideo{position:fixed;top:50%;left:50%;min-width:100%;min-height:100%;width:auto;height:auto;transform:translate(-50%,-50%);z-index:-2;object-fit:cover;opacity:.4;filter:brightness(.45) contrast(1.25);}
+@media (max-width:768px){#myVideo{opacity:.25;}}
+
+#preloader{position:fixed;inset:0;background:#0a0a0a;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:40px;transition:opacity 1.2s;}
+#preloader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.preloader-logo{width:120px;height:120px;background:var(--accent);border-radius:50%;position:relative;animation:p 2s infinite alternate,f 4s ease-in-out infinite;box-shadow:0 0 60px rgba(185,28,62,.8);}
+.preloader-logo::before{content:'L';position:absolute;inset:0;color:#fff;font-size:68px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+@keyframes p{from{box-shadow:0 0 60px rgba(185,28,62,.8);}to{box-shadow:0 0 100px rgba(255,51,102,.9);}}
+@keyframes f{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+.progress-bar{width:280px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.progress-fill{width:0;height:100%;background:linear-gradient(90deg,#b91c3e,#ff3366);transition:width .4s;box-shadow:0 0 20px rgba(255,51,102,.8);}
 
 .container{max-width:1320px;margin:0 auto;padding:80px 20px 140px;}
 @media (max-width:768px){.container{padding:60px 16px 120px;}}
 
-.card{background:var(--card);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:36px;padding:50px 30px;
-    box-shadow:0 25px 70px rgba(0,0,0,0.6), 0 0 25px rgba(185,28,62,0.35);opacity:0;transform:translateY(70px);
-    transition:all 1.4s cubic-bezier(0.23,1,0.32,1);}
-@media (max-width:768px){.card{padding:40px 24px;border-radius:28px;}}
+.card{background:var(--card);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:36px;padding:50px 30px;
+    box-shadow:0 25px 70px rgba(0,0,0,.6), 0 0 25px rgba(185,28,62,.35);opacity:0;transform:translateY(70px);
+    transition:all 1.4s cubic-bezier(.23,1,.32,1);}
 .card.show{opacity:1;transform:none;}
 
-.hero{display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
+.hero{display:flex;align-items:center;gap:40px;flex-wrap:wrap;position:relative;}
 @media (max-width:992px){.hero{gap:32px;flex-direction:column;align-items:center;text-align:center;}}
-.avatar{width:260px;height:260px;border-radius:32px;overflow:hidden;border:6px solid var(--accent);
-    box-shadow:0 0 0 36px rgba(185,28,62,0.4);flex-shrink:0;}
+.avatar{width:260px;height:260px;border-radius:32px;overflow:hidden;border:6px solid var(--accent);box-shadow:0 0 30px rgba(185,28,62,.6);flex-shrink:0;position:relative;z-index:1;}
 @media (max-width:480px){.avatar{width:200px;height:200px;}}
 .avatar img{width:100%;height:100%;object-fit:cover;}
 .intro{flex:1;min-width:300px;}
 h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
-@media (max-width:480px){h1{font-size:38px;}}
-.subtitle{font-size:18px;margin-bottom:36px;color:var(--text-light);opacity:0.9;}
+.subtitle{font-size:18px;margin-bottom:36px;color:var(--text-light);opacity:.9;}
 .stats{display:flex;gap:32px;flex-wrap:wrap;justify-content:center;margin:36px 0;}
 .stat{font-size:32px;color:var(--accent);font-weight:800;}
-.stat small{font-size:14px;margin-top:4px;color:var(--text-light);display:block;opacity:0.9;font-weight:500;}
-.cta-wrapper{display:flex;flex-wrap:wrap;gap:16px;margin-top:36px;justify-content:center;align-items:center;}
-.cta{padding:16px 36px;font-size:18px;border-radius:50px;background:var(--accent);color:#fff;
-    box-shadow:0 16px 36px rgba(185,28,62,0.35);cursor:pointer;transition:0.45s;text-decoration:none;
-    display:inline-block;min-width:220px;text-align:center;font-weight:600;}
-.cta:hover{background:var(--accent-hover);transform:translateY(-6px);}
+.stat small{font-size:14px;margin-top:4px;color:var(--text-light);display:block;opacity:.9;}
 
-#music-player{
-    position:fixed;bottom:20px;left:20px;right:20px;max-width:440px;margin:0 auto;left:50%;transform:translateX(-50%);
-    background:rgba(20,20,35,0.96);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
-    border:1px solid rgba(185,28,62,0.35);border-radius:28px;padding:16px 20px;
-    display:flex;align-items:center;gap:16px;z-index:999;
-    box-shadow:0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(185,28,62,0.2);
-    opacity:0;transform:translateX(-50%) translateY(40px) scale(0.94);
-    transition:all 0.7s cubic-bezier(0.23,1,0.32,1);}
-#music-player.visible{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
-#play-pause-btn{width:60px;height:60px;background:var(--accent);border:none;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 12px 30px rgba(185,28,62,0.5);}
-#play-pause-btn:hover{background:var(--accent-hover);transform:scale(1.1);}
-#play-pause-btn svg{width:26px;height:26px;fill:#fff;transition:all 0.3s;}
-#music-player.playing #play-pause-btn{animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 12px 30px rgba(185,28,62,0.5);}50%{box-shadow:0 12px 45px rgba(185,28,62,0.8);}}
-.track-info{flex:1;overflow:hidden;}
-.track-title{font-size:16px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.artist{font-size:13px;color:var(--text-light);opacity:0.9;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.progress-container{position:absolute;bottom:0;left:0;width:100%;height:5px;background:rgba(0,0,0,0.4);cursor:pointer;
-    opacity:0;transition:opacity 0.4s;border-radius:0 0 28px 28px;overflow:hidden;}
-#music-player.playing .progress-container{opacity:1;}
-.progress-fill{background:var(--accent);width:0;height:100%;transition:width 0.1s linear;}
-.progress-knob{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:14px;height:14px;
-    background:#fff;border-radius:50%;opacity:0;box-shadow:0 0 20px rgba(185,28,62,0.9);transition:opacity 0.2s;}
-.progress-container:hover .progress-knob{opacity:1;}
-
-.lang-master{position:fixed;top:16px;left:16px;width:50px;height:50px;background:rgba(18,18,28,0.95);border:2px solid var(--accent);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:700;cursor:pointer;z-index:1001;
-    box-shadow:0 8px 30px rgba(0,0,0,0.6);transition:all 0.3s;}
-.lang-master:hover{transform:scale(1.08);border-color:var(--accent-hover);}
-.lang-popup{position:fixed;top:76px;left:16px;z-index:1000;opacity:0;pointer-events:none;transition:all 0.4s;display:flex;flex-direction:column;gap:10px;}
-.lang-popup.active{opacity:1;pointer-events:all;}
-.lang-btn{width:48px;height:48px;background:rgba(18,18,28,0.95);border:2px solid var(--border);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;cursor:pointer;transition:all 0.3s;
-    box-shadow:0 6px 20px rgba(0,0,0,0.5);}
-.lang-btn:hover{border-color:var(--accent);transform:scale(1.1);background:var(--accent);}
+.cta-wrapper{display:flex;flex-wrap:wrap;gap:20px;margin-top:44px;justify-content:center;}
+.cta-btn{
+    position:relative;display:flex;align-items:center;justify-content:center;gap:16px;
+    padding:18px 36px;height:68px;border-radius:50px;
+    background:linear-gradient(135deg,#b91c3e,#e0204b,#ff3366);color:#fff;font-size:19px;font-weight:700;
+    box-shadow:0 16px 36px rgba(185,28,62,.4);cursor:pointer;transition:all .5s cubic-bezier(.23,1,.32,1);
+    text-decoration:none;overflow:hidden;border:2px solid transparent;text-transform:uppercase;letter-spacing:.6px;
+    min-width:300px;max-width:360px;width:100%;
+}
+.cta-btn img{width:36px;height:36px;filter:brightness(0) invert(1);}
+@media (min-width:768px){.cta-btn{width:auto;min-width:340px;}}
+.cta-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ffffff44,transparent);transform:translateX(-100%);transition:.9s;}
+.cta-btn:hover{transform:translateY(-8px) scale(1.04);box-shadow:0 24px 50px rgba(185,28,62,.6);border:2px solid #ff3366;}
+.cta-btn:hover::before{transform:translateX(100%);}
 
 .services h2,.reviews-section h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
-@media (max-width:480px){.services h2,.reviews-section h2{font-size:32px;margin:80px 0 40px;}}
-.service-list,.reviews-list{display:grid;gap:24px;grid-template-columns:1fr;}
+.service-list{display:grid;gap:24px;grid-template-columns:1fr;}
 @media (min-width:992px){.service-list{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));}}
-@media (min-width:768px){.reviews-list{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));}}
-.service,.review-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;
-    padding:28px;display:flex;flex-direction:column;gap:12px;transition:all 0.5s;opacity:0;transform:translateY(30px);}
-.service.show,.review-card{opacity:1;transform:none;}
-.service:hover,.review-card:hover{transform:translateY(-10px);border-color:var(--accent);}
+.service{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;
+    padding:28px;display:flex;flex-direction:column;gap:12px;transition:.5s;opacity:0;transform:translateY(30px);}
+.service.show{opacity:1;transform:none;}
+.service:hover{transform:translateY(-10px);border-color:var(--accent);}
 .service strong{font-size:21px;color:var(--accent);font-weight:700;}
-.service .desc{font-size:15px;color:var(--text-light);opacity:0.92;}
+.service .desc{font-size:15px;color:var(--text-light);opacity:.92;}
 .service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
 
-/* НОВЫЕ КРУТЫЕ ЗВЁЗДЫ */
-.rating {
-    display: inline-flex;
-    gap: 6px;
-    font-size: 26px;
-    line-height: 1;
-}
-.rating span {
-    color: #444;
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    text-shadow: 0 0 8px rgba(0,0,0,0.6);
-}
-.rating span.filled {
-    color: transparent;
-    background: linear-gradient(90deg, #b91c3e, #ff3366);
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow: 0 0 20px rgba(185, 28, 62, 0.7);
-    animation: starGlow 2.5s ease-in-out infinite alternate;
-}
-@keyframes starGlow {
-    from { text-shadow: 0 0 20px rgba(185, 28, 62, 0.7); }
-    to   { text-shadow: 0 0 30px rgba(255, 51, 102, 0.9); }
-}
+.reviews-section{margin:160px 0 100px;overflow:hidden;}
+.reviews-section h2{font-size:42px;background:linear-gradient(90deg,#b91c3e,#ff3366);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:70px;font-weight:900;}
+.review-tape{display:flex;gap:36px;padding:40px 0;animation:s 65s linear infinite;}
+@keyframes s{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.review-tape.duplicate{animation-direction:reverse;}
+.review-card{width:400px;flex-shrink:0;background:rgba(28,28,40,.68);backdrop-filter:blur(20px);
+    border:1px solid rgba(185,28,62,.3);border-radius:28px;padding:32px;box-shadow:0 20px 40px rgba(0,0,0,.5);transition:.6s;}
+.review-card:hover{transform:translateY(-16px) scale(1.02);border-color:var(--accent);}
 
-.review-header{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
-.review-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);}
-.review-name{font-weight:700;color:#fff;font-size:17px;}
-.review-date{font-size:13px;color:var(--text-light);opacity:0.7;margin-left:auto;}
-.review-text{font-size:16px;line-height:1.5;margin-top:12px;color:var(--text-light);}
+.lang-master{position:fixed;top:20px;left:20px;width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.6);}
+.lang-master:hover{transform:scale(1.12);}
+.lang-popup{position:absolute;top:80px;left:20px;background:rgba(18,18,28,.98);border:2px solid var(--accent);border-radius:16px;overflow:hidden;display:none;z-index:9999;box-shadow:0 15px 40px rgba(0,0,0,.7);}
+.lang-popup.active{display:block;}
+.lang-btn{padding:14px 24px;color:#fff;cursor:pointer;transition:.3s;font-size:17px;}
+.lang-btn:hover{background:var(--accent);}
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;
-    opacity:0;pointer-events:none;transition:0.5s;z-index:1000;padding:20px;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:.5s;z-index:1000;padding:20px;}
 .modal.show{opacity:1;pointer-events:auto;}
-.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);padding:50px 30px;border-radius:28px;
-    width:100%;max-width:540px;text-align:center;transform:scale(0.92);transition:0.5s;}
+.modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;
+    width:100%;max-width:540px;text-align:center;transform:scale(.92);transition:.5s;padding:50px 30px;}
 .modal.show .modal-content{transform:scale(1);}
 .modal-content h3{color:var(--accent);font-size:34px;margin-bottom:28px;}
-.contact-links a,.payment-methods > div,.google-btn{display:flex;align-items:center;gap:20px;background:rgba(185,28,62,0.08);border:1px solid rgba(185,28,62,0.2);
-    border-radius:20px;padding:16px 20px;margin:14px 0;transition:all 0.4s;font-weight:600;font-size:18px;color:var(--text);text-decoration:none;cursor:pointer;}
-.contact-links a:hover,.payment-methods > div:hover,.google-btn:hover{background:rgba(185,28,62,0.18);border-color:var(--accent);transform:translateY(-6px);}
-.contact-links img,.payment-methods img{width:56px;height:56px;border-radius:50%;object-fit:contain;}
+.contact-links a,.payment-methods > div{
+    display:flex;align-items:center;gap:20px;background:rgba(185,28,62,.08);border:1px solid rgba(185,28,62,.2);
+    border-radius:20px;padding:18px 24px;margin:14px 0;transition:.4s;font-weight:600;font-size:18px;color:var(--text);text-decoration:none;}
+.contact-links a:hover,.payment-methods > div:hover{background:rgba(185,28,62,.18);border-color:var(--accent);transform:translateY(-6px);}
+.contact-links img,.payment-methods img{width:36px;height:36px;border-radius:8px;flex-shrink:0;object-fit:cover;}
 #closeModal,#closePayment,#closeReviewModal{background:var(--accent);color:#fff;border:none;padding:14px 36px;border-radius:50px;
-    cursor:pointer;font-size:17px;margin-top:28px;transition:0.3s;font-weight:600;}
+    cursor:pointer;font-size:17px;margin-top:28px;transition:.3s;font-weight:600;}
 #closeModal:hover,#closePayment:hover,#closeReviewModal:hover{background:var(--accent-hover);transform:scale(1.06);}
-#reviewText{width:100%;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:16px;padding:16px;color:#fff;font-size:16px;margin-top:20px;resize:vertical;}
+
+/* НОВАЯ МУЗЫКАЛЬНАЯ ПАНЕЛЬ */
+#music-player{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:480px;width:calc(100% - 40px);
+    background:rgba(20,20,35,.96);backdrop-filter:blur(32px);border:1px solid rgba(185,28,62,.35);
+    border-radius:28px;padding:18px 24px;display:flex;flex-direction:column;gap:12px;z-index:999;
+    box-shadow:0 20px 50px rgba(0,0,0,.7);opacity:0;transition:opacity .7s,transform .4s;
+}
+#music-player.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+
+#music-player .track-info .track-title{font-weight:700;font-size:17px;}
+#music-player .track-info .artist{font-size:13px;opacity:.8;}
+
+.progress-container{display:flex;align-items:center;gap:12px;font-size:13px;}
+#songProgress{
+    flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;position:relative;cursor:pointer;
+}
+#songProgress .progress-fill{
+    height:100%;width:0;background:linear-gradient(90deg,#b91c3e,#ff3366);position:relative;
+    box-shadow:0 0 15px rgba(255,51,102,.6);
+}
+#songProgress .progress-knob{
+    position:absolute;top:50%;right:0;width:16px;height:16px;background:var(--accent);border-radius:50%;
+    transform:translate(50%,-50%);opacity:0;transition:all .2s;box-shadow:0 0 20px rgba(185,28,62,.8);
+}
+#songProgress:hover .progress-knob{opacity:1;transform:translate(50%,-50%) scale(1.3);}
+
+.controls{display:flex;align-items:center;gap:20px;justify-content:center;}
+#play-pause-btn{
+    width:48px;height:48px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:.3s;box-shadow:0 8px 25px rgba(185,28,62,.5);
+}
+#play-pause-btn:hover{transform:scale(1.1);}
+#play-pause-btn svg{width:20px;height:20px;fill:#fff;}
+
+.volume-container{display:flex;align-items:center;gap:10px;width:120px;}
+#volume-slider{
+    flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;position:relative;cursor:pointer;
+}
+#volume-slider::before{
+    content:'';position:absolute;top:0;left:0;height:100%;width:var(--vol,70%);background:var(--accent);transition:width .2s;
+}
+#volume-icon{cursor:pointer;opacity:.7;transition:.3s;}
+#volume-icon:hover{opacity:1;transform:scale(1.15);}
 </style>
 </head>
 <body>
 
-<video autoplay muted loop playsinline id="myVideo"><source src="assets/фон.mp4" type="video/mp4"></video>
-<audio id="background-music" loop preload="auto"><source src="assets/песня.mp3" type="audio/mpeg"></audio>
+<div id="preloader">
+    <div class="preloader-logo"></div>
+    <div class="preloader-text">LIBERTY</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
 
+<video autoplay muted loop playsinline id="myVideo">
+    <source src="https://cdn.jsdelivr.net/gh/0x00A/0x00A@main/bg.mp4" type="video/mp4">
+</video>
+
+<audio id="background-music" loop preload="auto">
+    <source src="https://cdn.jsdelivr.net/gh/0x00A/0x00A@main/exyl.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ЯЗЫК -->
 <div class="lang-master" id="langMaster">EN</div>
 <div class="lang-popup" id="langPopup">
     <div class="lang-btn" data-lang="en">EN</div>
@@ -156,74 +177,109 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <div class="container">
     <div class="card" id="mainCard">
         <div class="hero">
-            <div class="avatar"><img src="assets/6ad1f8b10c7b2937f056040602fe6f0f.jpg" alt="Liberty"></div>
+            <div class="avatar"><img src="https://cdn.discordapp.com/attachments/1292938472938472938/1292938472938472938/6ad1f8b10c7b2937f056040602fe6f0f.jpg" alt="Liberty"></div>
             <div class="intro">
                 <h1 data-en="Welcome to my bio :P" data-ru="Ты попал в моё био :P">Welcome to my bio :P</h1>
                 <div class="subtitle" data-en="Certified Cyber Security Analyst • Network Architect • Python Developer"
-                     data-ru="Сертифицированный специалист в сфере кибербезопасности • Нетворкер • Python-дев">
+                     data-ru="Сертифицированный спец по кибербезу • Нетворкер • Python-дев">
                     Certified Cyber Security Analyst • Network Architect • Python Developer
                 </div>
                 <div class="stats">
                     <div class="stat">2+<small data-en="years experience" data-ru="года в деле">years experience</small></div>
                     <div class="stat">50+<small data-en="completed projects" data-ru="выполненных заказов">completed projects</small></div>
                 </div>
+
                 <div class="cta-wrapper">
-                    <a href="javascript:void(0)" class="cta" id="contactBtn">
+                    <a href="javascript:void(0)" class="cta-btn" id="contactBtn">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt="">
                         <span data-en="HIRE ME NOW" data-ru="ОФОРМИТЬ ЗАКАЗ">HIRE ME NOW</span>
                     </a>
-                    <a href="javascript:void(0)" class="cta" id="paymentBtn">
-                        <span data-en="You can pay with" data-ru="Оплата через">You can pay with</span>
+                    <a href="javascript:void(0)" class="cta-btn" id="paymentBtn">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/bitcoin.svg" alt="">
+                        <span data-en="Payment Options" data-ru="Способы оплаты">Payment Options</span>
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="services">
-            <h2 data-en="SERVICES THAT I OFFER" data-ru="Что может предложить мой шоп">SERVICES THAT I OFFER</h2>
+            <h2 data-en="SERVICES THAT I OFFER" data-ru="МОИ УСЛУГИ">SERVICES THAT I OFFER</h2>
             <div class="service-list">
-                <div class="service"><div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Создание баннеров и лого">[01] Logo / Banner creation</strong><div class="desc" data-en="High-quality branding & graphics" data-ru="Логотипы и баннеры премиум-качества">High-quality branding & graphics</div></div><div class="price">$10</div></div>
-                <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание веб-сайта">[02] Website Creation</strong><div class="desc" data-en="Order your own website..." data-ru="Создам веб-сайт под ваш вкус и требования">Order your own website...</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
-                <div class="service ru-only"><div><strong>[03] Python / Bot Development</strong><div class="desc">Какие-либо скрипты на Python / боты для Discord, Telegram</div></div><div class="price">Зависит от сложности</div></div>
-                <div class="service en-only"><div><strong>[03] Livery Design</strong><div class="desc">Custom liveries and covers</div></div><div class="price">$5 Per one.</div></div>
-                <div class="service en-only"><div><strong>[04] Server Network Architecture</strong><div class="desc">Full server setup & support</div></div><div class="price">$150/mo</div></div>
-                <div class="service en-only"><div><strong>[05] Python / Bot Development</strong><div class="desc">Custom scripts & automation</div></div><div class="price">Depends on Difficulty</div></div>
+                <div class="service">
+                    <div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Лого / Баннеры">[01] Logo / Banner creation</strong>
+                    <div class="desc" data-en="Premium branding & graphics" data-ru="Премиум брендинг и графика">Premium branding & graphics</div></div>
+                    <div class="price">$10+</div>
+                </div>
+                <div class="service">
+                    <div><strong data-en="[02] Website Creation" data-ru="[02] Создание сайтов">[02] Website Creation</strong>
+                    <div class="desc" data-en="From landing page to full project" data-ru="От лендинга до крупного проекта">From landing page to full project</div></div>
+                    <div class="price" data-en="From $100" data-ru="От $100">From $100</div>
+                </div>
+                <div class="service">
+                    <div><strong data-en="[03] Networker assistance" data-ru="[03] Помощь с инет.подключениями и настройкой">[03] Networker assistance</strong>
+                    <div class="desc" data-en="Setting up your host, answer on common questions and etc." data-ru="Настройка хостинга, ответы на вопросы и т.д.">Setting up your host, answer on common questions and etc.</div></div>
+                    <div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div>
+                </div>
+                <div class="service">
+                    <div><strong data-en="[04] Python development" data-ru="[04] Разработка на Python">[04] Python development</strong>
+                    <div class="desc" data-en="Creating a python project like discord bot or any sort of stuff" data-ru="Создание ботов в телеграме/дискорде,автоматизация процессов">Creating a python project like discord bot, parsers, automation</div></div>
+                    <div class="price" data-en="Depends on how hard it is" data-ru="Зависит от сложности">Depends on how hard it is</div>
+                </div>
+                <div class="service">
+                    <div><strong data-en="[05] Livery creation">[05] Livery creation</strong>
+                    <div class="desc" data-en="Creating detailed liveries for erlc in great quality.">Creating detailed liveries for erlc in great quality.</div></div>
+                    <div class="price" data-en="From $5" data-ru="От $5">From $5</div>
+                </div>
             </div>
         </div>
 
         <div class="reviews-section">
             <h2 data-en="CLIENT REVIEWS" data-ru="ОТЗЫВЫ КЛИЕНТОВ">CLIENT REVIEWS</h2>
-            <div id="reviewsList" class="reviews-list"></div>
-            <div class="cta-wrapper" style="margin-top:50px;">
-                <a href="javascript:void(0)" class="cta" id="leaveReviewBtn">
-                    <span data-en="LEAVE A REVIEW" data-ru="ОСТАВИТЬ ОТЗЫВ">LEAVE A REVIEW</span>
-                </a>
+            <div id="reviewTape" class="review-tape"></div>
+            <div id="reviewTapeDuplicate" class="review-tape duplicate"></div>
+            <div class="cta-wrapper" style="margin-top:60px;justify-content:center;">
+                <a href="javascript:void(0)" class="cta-btn" id="leaveReviewBtn"><span data-en="LEAVE A REVIEW" data-ru="ОСТАВИТЬ ОТЗЫВ">LEAVE A REVIEW</span></a>
             </div>
         </div>
     </div>
 </div>
 
+<!-- НОВАЯ КРАСИВАЯ МУЗЫКАЛЬНАЯ ПАНЕЛЬ -->
 <div id="music-player">
-    <button id="play-pause-btn">
-        <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
-    </button>
     <div class="track-info">
-        <div class="track-title">Nice logo</div>
-        <div class="artist">Exyl</div>
+        <div class="track-title">Friday</div>
+        <div class="artist">Riton x NightCrawlers</div>
     </div>
-    <div class="progress-container" id="progress-container">
-        <div class="progress-fill"></div>
-        <div class="progress-knob"></div>
+
+    <div class="progress-container">
+        <span id="currentTime">0:00</span>
+        <div class="progress-bar" id="songProgress">
+            <div class="progress-fill"></div>
+            <div class="progress-knob"></div>
+        </div>
+        <span id="duration">--:--</span>
+    </div>
+
+    <div class="controls">
+        <button id="play-pause-btn">
+            <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+        </button>
+
+        <div class="volume-container">
+            <svg id="volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <div id="volume-slider" style="--vol:70%"></div>
+        </div>
     </div>
 </div>
 
-<!-- Модалки -->
+<!-- МОДАЛКИ -->
 <div id="contactModal" class="modal"><div class="modal-content">
     <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
     <div class="contact-links">
-        <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt="Gmail"> interpoldis@gmail.com</a>
-        <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt="Telegram"> @TheTrueLiberty</a>
-        <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt="Discord"> TheTrueLiberty</a>
+        <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt=""> interpoldis@gmail.com</a>
+        <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @TheTrueLiberty</a>
+        <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt=""> TheTrueLiberty</a>
     </div>
     <button id="closeModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
 </div></div>
@@ -231,199 +287,262 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <div id="paymentModal" class="modal"><div class="modal-content">
     <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
     <div class="payment-methods">
-        <div><img src="https://play-lh.googleusercontent.com/JBFEfcBlEhgL-QEP-Vw_drnPVLUcaxJQt_io9wxntkEJ-YBp1pXn3XQI1eiyzc-SQw=w240-h480-rw" alt="Tonkeeper"><strong>Tonkeeper</strong></div>
-        <div><img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet"><strong>Trust Wallet</strong></div>
-        <div><img src="https://logos.telegram-store.com/bots/cryptobot/telegram_bot_logo.jpg" alt="CryptoBot"><strong>@cryptobot</strong></div>
-        <div><img src="https://img.freepik.com/premium-photo/three-stacked-bank-cards-dark-background_1219282-1018.jpg?w=740" alt="Bank Transfer">
-            <strong data-en="European bank transfer" data-ru="Банковский перевод (EU)">European bank transfer</strong>
-        </div>
+        <div><img src="https://cryptologos.cc/logos/toncoin-ton-logo.svg?v=034" alt=""> Tonkeeper</div>
+        <div><img src="https://cryptologos.cc/logos/tether-usdt-logo.svg?v=034" alt=""> USDT TRC20</div>
+        <div><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=034" alt=""> Bitcoin</div>
+        <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @CryptoBot</div>
+        <div><img src="https://www.uponarriving.com/wp-content/uploads/2018/02/Mastercard-Black-Card-8-490x315.png" alt="Mastercard"> Bank transfers [EU]</div>
     </div>
-    <p style="margin-top:28px;opacity:0.85;font-size:16px;" data-en="DM me for wallet address" data-ru="Напиши мне — пришлю реквизиты">
-        DM me for wallet address
-    </p>
+    <p style="margin-top:28px;opacity:.85;" data-en="DM me for details" data-ru="Напиши — пришлю реквизиты">DM me for details</p>
     <button id="closePayment"><span data-en="Close" data-ru="Закрыть">Close</span></button>
 </div></div>
 
 <div id="reviewModal" class="modal"><div class="modal-content">
-    <h3 data-en="Leave your review" data-ru="Оставить отзыв">Leave your review</h3>
-    <div id="googleSignInBtn" class="google-btn">Sign in with Google</div>
+    <h3 data-en="Leave a review" data-ru="Оставить отзыв">Leave a review</h3>
+    <div id="googleSignInBtn" class="cta-btn" style="margin:20px auto;display:inline-flex;">Sign in with Google</div>
     <div id="reviewForm" style="display:none;">
-        <textarea id="reviewText" data-en-placeholder="Write your review (up to 300 characters)..."
-                  data-ru-placeholder="Напиши свой отзыв (до 300 символов)..." placeholder="Напиши свой отзыв (до 300 символов)..." maxlength="300" rows="5"></textarea>
-        <div style="margin:28px 0;text-align:center;">
-            <div id="ratingInput" class="rating" style="font-size:36px;letter-spacing:8px;cursor:pointer;">☆☆☆☆☆</div>
-        </div>
-        <button id="submitReviewBtn" class="cta" style="width:100%;"><span data-en="Submit review" data-ru="Отправить отзыв">Отправить отзыв</span></button>
+        <textarea id="reviewText" data-en-placeholder="Your review..." data-ru-placeholder="Ваш отзыв..." maxlength="300" rows="5" style="width:100%;padding:16px;background:rgba(255,255,255,.1);border:1px solid var(--border);border-radius:16px;color:#fff;margin-top:20px;"></textarea>
+        <div style="margin:28px 0;text-align:center;font-size:36px;letter-spacing:8px;cursor:pointer;" id="ratingInput">★★★★★</div>
+        <button id="submitReviewBtn" class="cta-btn" style="width:100%;margin-top:10px;"><span data-en="Submit" data-ru="Отправить">Submit</span></button>
     </div>
     <button id="closeReviewModal"><span data-en="Close" data-ru="Закрыть">Close</span></button>
 </div></div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-  const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
     authDomain: "liberty-bio.firebaseapp.com",
     projectId: "liberty-bio",
     storageBucket: "liberty-bio.firebasestorage.app",
     messagingSenderId: "498591653250",
-    appId: "1:498591653250:web:e634097c5fe0034212839b",
-    measurementId: "G-3W98LCQK1X"
-  };
+    appId: "1:498591653250:web:e634097c5fe0034212839b"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  // Музыка
-  const audio = document.getElementById('background-music');
-  const player = document.getElementById('music-player');
-  document.body.addEventListener('click', () => audio.play().catch(()=>{}), {once:true});
-  setTimeout(() => player.classList.add('visible'), 1000);
-  player.onclick = () => { audio.paused ? audio.play() && player.classList.add('playing') : audio.pause() && player.classList.remove('playing'); };
-  audio.addEventListener('timeupdate', () => {
-    const percent = (audio.currentTime / audio.duration) * 100 || 0;
-    document.querySelector('.progress-fill').style.width = percent + '%';
-    document.querySelector('.progress-knob').style.left = percent + '%';
-  });
-  document.getElementById('progress-container').onclick = e => {
+let currentLang = 'en';
+let currentUser = null;
+let currentRating = 5;
+
+// УЛУЧШЕННАЯ ФУНКЦИЯ ЯЗЫКА
+const switchLang = () => {
+    document.getElementById('langMaster').textContent = currentLang.toUpperCase();
+    document.querySelectorAll('[data-en], [data-ru]').forEach(el => {
+        const key = currentLang === 'en' ? 'data-en' : 'data-ru';
+        if (el.hasAttribute(key)) {
+            el.textContent = el.getAttribute(key);
+        }
+    });
+    // Фикс для placeholder в textarea
+    const textarea = document.getElementById('reviewText');
+    if (textarea) {
+        textarea.placeholder = currentLang === 'en' ? textarea.getAttribute('data-en-placeholder') : textarea.getAttribute('data-ru-placeholder');
+    }
+    // Фикс для кнопки submit
+    const submitBtn = document.getElementById('submitReviewBtn');
+    if (submitBtn) {
+        submitBtn.innerHTML = `<span data-en="Submit" data-ru="Отправить">${currentLang === 'en' ? 'Submit' : 'Отправить'}</span>`;
+    }
+};
+document.getElementById('langMaster').onclick = (e) => {
     e.stopPropagation();
-    const rect = e.currentTarget.getBoundingClientRect();
-    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-  };
-
-  // Язык
-  let currentLang = 'en';
-  document.getElementById('langMaster').onclick = () => document.getElementById('langPopup').classList.toggle('active');
-  document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => {
+    document.getElementById('langPopup').classList.toggle('active');
+    document.addEventListener('click', closeLangPopup, true);
+};
+function closeLangPopup(e) {
+    if (!e.target.closest('.lang-master') && !e.target.closest('.lang-popup')) {
+        document.getElementById('langPopup').classList.remove('active');
+        document.removeEventListener('click', closeLangPopup, true);
+    }
+}
+document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = (e) => {
     e.stopPropagation();
     currentLang = btn.dataset.lang;
-    document.getElementById('langMaster').textContent = currentLang.toUpperCase();
-    document.querySelectorAll('[data-en],[data-ru]').forEach(el => el.dataset[currentLang] && (el.textContent = el.dataset[currentLang]));
-    document.querySelectorAll('textarea[data-en-placeholder]').forEach(el => el.placeholder = el.dataset[currentLang === 'en' ? 'enPlaceholder' : 'ruPlaceholder']);
-    document.querySelectorAll('.ru-only').forEach(el => el.style.display = currentLang==='ru'?'flex':'none');
-    document.querySelectorAll('.en-only').forEach(el => el.style.display = currentLang==='en'?'flex':'none');
+    switchLang();
     document.getElementById('langPopup').classList.remove('active');
-  });
+    document.removeEventListener('click', closeLangPopup, true);
+});
+switchLang();
 
-  // Модалки
-  document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
-  document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
-  document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
-  document.getElementById('closeModal').onclick = () => document.getElementById('contactModal').classList.remove('show');
-  document.getElementById('closePayment').onclick = () => document.getElementById('paymentModal').classList.remove('show');
-  document.getElementById('closeReviewModal').onclick = () => document.getElementById('reviewModal').classList.remove('show');
-  document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target===m && m.classList.remove('show'));
-  document.addEventListener('keydown', e => e.key==='Escape' && document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show')));
+// ПРЕЛОАДЕР
+(() => {
+    const preloader = document.getElementById('preloader');
+    const fill = document.getElementById('progressFill');
+    let p = 0;
+    const t = setInterval(() => {
+        p += Math.random()*7 + 4;
+        if (p > 94) p = 94;
+        fill.style.width = p + '%';
+    }, 80);
 
-  // Анимации появления
-  setTimeout(() => document.getElementById('mainCard').classList.add('show'), 300);
-  setTimeout(() => document.querySelectorAll('.service').forEach((s,i) => getComputedStyle(s).display!=='none' && setTimeout(()=>s.classList.add('show'),600+i*150)), 300);
+    Promise.all([document.fonts.ready, new Promise(r => window.addEventListener('load', r))]).then(() => {
+        clearInterval(t);
+        fill.style.width = '100%';
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+            document.body.classList.add('loaded');
+            document.getElementById('mainCard').classList.add('show');
+            document.querySelectorAll('.service').forEach((s,i) => setTimeout(() => s.classList.add('show'), 600 + i*150));
+        }, 500);
+    });
+    setTimeout(() => { preloader.classList.add('hidden'); document.body.classList.add('loaded'); }, 5500);
+})();
 
-  // === НОВЫЕ ЗВЁЗДЫ + ОТЗЫВЫ ===
-  let currentUser = null;
-  let currentRating = 5;
-  const MY_UID = "EowDTxvpMhTcKhsV7x6kEpDAuyc2";
+// МУЗЫКА + НОВАЯ ПАНЕЛЬ
+const audio = document.getElementById('background-music');
+const playPauseBtn = document.getElementById('play-pause-btn');
+const playIcon = playPauseBtn.querySelector('.play');
+const pauseIcon = playPauseBtn.querySelector('.pause');
+const progressFill = document.querySelector('#songProgress .progress-fill');
+const progressKnob = document.querySelector('#songProgress .progress-knob');
+const currentTimeEl = document.getElementById('currentTime');
+const durationEl = document.getElementById('duration');
+const volumeSlider = document.getElementById('volume-slider');
 
-  const reviewsList = document.getElementById("reviewsList");
-  const reviewsQuery = query(collection(db, "reviews"), orderBy("pinned", "desc"), orderBy("timestamp", "desc"));
+const formatTime = (s) => {
+    const m = Math.floor(s / 60);
+    const secs = Math.floor(s % 60);
+    return `${m}:${secs < 10 ? '0' : ''}${secs}`;
+};
 
-  function createStars(rating) {
-    const div = document.createElement('div');
-    div.className = 'rating';
-    for(let i=1;i<=5;i++){
-      const s = document.createElement('span');
-      s.textContent = '★';
-      if(i <= rating) s.classList.add('filled');
-      div.appendChild(s);
+audio.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = percent + '%';
+        progressKnob.style.left = percent + '%';
+        currentTimeEl.textContent = formatTime(audio.currentTime);
     }
-    return div.outerHTML;
-  }
+});
 
-  function renderReviews() {
-    onSnapshot(reviewsQuery, snap => {
-      reviewsList.innerHTML = "";
-      snap.forEach(d => {
-        const r = d.data();
-        const isOwner = currentUser && currentUser.uid === MY_UID;
-        const div = document.createElement("div");
-        div.className = "review-card";
-        div.innerHTML = `
-          <div class="review-header">
-            <img src="${r.photoURL || 'https://via.placeholder.com/48'}" class="review-avatar" alt="avatar">
-            <div class="review-name">${r.name || (currentLang==='ru'?'Аноним':'Anonymous')}</div>
-            ${r.pinned ? '<div style="color:#b91c3e;font-weight:900;margin-left:8px;">PINNED</div>' : ''}
-            <div class="review-date">${r.timestamp?.toDate?.().toLocaleDateString(currentLang==='ru'?'ru-RU':'en-US') || ''}</div>
-          </div>
-          <div class="rating-display">${createStars(r.rating)}</div>
-          <div class="review-text">${r.text.replace(/\n/g,'<br>')}</div>
-          ${isOwner ? `<div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;">
-            <button class="pin-btn" data-id="${d.id}" style="background:${r.pinned?'#444':'rgba(185,28,62,0.3)'};padding:8px 16px;border-radius:10px;color:#fff;border:none;cursor:pointer;font-size:14px;">
-              ${r.pinned ? (currentLang==='ru'?'Открепить':'Unpin') : (currentLang==='ru'?'Закрепить':'Pin')}
-            </button>
-            <button class="delete-btn" data-id="${d.id}" style="background:#b91c3e;padding:8px 16px;border-radius:10px;color:#fff;border:none;cursor:pointer;font-size:14px;">
-              ${currentLang==='ru'?'Удалить':'Delete'}
-            </button>
-          </div>` : ''}
+document.getElementById('songProgress').addEventListener('click', e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+});
+
+playPauseBtn.addEventListener('click', () => {
+    if (audio.paused) {
+        audio.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+    } else {
+        audio.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+    }
+});
+
+volumeSlider.addEventListener('click', e => {
+    const rect = volumeSlider.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    const vol = Math.max(0, Math.min(1, pos));
+    audio.volume = vol;
+    volumeSlider.style.setProperty('--vol', (vol * 100) + '%');
+});
+
+// Автозапуск после первого клика
+const unlock = () => {
+    audio.play().catch(()=>{});
+    document.getElementById('myVideo').play().catch(()=>{});
+    document.removeEventListener('click', unlock);
+    document.removeEventListener('touchstart', unlock);
+};
+document.addEventListener('click', unlock, {once:true});
+document.addEventListener('touchstart', unlock, {once:true});
+
+setTimeout(() => document.getElementById('music-player').classList.add('visible'), 1800);
+
+// МОДАЛКИ
+document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
+document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
+document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
+document.querySelectorAll('#closeModal, #closePayment, #closeReviewModal').forEach(b => b.onclick = () => b.closest('.modal').classList.remove('show'));
+document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target === m && m.classList.remove('show'));
+
+// ОТЗЫВЫ ИЗ FIREBASE
+const tape = document.getElementById('reviewTape');
+const dupe = document.getElementById('reviewTapeDuplicate');
+
+function createStars(r) {
+    return `<div style="display:flex;gap:6px;font-size:32px;color:#b91c3e;margin:16px 0;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>`;
+}
+
+function renderReviews(snap) {
+    const rev = [];
+    snap.forEach(d => rev.push({id:d.id, ...d.data()}));
+    tape.innerHTML = dupe.innerHTML = '';
+    if (rev.length === 0) {
+        const msg = currentLang === 'ru' ? 'Нет отзывов :(' : 'no reviews yet :( buy my stuff please';
+        tape.innerHTML = dupe.innerHTML = `<div class="review-card"><div style="text-align:center;padding:80px;color:#777;">${msg}</div></div>`.repeat(3);
+        return;
+    }
+    rev.forEach(r => {
+        const c = document.createElement('div');
+        c.className = 'review-card';
+        c.innerHTML = `
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+                <img src="${r.photoURL || 'https://via.placeholder.com/64'}" style="width:64px;height:64px;border-radius:50%;border:4px solid #b91c3e;">
+                <div>
+                    <div style="font-weight:700;color:#fff;">${r.name || 'Anonymous'}</div>
+                    <div style="font-size:13px;color:#aaa;">${r.timestamp?.toDate?.().toLocaleDateString() || ''}</div>
+                </div>
+            </div>
+            ${createStars(r.rating || 5)}
+            <div style="color:#ddd;line-height:1.6;">${(r.text || '').replace(/\n/g,'<br>')}</div>
         `;
-        reviewsList.appendChild(div);
-      });
-
-      // Админка
-      if (currentUser && currentUser.uid === MY_UID) {
-        document.querySelectorAll('.delete-btn').forEach(b => b.onclick = () => confirm(currentLang==='ru'?'Удалить навсегда?':'Delete forever?') && deleteDoc(doc(db, "reviews", b.dataset.id)));
-        document.querySelectorAll('.pin-btn').forEach(b => b.onclick = async () => {
-          const id = b.dataset.id;
-          const wasPinned = b.textContent.includes(currentLang==='ru'?'Открепить':'Unpin');
-          snap.docs.forEach(d => d.data().pinned && d.id !== id && updateDoc(doc(db, "reviews", d.id), {pinned:false}));
-          await updateDoc(doc(db, "reviews", id), {pinned: !wasPinned});
-        });
-      }
+        tape.appendChild(c);
+        dupe.appendChild(c.cloneNode(true));
     });
-  }
+}
 
-  onAuthStateChanged(auth, user => { currentUser = user; renderReviews(); });
+const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
+onSnapshot(q, renderReviews);
 
-  // Ввод рейтинга при оставлении отзыва
-  const ratingInput = document.getElementById('ratingInput');
-  ratingInput.addEventListener('click', e => {
-    const rect = ratingInput.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    currentRating = Math.round(offsetX / rect.width * 5) || 1;
-    currentRating = Math.max(1, Math.min(5, currentRating));
-    ratingInput.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
-    ratingInput.querySelectorAll('span').forEach((s,i) => {
-      s.classList.toggle('filled', i < currentRating);
-    });
-  });
+// ОСТАВИТЬ ОТЗЫВ
+document.getElementById('ratingInput').onclick = e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    currentRating = Math.ceil((x / rect.width) * 5);
+    e.currentTarget.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
+};
 
-  document.getElementById("googleSignInBtn").onclick = async () => {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    currentUser = result.user;
-    document.getElementById("googleSignInBtn").style.display = "none";
-    document.getElementById("reviewForm").style.display = "block";
-  };
+document.getElementById('googleSignInBtn').onclick = async () => {
+    const p = new GoogleAuthProvider();
+    const res = await signInWithPopup(auth, p);
+    currentUser = res.user;
+    document.getElementById('googleSignInBtn').style.display = 'none';
+    document.getElementById('reviewForm').style.display = 'block';
+};
 
-  document.getElementById("submitReviewBtn").onclick = async () => {
-    const text = document.getElementById("reviewText").value.trim();
-    if (!text) return alert(currentLang==='ru'?'Напиши отзыв!':'Write a review!');
-    if (!currentUser) return alert(currentLang==='ru'?'Войди через Google':'Sign in with Google');
-
+document.getElementById('submitReviewBtn').onclick = async () => {
+    const text = document.getElementById('reviewText').value.trim();
+    if (!text) return alert(currentLang==='ru'?'Напиши отзыв!' : 'Write a review!');
+    if (!currentUser) return alert(currentLang==='ru'?'Войди через Google' : 'Sign in with Google');
     await addDoc(collection(db, "reviews"), {
-      name: currentUser.displayName,
-      photoURL: currentUser.photoURL,
-      text, rating: currentRating, pinned: false, timestamp: serverTimestamp()
+        name: currentUser.displayName,
+        photoURL: currentUser.photoURL,
+        text,
+        rating: currentRating,
+        timestamp: serverTimestamp()
     });
-
-    alert(currentLang==='ru'?'Спасибо за отзыв!':'Thank you!');
-    document.getElementById("reviewModal").classList.remove("show");
-    document.getElementById("reviewText").value = "";
+    alert(currentLang==='ru'?'Спасибо!' : 'Thank you!');
+    document.getElementById('reviewModal').classList.remove('show');
+    document.getElementById('reviewText').value = '';
     currentRating = 5;
-    ratingInput.innerHTML = '☆☆☆☆☆';
-  };
+    document.getElementById('ratingInput').innerHTML = '★★★★★';
+};
+
+onAuthStateChanged(auth, u => currentUser = u);
 </script>
 </body>
 </html>
