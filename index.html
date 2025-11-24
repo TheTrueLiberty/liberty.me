@@ -73,7 +73,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .service .desc{font-size:15px;color:var(--text-light);opacity:.92;}
 .service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
 
-/* СЕТКА ОТЗЫВОВ */
 .reviews-section{margin:160px 0 100px;overflow:hidden;}
 .reviews-section h2{font-size:42px;background:linear-gradient(90deg,#b91c3e,#ff3366);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:70px;font-weight:900;}
 .reviews-grid-wrapper{position:relative;height:760px;overflow:hidden;}
@@ -86,14 +85,12 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .review-card{background:rgba(28,28,40,.75);backdrop-filter:blur(20px);border:1px solid rgba(185,28,62,.3);border-radius:26px;padding:28px;box-shadow:0 16px 40px rgba(0,0,0,.5);transition:all .5s;height:340px;display:flex;flex-direction:column;}
 .review-card:hover{transform:translateY(-12px) scale(1.03);border-color:var(--accent);box-shadow:0 24px 50px rgba(185,28,62,.3);}
 
-/* ПАНЕЛЬ ПОЛЬЗОВАТЕЛЯ */
 #userPanel{position:fixed;top:20px;right:20px;display:flex;align-items:center;gap:12px;z-index:999;background:rgba(18,18,28,.95);padding:10px 16px;border-radius:20px;border:2px solid var(--accent);opacity:0;transition:.4s;pointer-events:none;}
 #userPanel.show{opacity:1;pointer-events:auto;}
 #userPanel img{width:42px;height:42px;border-radius:50%;border:3px solid var(--accent);object-fit:cover;}
 #userPanel span{font-weight:700;color:#fff;}
 #logoutBtn{margin-left:10px;color:#ff3366;cursor:pointer;font-size:14px;}
 
-/* АВТОРИЗАЦИЯ */
 #authModal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;z-index:10000;opacity:0;pointer-events:none;transition:.5s;}
 #authModal.show{opacity:1;pointer-events:auto;}
 .auth-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:32px;width:100%;max-width:460px;padding:50px 40px;text-align:center;position:relative;}
@@ -104,9 +101,9 @@ input[type=text],input[type=email],input[type=password]{
     width:100%;padding:16px 20px;margin:12px 0;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:16px;color:#fff;font-size:16px;transition:.3s;
 }
 input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185,28,62,.3);}
-#closeAuth{position:absolute;top:20px;right:20px;background:none;border:none;color:#777;font-size:28px;cursor:pointer;}
+#closeAuth{position:absolute;top:20px;right:20px;background:var(--accent);width:40px;height:40px;border-radius:50%;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;}
+#closeAuth:hover{background:var(--accent-hover);transform:scale(1.1);}
 
-/* КРАСИВЫЙ МЕДИАПЛЕЕР */
 #music-player{
     position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
     width:420px;max-width:calc(100% - 40px);background:rgba(20,20,35,.96);
@@ -114,7 +111,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     padding:20px 28px;box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 40px rgba(185,28,62,.4);
     z-index:999;opacity:0;transition:all .6s cubic-bezier(.23,1,.32,1);overflow:hidden;
 }
-#music-player.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+#music-player.visible{opacity:1;}
 #music-player .track-info{margin-bottom:12px;text-align:center;}
 #music-player .track-title{font-size:18px;font-weight:800;color:#fff;}
 #music-player .artist{font-size:14px;color:#bbb;margin-top:4px;}
@@ -130,15 +127,18 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 #play-pause-btn:hover{transform:scale(1.1);box-shadow:0 20px 60px rgba(185,28,62,.8);}
 #play-pause-btn svg{width:28px;height:28px;fill:#fff;}
 
-/* МОДАЛКИ */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;
     opacity:0;pointer-events:none;transition:.5s;z-index:1000;padding:20px;}
 .modal.show{opacity:1;pointer-events:auto;}
 .modal-content{background:var(--card);backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:28px;
-    width:100%;max-width:540px;text-align:center;transform:scale(.92);transition:.5s;padding:50px 30px;}
+    width:100%;max-width:540px;text-align:center;transform:scale(.92);transition:.5s;padding:50px 30px;position:relative;}
 .modal.show .modal-content{transform:scale(1);}
+.modal-close{
+    position:absolute;top:20px;right:20px;width:40px;height:40px;background:var(--accent);border-radius:50%;
+    color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;
+}
+.modal-close:hover{background:var(--accent-hover);transform:scale(1.1);}
 
-/* КОНТЕНТ В МОДАЛКАХ */
 .contact-links a,.payment-methods > div{
     display:flex;align-items:center;gap:20px;background:rgba(185,28,62,.08);border:1px solid rgba(185,28,62,.2);
     border-radius:20px;padding:18px 24px;margin:14px 0;transition:.4s;font-weight:600;font-size:18px;color:var(--text);text-decoration:none;
@@ -148,7 +148,6 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 }
 .contact-links img,.payment-methods img{width:36px;height:36px;border-radius:8px;flex-shrink:0;object-fit:cover;}
 
-/* ОТЗЫВ — КНОПКИ ПО ЦЕНТРУ */
 #reviewModal .modal-content{display:flex;flex-direction:column;gap:24px;align-items:center;}
 #reviewText{width:100%;padding:18px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:20px;color:#fff;font-size:16px;resize:none;}
 #reviewText:focus{outline:none;border-color:var(--accent);box-shadow:0 0 25px rgba(185,28,62,.3);}
@@ -156,13 +155,14 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
 #ratingInput:hover{transform:scale(1.08);}
 #submitReviewBtn{width:100%;max-width:380px;}
 
-/* ЯЗЫК */
-.lang-master{position:fixed;top:20px;left:20px;width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.6);}
+/* ИСПРАВЛЕННАЯ ПАНЕЛЬ ЯЗЫКА */
+.lang-wrapper{position:fixed;top:20px;left:20px;z-index:9999;}
+.lang-master{width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.6);transition:transform .3s;position:relative;z-index:2;}
 .lang-master:hover{transform:scale(1.12);}
-.lang-popup{position:absolute;top:80px;left:20px;background:rgba(18,18,28,.98);border:2px solid var(--accent);border-radius:16px;overflow:hidden;display:none;z-index:9999;box-shadow:0 15px 40px rgba(0,0,0,.7);}
-.lang-popup.active{display:block;}
-.lang-btn{padding:14px 24px;color:#fff;cursor:pointer;transition:.3s;font-size:17px;}
+.lang-popup{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:rgba(18,18,28,.98);border:2px solid var(--accent);border-radius:16px;overflow:hidden;display:none;min-width:80px;box-shadow:0 15px 40px rgba(0,0,0,.7);z-index:1;}
+.lang-popup.active{display:block;animation:pop .3s ease-out;}
+@keyframes pop{from{transform:translateX(-50%) scale(.9);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+.lang-btn{padding:14px 24px;color:#fff;cursor:pointer;transition:.3s;font-size:17px;text-align:center;}
 .lang-btn:hover{background:var(--accent);}
 </style>
 </head>
@@ -182,10 +182,13 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     <source src="https://cdn.jsdelivr.net/gh/0x00A/0x00A@main/exyl.mp3" type="audio/mpeg">
 </audio>
 
-<div class="lang-master" id="langMaster">EN</div>
-<div class="lang-popup" id="langPopup">
-    <div class="lang-btn" data-lang="en">EN</div>
-    <div class="lang-btn" data-lang="ru">RU</div>
+<!-- ПАНЕЛЬ ЯЗЫКА -->
+<div class="lang-wrapper">
+    <div class="lang-master" id="langMaster">EN</div>
+    <div class="lang-popup" id="langPopup">
+        <div class="lang-btn" data-lang="en">EN</div>
+        <div class="lang-btn" data-lang="ru">RU</div>
+    </div>
 </div>
 
 <div id="userPanel">
@@ -231,7 +234,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
                 <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание сайтов">[02] Website Creation</strong><div class="desc" data-en="From landing page to full project" data-ru="От лендинга до крупного проекта">From landing page to full project</div></div><div class="price" data-en="From $100" data-ru="От $100">From $100</div></div>
                 <div class="service"><div><strong data-en="[03] Networker assistance" data-ru="[03] Помощь с инет.подключениями и настройкой">[03] Networker assistance</strong><div class="desc" data-en="Setting up your host, answer on common questions and etc." data-ru="Настройка хостинга, ответы на вопросы и т.д.">Setting up your host, answer on common questions and etc.</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
                 <div class="service"><div><strong data-en="[04] Python development" data-ru="[04] Разработка на Python">[04] Python development</strong><div class="desc" data-en="Creating a python project like discord bot or any sort of stuff" data-ru="Создание ботов в телеграме/дискорде,автоматизация процессов">Creating a python project like discord bot, parsers, automation</div></div><div class="price" data-en="Depends on how hard it is" data-ru="Зависит от сложности">Depends on how hard it is</div></div>
-                <div class="service"><div><strong data-en="[05] Livery creation">[05] Livery creation</strong><div class="desc" data-en="Creating detailed liveries for erlc in great quality.">Creating detailed liveries for erlc in great quality.</div></div><div class="price" data-en="From $5" data-ru="От $5">From $5</div></div>
+                <div class="service" data-en="[05] Livery creation"><div><strong>[05] Livery creation</strong><div class="desc">Creating detailed liveries for erlc in great quality.</div></div><div class="price">From $5</div></div>
             </div>
         </div>
 
@@ -248,7 +251,7 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     </div>
 </div>
 
-<!-- МОДАЛ АВТОРИЗАЦИИ -->
+<!-- МОДАЛЫ -->
 <div id="authModal">
     <div class="auth-content">
         <button id="closeAuth">x</button>
@@ -270,7 +273,6 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     </div>
 </div>
 
-<!-- КРАСИВЫЙ МЕДИАПЛЕЕР -->
 <div id="music-player">
     <div class="track-info">
         <div class="track-title">Friday</div>
@@ -292,21 +294,21 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
     </div>
 </div>
 
-<!-- МОДАЛКИ -->
 <div id="contactModal" class="modal">
     <div class="modal-content">
+        <button class="modal-close">x</button>
         <h3 data-en="CONTACT" data-ru="КОНТАКТЫ">CONTACT</h3>
         <div class="contact-links">
             <a href="mailto:interpoldis@gmail.com"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/gmail.svg" alt=""> interpoldis@gmail.com</a>
             <a href="https://t.me/TheTrueLiberty" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/telegram.svg" alt=""> @TheTrueLiberty</a>
             <a href="https://discord.com/users/1084944590898937867" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/discord.svg" alt=""> TheTrueLiberty</a>
         </div>
-        <button id="closeModal">Close</button>
     </div>
 </div>
 
 <div id="paymentModal" class="modal">
     <div class="modal-content">
+        <button class="modal-close">x</button>
         <h3 data-en="Payment Methods" data-ru="Способы оплаты">Payment Methods</h3>
         <div class="payment-methods">
             <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/ton.svg" alt=""> Tonkeeper</div>
@@ -316,17 +318,16 @@ input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 20px rgba(185
             <div><img src="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/mastercard.svg" alt=""> Bank transfers [EU]</div>
         </div>
         <p style="margin-top:28px;opacity:.85;" data-en="DM me for details" data-ru="Напиши — пришлю реквизиты">DM me for details</p>
-        <button id="closePayment">Close</button>
     </div>
 </div>
 
 <div id="reviewModal" class="modal">
     <div class="modal-content">
+        <button class="modal-close">x</button>
         <h3 data-en="Leave a review" data-ru="Оставить отзыв">Leave a review</h3>
         <textarea id="reviewText" data-en-placeholder="Your review..." data-ru-placeholder="Ваш отзыв..." maxlength="300" rows="5"></textarea>
         <div id="ratingInput">★★★★★</div>
-        <button id="submitReviewBtn" class="cta-btn">Submit</button>
-        <button id="closeReviewModal">Close</button>
+        <button id="submitReviewBtn" class="cta-btn"><span data-en="Submit" data-ru="Отправить">Submit</span></button>
     </div>
 </div>
 
@@ -356,15 +357,19 @@ let audioUnlocked = false;
 // ЯЗЫК
 const switchLang = () => {
     document.getElementById('langMaster').textContent = currentLang.toUpperCase();
-    document.querySelectorAll('[data-en], [data-ru]').forEach(el => {
-        const key = currentLang === 'en' ? 'data-en' : 'data-ru';
-        if (el.hasAttribute(key)) el.textContent = el.getAttribute(key);
+    document.querySelectorAll('[data-en],[data-ru]').forEach(el => {
+        const text = el.getAttribute(`data-${currentLang}`);
+        if (text !== null) el.textContent = text;
     });
     const textarea = document.getElementById('reviewText');
-    if (textarea) textarea.placeholder = currentLang === 'en' ? textarea.getAttribute('data-en-placeholder') : textarea.getAttribute('data-ru-placeholder');
+    if (textarea) textarea.placeholder = textarea.getAttribute(`data-${currentLang}-placeholder`);
+    document.querySelectorAll('.service').forEach((s, i) => {
+        if (i === 4) s.style.display = currentLang === 'en' ? 'flex' : 'none';
+    });
 };
-document.getElementById('langMaster').onclick = e => { e.stopPropagation(); document.getElementById('langPopup').classList.toggle('active'); document.addEventListener('click', closeLangPopup, true); };
-function closeLangPopup(e) { if (!e.target.closest('.lang-master') && !e.target.closest('.lang-popup')) { document.getElementById('langPopup').classList.remove('active'); document.removeEventListener('click', closeLangPopup, true); }}
+
+document.getElementById('langMaster').onclick = e => { e.stopPropagation(); document.getElementById('langPopup').classList.toggle('active'); };
+document.addEventListener('click', e => { if (!e.target.closest('.lang-wrapper')) document.getElementById('langPopup').classList.remove('active'); });
 document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => { e.stopPropagation(); currentLang = btn.dataset.lang; switchLang(); document.getElementById('langPopup').classList.remove('active'); });
 switchLang();
 
@@ -386,7 +391,7 @@ switchLang();
     setTimeout(() => { preloader.classList.add('hidden'); document.body.classList.add('loaded'); }, 5500);
 })();
 
-// МУЗЫКА
+// АУДИО + ВИДЕО
 const audio = document.getElementById('background-music');
 const unlockAudio = () => { if (audioUnlocked) return; audio.play().catch(()=>{}); document.getElementById('myVideo').play().catch(()=>{}); audioUnlocked = true; document.removeEventListener('click', unlockAudio); document.removeEventListener('touchstart', unlockAudio); };
 document.addEventListener('click', unlockAudio, {once: true});
@@ -395,26 +400,6 @@ document.addEventListener('touchstart', unlockAudio, {once: true});
 const playPauseBtn = document.getElementById('play-pause-btn');
 const playIcon = playPauseBtn.querySelector('.play');
 const pauseIcon = playPauseBtn.querySelector('.pause');
-const progressFill = document.querySelector('#songProgress .progress-fill');
-const progressKnob = document.querySelector('#songProgress .progress-knob');
-const currentTimeEl = document.getElementById('currentTime');
-const durationEl = document.getElementById('duration');
-
-const formatTime = s => { const m = Math.floor(s/60); const secs = Math.floor(s%60); return `${m}:${secs<10?'0':''}${secs}`; };
-audio.addEventListener('loadedmetadata', () => durationEl.textContent = formatTime(audio.duration));
-audio.addEventListener('timeupdate', () => {
-    if (audio.duration) {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressFill.style.width = percent + '%';
-        progressKnob.style.left = percent + '%';
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-    }
-});
-document.getElementById('songProgress').addEventListener('click', e => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const pos = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = pos * audio.duration;
-});
 playPauseBtn.addEventListener('click', () => {
     if (audio.paused) { audio.play(); playIcon.style.display = 'none'; pauseIcon.style.display = 'block'; }
     else { audio.pause(); playIcon.style.display = 'block'; pauseIcon.style.display = 'none'; }
@@ -424,34 +409,24 @@ setTimeout(() => document.getElementById('music-player').classList.add('visible'
 // АВТОРИЗАЦИЯ
 const authModal = document.getElementById('authModal');
 let isRegister = false;
-document.getElementById('toggleToRegister').onclick = () => { isRegister = true; document.getElementById('authTitle').textContent = 'Create Account'; document.getElementById('displayName').style.display = 'block'; };
-document.getElementById('toggleToLogin').onclick = () => { isRegister = false; document.getElementById('authTitle').textContent = 'Sign In'; document.getElementById('displayName').style.display = 'none'; };
+document.getElementById('toggleToRegister').onclick = () => { isRegister = true; document.getElementById('authTitle').textContent = currentLang === 'ru' ? 'Регистрация' : 'Create Account'; document.getElementById('displayName').style.display = 'block'; };
+document.getElementById('toggleToLogin').onclick = () => { isRegister = false; document.getElementById('authTitle').textContent = currentLang === 'ru' ? 'Вход' : 'Sign In'; document.getElementById('displayName').style.display = 'none'; };
 document.getElementById('leaveReviewBtn').onclick = () => { if (!currentUser) authModal.classList.add('show'); else document.getElementById('reviewModal').classList.add('show'); };
 document.getElementById('closeAuth').onclick = () => authModal.classList.remove('show');
 authModal.onclick = e => e.target === authModal && authModal.classList.remove('show');
 
-document.getElementById('authGoogleBtn').onclick = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
-};
-
+document.getElementById('authGoogleBtn').onclick = async () => { const p = new GoogleAuthProvider(); await signInWithPopup(auth, p); };
 document.getElementById('authSubmit').onclick = async () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const displayName = document.getElementById('displayName').value.trim();
-    if (!email || !password || (isRegister && !displayName)) return alert('Заполни все поля!');
+    if (!email || !password || (isRegister && !displayName)) return alert(currentLang === 'ru' ? 'Заполни все поля!' : 'Fill all fields!');
     try {
-        let userCred;
-        if (isRegister) {
-            userCred = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(userCred.user, { displayName });
-        } else {
-            userCred = await signInWithEmailAndPassword(auth, email, password);
-        }
+        let userCred = isRegister 
+            ? await createUserWithEmailAndPassword(auth, email, password).then(u => { updateProfile(u.user, {displayName}); return u; })
+            : await signInWithEmailAndPassword(auth, email, password);
         authModal.classList.remove('show');
-    } catch (err) {
-        alert(err.message);
-    }
+    } catch (err) { alert(err.message); }
 };
 
 onAuthStateChanged(auth, user => {
@@ -466,62 +441,88 @@ onAuthStateChanged(auth, user => {
 });
 document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-// ОТЗЫВЫ
+// ОТЗЫВЫ (ИСПРАВЛЕНО — правильный язык)
 const reviewsGrid = document.getElementById('reviewsGrid');
 const reviewsGridDupe = document.getElementById('reviewsGridDuplicate');
 
 function renderReviews(snap) {
     const reviews = [];
-    snap.forEach(doc => reviews.push({id: doc.id, ...doc.data()}));
+    snap.forEach(d => reviews.push({id: d.id, ...d.data()}));
+
     reviewsGrid.innerHTML = reviewsGridDupe.innerHTML = '';
+
     if (reviews.length === 0) {
         const msg = currentLang === 'ru' ? 'Пока нет отзывов :(' : 'No reviews yet :(';
-        const ph = `<div class="review-card"><div style="text-align:center;padding:100px 20px;color:#777;font-size:18px;">${msg}<br><br>Будь первым!</div></div>`;
+        const beFirst = currentLang === 'ru' ? 'Будь первым!' : 'Be the first!';
+        const ph = `<div class="review-card"><div style="text-align:center;padding:100px 20px;color:#777;font-size:18px;">${msg}<br><br>${beFirst}</div></div>`;
         reviewsGrid.innerHTML = reviewsGridDupe.innerHTML = ph.repeat(12);
         return;
     }
+
     while (reviews.length < 24) reviews.push(...reviews);
     reviews.length = 24;
+
     const frag1 = document.createDocumentFragment();
     const frag2 = document.createDocumentFragment();
+
     reviews.forEach(r => {
+        const reviewText = currentLang === 'ru' 
+            ? (r.text_ru || r.text || 'Отличная работа!') 
+            : (r.text_en || r.text || 'Great job!');
+
         const card = document.createElement('div');
         card.className = 'review-card';
         card.innerHTML = `
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
                 <img src="${r.photoURL || 'https://via.placeholder.com/64'}" style="width:64px;height:64px;border-radius:50%;border:4px solid #b91c3e;object-fit:cover;">
-                <div><div style="font-weight:700;color:#fff;font-size:17px;">${r.name || 'Anonymous'}</div>
-                <div style="font-size:13px;color:#aaa;">${r.timestamp?.toDate?.().toLocaleDateString() || ''}</div></div>
+                <div>
+                    <div style="font-weight:700;color:#fff;font-size:17px;">${r.name || 'Anonymous'}</div>
+                    <div style="font-size:13px;color:#aaa;">${r.timestamp?.toDate?.()?.toLocaleDateString() || ''}</div>
+                </div>
             </div>
-            <div style="display:flex;gap:6px;font-size:30px;color:#b91c3e;margin:8px 0;">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5-(r.rating || 5))}</div>
-            <div style="color:#ddd;line-height:1.6;font-size:15px;flex:1;overflow:hidden;">${(r.text || '').replace(/\n/g,'<br>')}</div>
+            <div style="display:flex;gap:6px;font-size:30px;color:#b91c3e;margin:8px 0;">
+                ${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}
+            </div>
+            <div style="color:#ddd;line-height:1.6;font-size:15px;flex:1;overflow:hidden;">
+                ${reviewText.replace(/\n/g, '<br>')}
+            </div>
         `;
         frag1.appendChild(card);
         frag2.appendChild(card.cloneNode(true));
     });
+
     reviewsGrid.appendChild(frag1);
     reviewsGridDupe.appendChild(frag2);
 }
+
 const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
 onSnapshot(q, renderReviews);
 
-// ОТПРАВКА ОТЗЫВА
+// ОТПРАВКА ОТЗЫВА (сохраняет на нужном языке)
 document.getElementById('ratingInput').onclick = e => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     currentRating = Math.ceil((x / rect.width) * 5);
     e.currentTarget.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
 };
+
 document.getElementById('submitReviewBtn').onclick = async () => {
-    if (!currentUser) return alert('Войди сначала!');
-    const text = document.getElementById('reviewText').value.trim();
-    if (!text) return alert('Напиши отзыв!');
+    if (!currentUser) return alert(currentLang === 'ru' ? 'Войди сначала!' : 'Log in first!');
+    const textInput = document.getElementById('reviewText').value.trim();
+    if (!textInput) return alert(currentLang === 'ru' ? 'Напиши отзыв!' : 'Write a review!');
+
+    const field = currentLang === 'ru' ? 'text_ru' : 'text_en';
+
     await addDoc(collection(db, "reviews"), {
         name: currentUser.displayName || currentUser.email.split('@')[0],
         photoURL: currentUser.photoURL || 'https://via.placeholder.com/64',
-        text, rating: currentRating, timestamp: serverTimestamp()
+        text: textInput,
+        [field]: textInput,
+        rating: currentRating,
+        timestamp: serverTimestamp()
     });
-    alert('Спасибо!');
+
+    alert(currentLang === 'ru' ? 'Спасибо!' : 'Thank you!');
     document.getElementById('reviewModal').classList.remove('show');
     document.getElementById('reviewText').value = '';
     currentRating = 5;
@@ -531,7 +532,7 @@ document.getElementById('submitReviewBtn').onclick = async () => {
 // МОДАЛКИ
 document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
 document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
-document.querySelectorAll('#closeModal, #closePayment, #closeReviewModal').forEach(b => b.onclick = () => b.closest('.modal').classList.remove('show'));
+document.querySelectorAll('.modal-close').forEach(btn => btn.onclick = () => btn.closest('.modal').classList.remove('show'));
 document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target === m && m.classList.remove('show'));
 </script>
 </body>
