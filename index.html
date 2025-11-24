@@ -62,7 +62,7 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .cta-btn:hover{transform:translateY(-8px) scale(1.04);box-shadow:0 24px 50px rgba(185,28,62,.6);border:2px solid #ff3366;}
 .cta-btn:hover::before{transform:translateX(100%);}
 
-.services h2,.reviews-section h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
+.services h2{font-size:38px;margin:100px 0 50px;color:var(--accent);text-align:center;font-weight:800;}
 .service-list{display:grid;gap:24px;grid-template-columns:1fr;}
 @media (min-width:992px){.service-list{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));}}
 .service{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;
@@ -73,14 +73,58 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 .service .desc{font-size:15px;color:var(--text-light);opacity:.92;}
 .service .price{font-size:19px;color:var(--accent);font-weight:700;align-self:flex-end;}
 
-.reviews-section{margin:160px 0 100px;overflow:hidden;}
-.reviews-section h2{font-size:42px;background:linear-gradient(90deg,#b91c3e,#ff3366);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:70px;font-weight:900;}
-.review-tape{display:flex;gap:36px;padding:40px 0;animation:s 65s linear infinite;}
-@keyframes s{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.review-tape.duplicate{animation-direction:reverse;}
-.review-card{width:400px;flex-shrink:0;background:rgba(28,28,40,.68);backdrop-filter:blur(20px);
-    border:1px solid rgba(185,28,62,.3);border-radius:28px;padding:32px;box-shadow:0 20px 40px rgba(0,0,0,.5);transition:.6s;}
-.review-card:hover{transform:translateY(-16px) scale(1.02);border-color:var(--accent);}
+/* НОВАЯ КРУТАЯ СЕТКА ОТЗЫВОВ — 3–4 в ряд, 2 строки, плавная прокрутка */
+.reviews-section{
+    margin:160px 0 100px;
+    overflow:hidden;
+}
+.reviews-section h2{
+    font-size:42px;
+    background:linear-gradient(90deg,#b91c3e,#ff3366);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-align:center;margin-bottom:70px;font-weight:900;
+}
+.reviews-grid-wrapper{
+    position:relative;
+    height:760px;
+    overflow:hidden;
+}
+.reviews-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+    padding:20px 0;
+    animation:scrollGrid 40s linear infinite;
+    will-change:transform;
+}
+.reviews-grid.duplicate{
+    animation:scrollGrid 40s linear infinite reverse;
+}
+@media (min-width:1400px){.reviews-grid{grid-template-columns:repeat(4,1fr);}}
+@media (max-width:992px){.reviews-grid{grid-template-columns:repeat(2,1fr);gap:20px;}}
+@media (max-width:640px){.reviews-grid{grid-template-columns:1fr;}}
+@keyframes scrollGrid{
+    0%{transform:translateY(0)}
+    100%{transform:translateY(-50%)}
+}
+.review-card{
+    background:rgba(28,28,40,.75);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(185,28,62,.3);
+    border-radius:26px;
+    padding:28px;
+    box-shadow:0 16px 40px rgba(0,0,0,.5);
+    transition:all .5s;
+    height:340px;
+    display:flex;
+    flex-direction:column;
+}
+.review-card:hover{
+    transform:translateY(-12px) scale(1.03);
+    border-color:var(--accent);
+    box-shadow:0 24px 50px rgba(185,28,62,.3);
+}
 
 .lang-master{position:fixed;top:20px;left:20px;width:56px;height:56px;background:rgba(18,18,28,.95);border:3px solid var(--accent);border-radius:50%;
     display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:900;cursor:pointer;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.6);}
@@ -106,7 +150,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     cursor:pointer;font-size:17px;margin-top:28px;transition:.3s;font-weight:600;}
 #closeModal:hover,#closePayment:hover,#closeReviewModal:hover{background:var(--accent-hover);transform:scale(1.06);}
 
-/* НОВАЯ МУЗЫКАЛЬНАЯ ПАНЕЛЬ */
 #music-player{
     position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:480px;width:calc(100% - 40px);
     background:rgba(20,20,35,.96);backdrop-filter:blur(32px);border:1px solid rgba(185,28,62,.35);
@@ -114,39 +157,20 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     box-shadow:0 20px 50px rgba(0,0,0,.7);opacity:0;transition:opacity .7s,transform .4s;
 }
 #music-player.visible{opacity:1;transform:translateX(-50%) translateY(0);}
-
 #music-player .track-info .track-title{font-weight:700;font-size:17px;}
 #music-player .track-info .artist{font-size:13px;opacity:.8;}
-
 .progress-container{display:flex;align-items:center;gap:12px;font-size:13px;}
-#songProgress{
-    flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;position:relative;cursor:pointer;
-}
-#songProgress .progress-fill{
-    height:100%;width:0;background:linear-gradient(90deg,#b91c3e,#ff3366);position:relative;
-    box-shadow:0 0 15px rgba(255,51,102,.6);
-}
-#songProgress .progress-knob{
-    position:absolute;top:50%;right:0;width:16px;height:16px;background:var(--accent);border-radius:50%;
-    transform:translate(50%,-50%);opacity:0;transition:all .2s;box-shadow:0 0 20px rgba(185,28,62,.8);
-}
+#songProgress{flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;position:relative;cursor:pointer;}
+#songProgress .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#b91c3e,#ff3366);box-shadow:0 0 15px rgba(255,51,102,.6);}
+#songProgress .progress-knob{position:absolute;top:50%;right:0;width:16px;height:16px;background:var(--accent);border-radius:50%;transform:translate(50%,-50%);opacity:0;transition:all .2s;box-shadow:0 0 20px rgba(185,28,62,.8);}
 #songProgress:hover .progress-knob{opacity:1;transform:translate(50%,-50%) scale(1.3);}
-
 .controls{display:flex;align-items:center;gap:20px;justify-content:center;}
-#play-pause-btn{
-    width:48px;height:48px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;
-    cursor:pointer;transition:.3s;box-shadow:0 8px 25px rgba(185,28,62,.5);
-}
+#play-pause-btn{width:48px;height:48px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;box-shadow:0 8px 25px rgba(185,28,62,.5);}
 #play-pause-btn:hover{transform:scale(1.1);}
 #play-pause-btn svg{width:20px;height:20px;fill:#fff;}
-
 .volume-container{display:flex;align-items:center;gap:10px;width:120px;}
-#volume-slider{
-    flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;position:relative;cursor:pointer;
-}
-#volume-slider::before{
-    content:'';position:absolute;top:0;left:0;height:100%;width:var(--vol,70%);background:var(--accent);transition:width .2s;
-}
+#volume-slider{flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden;position:relative;cursor:pointer;}
+#volume-slider::before{content:'';position:absolute;top:0;left:0;height:100%;width:var(--vol,70%);background:var(--accent);transition:width .2s;}
 #volume-icon{cursor:pointer;opacity:.7;transition:.3s;}
 #volume-icon:hover{opacity:1;transform:scale(1.15);}
 </style>
@@ -167,7 +191,6 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     <source src="https://cdn.jsdelivr.net/gh/0x00A/0x00A@main/exyl.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ЯЗЫК -->
 <div class="lang-master" id="langMaster">EN</div>
 <div class="lang-popup" id="langPopup">
     <div class="lang-btn" data-lang="en">EN</div>
@@ -177,7 +200,9 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
 <div class="container">
     <div class="card" id="mainCard">
         <div class="hero">
-            <div class="avatar"><img src="https://cdn.discordapp.com/attachments/1292938472938472938/1292938472938472938/6ad1f8b10c7b2937f056040602fe6f0f.jpg" alt="Liberty"></div>
+            <div class="avatar">
+                <img src="assets/6ad1f8b10c7b2937f056040602fe6f0f.jpg" alt="Liberty">
+            </div>
             <div class="intro">
                 <h1 data-en="Welcome to my bio :P" data-ru="Ты попал в моё био :P">Welcome to my bio :P</h1>
                 <div class="subtitle" data-en="Certified Cyber Security Analyst • Network Architect • Python Developer"
@@ -205,38 +230,21 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         <div class="services">
             <h2 data-en="SERVICES THAT I OFFER" data-ru="МОИ УСЛУГИ">SERVICES THAT I OFFER</h2>
             <div class="service-list">
-                <div class="service">
-                    <div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Лого / Баннеры">[01] Logo / Banner creation</strong>
-                    <div class="desc" data-en="Premium branding & graphics" data-ru="Премиум брендинг и графика">Premium branding & graphics</div></div>
-                    <div class="price">$10+</div>
-                </div>
-                <div class="service">
-                    <div><strong data-en="[02] Website Creation" data-ru="[02] Создание сайтов">[02] Website Creation</strong>
-                    <div class="desc" data-en="From landing page to full project" data-ru="От лендинга до крупного проекта">From landing page to full project</div></div>
-                    <div class="price" data-en="From $100" data-ru="От $100">From $100</div>
-                </div>
-                <div class="service">
-                    <div><strong data-en="[03] Networker assistance" data-ru="[03] Помощь с инет.подключениями и настройкой">[03] Networker assistance</strong>
-                    <div class="desc" data-en="Setting up your host, answer on common questions and etc." data-ru="Настройка хостинга, ответы на вопросы и т.д.">Setting up your host, answer on common questions and etc.</div></div>
-                    <div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div>
-                </div>
-                <div class="service">
-                    <div><strong data-en="[04] Python development" data-ru="[04] Разработка на Python">[04] Python development</strong>
-                    <div class="desc" data-en="Creating a python project like discord bot or any sort of stuff" data-ru="Создание ботов в телеграме/дискорде,автоматизация процессов">Creating a python project like discord bot, parsers, automation</div></div>
-                    <div class="price" data-en="Depends on how hard it is" data-ru="Зависит от сложности">Depends on how hard it is</div>
-                </div>
-                <div class="service">
-                    <div><strong data-en="[05] Livery creation">[05] Livery creation</strong>
-                    <div class="desc" data-en="Creating detailed liveries for erlc in great quality.">Creating detailed liveries for erlc in great quality.</div></div>
-                    <div class="price" data-en="From $5" data-ru="От $5">From $5</div>
-                </div>
+                <div class="service"><div><strong data-en="[01] Logo / Banner creation" data-ru="[01] Лого / Баннеры">[01] Logo / Banner creation</strong><div class="desc" data-en="Premium branding & graphics" data-ru="Премиум брендинг и графика">Premium branding & graphics</div></div><div class="price">$10+</div></div>
+                <div class="service"><div><strong data-en="[02] Website Creation" data-ru="[02] Создание сайтов">[02] Website Creation</strong><div class="desc" data-en="From landing page to full project" data-ru="От лендинга до крупного проекта">From landing page to full project</div></div><div class="price" data-en="From $100" data-ru="От $100">From $100</div></div>
+                <div class="service"><div><strong data-en="[03] Networker assistance" data-ru="[03] Помощь с инет.подключениями и настройкой">[03] Networker assistance</strong><div class="desc" data-en="Setting up your host, answer on common questions and etc." data-ru="Настройка хостинга, ответы на вопросы и т.д.">Setting up your host, answer on common questions and etc.</div></div><div class="price" data-en="Depends on your needs" data-ru="В зависимости от потребностей">Depends on your needs</div></div>
+                <div class="service"><div><strong data-en="[04] Python development" data-ru="[04] Разработка на Python">[04] Python development</strong><div class="desc" data-en="Creating a python project like discord bot or any sort of stuff" data-ru="Создание ботов в телеграме/дискорде,автоматизация процессов">Creating a python project like discord bot, parsers, automation</div></div><div class="price" data-en="Depends on how hard it is" data-ru="Зависит от сложности">Depends on how hard it is</div></div>
+                <div class="service"><div><strong data-en="[05] Livery creation">[05] Livery creation</strong><div class="desc" data-en="Creating detailed liveries for erlc in great quality.">Creating detailed liveries for erlc in great quality.</div></div><div class="price" data-en="From $5" data-ru="От $5">From $5</div></div>
             </div>
         </div>
 
+        <!-- НОВАЯ СЕТКА ОТЗЫВОВ -->
         <div class="reviews-section">
             <h2 data-en="CLIENT REVIEWS" data-ru="ОТЗЫВЫ КЛИЕНТОВ">CLIENT REVIEWS</h2>
-            <div id="reviewTape" class="review-tape"></div>
-            <div id="reviewTapeDuplicate" class="review-tape duplicate"></div>
+            <div class="reviews-grid-wrapper">
+                <div class="reviews-grid" id="reviewsGrid"></div>
+                <div class="reviews-grid duplicate" id="reviewsGridDuplicate"></div>
+            </div>
             <div class="cta-wrapper" style="margin-top:60px;justify-content:center;">
                 <a href="javascript:void(0)" class="cta-btn" id="leaveReviewBtn"><span data-en="LEAVE A REVIEW" data-ru="ОСТАВИТЬ ОТЗЫВ">LEAVE A REVIEW</span></a>
             </div>
@@ -244,13 +252,12 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
     </div>
 </div>
 
-<!-- НОВАЯ КРАСИВАЯ МУЗЫКАЛЬНАЯ ПАНЕЛЬ -->
+<!-- МУЗЫКАЛЬНАЯ ПАНЕЛЬ -->
 <div id="music-player">
     <div class="track-info">
         <div class="track-title">Friday</div>
         <div class="artist">Riton x NightCrawlers</div>
     </div>
-
     <div class="progress-container">
         <span id="currentTime">0:00</span>
         <div class="progress-bar" id="songProgress">
@@ -259,13 +266,11 @@ h1{font-size:48px;line-height:1.1;margin-bottom:14px;color:#fff;}
         </div>
         <span id="duration">--:--</span>
     </div>
-
     <div class="controls">
         <button id="play-pause-btn">
             <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <svg class="pause" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
         </button>
-
         <div class="volume-container">
             <svg id="volume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             <div id="volume-slider" style="--vol:70%"></div>
@@ -330,60 +335,29 @@ let currentLang = 'en';
 let currentUser = null;
 let currentRating = 5;
 
-// УЛУЧШЕННАЯ ФУНКЦИЯ ЯЗЫКА
+// Язык
 const switchLang = () => {
     document.getElementById('langMaster').textContent = currentLang.toUpperCase();
     document.querySelectorAll('[data-en], [data-ru]').forEach(el => {
         const key = currentLang === 'en' ? 'data-en' : 'data-ru';
-        if (el.hasAttribute(key)) {
-            el.textContent = el.getAttribute(key);
-        }
+        if (el.hasAttribute(key)) el.textContent = el.getAttribute(key);
     });
-    // Фикс для placeholder в textarea
     const textarea = document.getElementById('reviewText');
-    if (textarea) {
-        textarea.placeholder = currentLang === 'en' ? textarea.getAttribute('data-en-placeholder') : textarea.getAttribute('data-ru-placeholder');
-    }
-    // Фикс для кнопки submit
-    const submitBtn = document.getElementById('submitReviewBtn');
-    if (submitBtn) {
-        submitBtn.innerHTML = `<span data-en="Submit" data-ru="Отправить">${currentLang === 'en' ? 'Submit' : 'Отправить'}</span>`;
-    }
+    if (textarea) textarea.placeholder = currentLang === 'en' ? textarea.getAttribute('data-en-placeholder') : textarea.getAttribute('data-ru-placeholder');
 };
-document.getElementById('langMaster').onclick = (e) => {
-    e.stopPropagation();
-    document.getElementById('langPopup').classList.toggle('active');
-    document.addEventListener('click', closeLangPopup, true);
-};
-function closeLangPopup(e) {
-    if (!e.target.closest('.lang-master') && !e.target.closest('.lang-popup')) {
-        document.getElementById('langPopup').classList.remove('active');
-        document.removeEventListener('click', closeLangPopup, true);
-    }
-}
-document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = (e) => {
-    e.stopPropagation();
-    currentLang = btn.dataset.lang;
-    switchLang();
-    document.getElementById('langPopup').classList.remove('active');
-    document.removeEventListener('click', closeLangPopup, true);
-});
+document.getElementById('langMaster').onclick = e => { e.stopPropagation(); document.getElementById('langPopup').classList.toggle('active'); document.addEventListener('click', closeLangPopup, true); };
+function closeLangPopup(e) { if (!e.target.closest('.lang-master') && !e.target.closest('.lang-popup')) { document.getElementById('langPopup').classList.remove('active'); document.removeEventListener('click', closeLangPopup, true); }}
+document.querySelectorAll('.lang-btn').forEach(btn => btn.onclick = e => { e.stopPropagation(); currentLang = btn.dataset.lang; switchLang(); document.getElementById('langPopup').classList.remove('active'); document.removeEventListener('click', closeLangPopup, true); });
 switchLang();
 
-// ПРЕЛОАДЕР
+// Прелоадер + анимации
 (() => {
     const preloader = document.getElementById('preloader');
     const fill = document.getElementById('progressFill');
     let p = 0;
-    const t = setInterval(() => {
-        p += Math.random()*7 + 4;
-        if (p > 94) p = 94;
-        fill.style.width = p + '%';
-    }, 80);
-
+    const t = setInterval(() => { p += Math.random()*7 + 4; if (p > 94) p = 94; fill.style.width = p + '%'; }, 80);
     Promise.all([document.fonts.ready, new Promise(r => window.addEventListener('load', r))]).then(() => {
-        clearInterval(t);
-        fill.style.width = '100%';
+        clearInterval(t); fill.style.width = '100%';
         setTimeout(() => {
             preloader.classList.add('hidden');
             document.body.classList.add('loaded');
@@ -394,7 +368,7 @@ switchLang();
     setTimeout(() => { preloader.classList.add('hidden'); document.body.classList.add('loaded'); }, 5500);
 })();
 
-// МУЗЫКА + НОВАЯ ПАНЕЛЬ
+// Музыка
 const audio = document.getElementById('background-music');
 const playPauseBtn = document.getElementById('play-pause-btn');
 const playIcon = playPauseBtn.querySelector('.play');
@@ -405,117 +379,83 @@ const currentTimeEl = document.getElementById('currentTime');
 const durationEl = document.getElementById('duration');
 const volumeSlider = document.getElementById('volume-slider');
 
-const formatTime = (s) => {
-    const m = Math.floor(s / 60);
-    const secs = Math.floor(s % 60);
-    return `${m}:${secs < 10 ? '0' : ''}${secs}`;
-};
-
-audio.addEventListener('loadedmetadata', () => {
-    durationEl.textContent = formatTime(audio.duration);
-});
-
-audio.addEventListener('timeupdate', () => {
-    if (audio.duration) {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressFill.style.width = percent + '%';
-        progressKnob.style.left = percent + '%';
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-    }
-});
-
-document.getElementById('songProgress').addEventListener('click', e => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const pos = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = pos * audio.duration;
-});
-
-playPauseBtn.addEventListener('click', () => {
-    if (audio.paused) {
-        audio.play();
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
-    } else {
-        audio.pause();
-        playIcon.style.display = 'block';
-        pauseIcon.style.display = 'none';
-    }
-});
-
-volumeSlider.addEventListener('click', e => {
-    const rect = volumeSlider.getBoundingClientRect();
-    const pos = (e.clientX - rect.left) / rect.width;
-    const vol = Math.max(0, Math.min(1, pos));
-    audio.volume = vol;
-    volumeSlider.style.setProperty('--vol', (vol * 100) + '%');
-});
-
-// Автозапуск после первого клика
-const unlock = () => {
-    audio.play().catch(()=>{});
-    document.getElementById('myVideo').play().catch(()=>{});
-    document.removeEventListener('click', unlock);
-    document.removeEventListener('touchstart', unlock);
-};
-document.addEventListener('click', unlock, {once:true});
-document.addEventListener('touchstart', unlock, {once:true});
-
+const formatTime = s => { const m = Math.floor(s/60); const secs = Math.floor(s%60); return `${m}:${secs<10?'0':''}${secs}`; };
+audio.addEventListener('loadedmetadata', () => durationEl.textContent = formatTime(audio.duration));
+audio.addEventListener('timeupdate', () => { if(audio.duration){ const percent = (audio.currentTime/audio.duration)*100; progressFill.style.width = percent + '%'; progressKnob.style.left = percent + '%'; currentTimeEl.textContent = formatTime(audio.currentTime); }});
+document.getElementById('songProgress').addEventListener('click', e => { const rect = e.currentTarget.getBoundingClientRect(); const pos = (e.clientX - rect.left)/rect.width; audio.currentTime = pos * audio.duration; });
+playPauseBtn.addEventListener('click', () => { if(audio.paused){audio.play(); playIcon.style.display='none'; pauseIcon.style.display='block';} else {audio.pause(); playIcon.style.display='block'; pauseIcon.style.display='none';}});
+volumeSlider.addEventListener('click', e => { const rect = volumeSlider.getBoundingClientRect(); const pos = (e.clientX - rect.left)/rect.width; const vol = Math.max(0, Math.min(1, pos)); audio.volume = vol; volumeSlider.style.setProperty('--vol', (vol*100)+'%'); });
+const unlock = () => { audio.play().catch(()=>{}); document.getElementById('myVideo').play().catch(()=>{}); document.removeEventListener('click', unlock); document.removeEventListener('touchstart', unlock); };
+document.addEventListener('click', unlock, {once:true}); document.addEventListener('touchstart', unlock, {once:true});
 setTimeout(() => document.getElementById('music-player').classList.add('visible'), 1800);
 
-// МОДАЛКИ
+// Модалки
 document.getElementById('contactBtn').onclick = () => document.getElementById('contactModal').classList.add('show');
 document.getElementById('paymentBtn').onclick = () => document.getElementById('paymentModal').classList.add('show');
 document.getElementById('leaveReviewBtn').onclick = () => document.getElementById('reviewModal').classList.add('show');
 document.querySelectorAll('#closeModal, #closePayment, #closeReviewModal').forEach(b => b.onclick = () => b.closest('.modal').classList.remove('show'));
 document.querySelectorAll('.modal').forEach(m => m.onclick = e => e.target === m && m.classList.remove('show'));
 
-// ОТЗЫВЫ ИЗ FIREBASE
-const tape = document.getElementById('reviewTape');
-const dupe = document.getElementById('reviewTapeDuplicate');
-
-function createStars(r) {
-    return `<div style="display:flex;gap:6px;font-size:32px;color:#b91c3e;margin:16px 0;">${'★'.repeat(r)}${'☆'.repeat(5-r)}</div>`;
-}
+// НОВАЯ СЕТКА ОТЗЫВОВ
+const reviewsGrid = document.getElementById('reviewsGrid');
+const reviewsGridDupe = document.getElementById('reviewsGridDuplicate');
 
 function renderReviews(snap) {
-    const rev = [];
-    snap.forEach(d => rev.push({id:d.id, ...d.data()}));
-    tape.innerHTML = dupe.innerHTML = '';
-    if (rev.length === 0) {
-        const msg = currentLang === 'ru' ? 'Нет отзывов :(' : 'no reviews yet :( buy my stuff please';
-        tape.innerHTML = dupe.innerHTML = `<div class="review-card"><div style="text-align:center;padding:80px;color:#777;">${msg}</div></div>`.repeat(3);
+    const reviews = [];
+    snap.forEach(doc => reviews.push({id: doc.id, ...doc.data()}));
+
+    reviewsGrid.innerHTML = '';
+    reviewsGridDupe.innerHTML = '';
+
+    if (reviews.length === 0) {
+        const placeholder = `<div class="review-card"><div style="text-align:center;padding:100px 20px;color:#777;font-size:18px;">${currentLang==='ru'?'Пока нет отзывов :(':'No reviews yet :('}<br><br>${currentLang==='ru'?'Будь первым!':'Be the first!'}</div></div>`;
+        const block = placeholder.repeat(12);
+        reviewsGrid.innerHTML = block; reviewsGridDupe.innerHTML = block;
         return;
     }
-    rev.forEach(r => {
-        const c = document.createElement('div');
-        c.className = 'review-card';
-        c.innerHTML = `
+
+    while (reviews.length < 24) reviews.push(...reviews);
+    reviews.length = 24;
+
+    const frag1 = document.createDocumentFragment();
+    const frag2 = document.createDocumentFragment();
+
+    reviews.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'review-card';
+        card.innerHTML = `
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-                <img src="${r.photoURL || 'https://via.placeholder.com/64'}" style="width:64px;height:64px;border-radius:50%;border:4px solid #b91c3e;">
+                <img src="${r.photoURL || 'https://via.placeholder.com/64'}" style="width:64px;height:64px;border-radius:50%;border:4px solid #b91c3e;object-fit:cover;">
                 <div>
-                    <div style="font-weight:700;color:#fff;">${r.name || 'Anonymous'}</div>
+                    <div style="font-weight:700;color:#fff;font-size:17px;">${r.name || 'Anonymous'}</div>
                     <div style="font-size:13px;color:#aaa;">${r.timestamp?.toDate?.().toLocaleDateString() || ''}</div>
                 </div>
             </div>
-            ${createStars(r.rating || 5)}
-            <div style="color:#ddd;line-height:1.6;">${(r.text || '').replace(/\n/g,'<br>')}</div>
+            <div style="display:flex;gap:6px;font-size:30px;color:#b91c3e;margin:8px 0;">
+                ${'★'.repeat(r.rating || 5)}${'☆'.repeat(5-(r.rating || 5))}
+            </div>
+            <div style="color:#ddd;line-height:1.6;font-size:15px;flex:1;overflow:hidden;">
+                ${(r.text || (currentLang==='ru'?'Отличная работа!':'Great job!')).replace(/\n/g,'<br>')}
+            </div>
         `;
-        tape.appendChild(c);
-        dupe.appendChild(c.cloneNode(true));
+        frag1.appendChild(card);
+        frag2.appendChild(card.cloneNode(true));
     });
+
+    reviewsGrid.appendChild(frag1);
+    reviewsGridDupe.appendChild(frag2);
 }
 
 const q = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
 onSnapshot(q, renderReviews);
 
-// ОСТАВИТЬ ОТЗЫВ
+// Оставить отзыв
 document.getElementById('ratingInput').onclick = e => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     currentRating = Math.ceil((x / rect.width) * 5);
     e.currentTarget.innerHTML = '★'.repeat(currentRating) + '☆'.repeat(5-currentRating);
 };
-
 document.getElementById('googleSignInBtn').onclick = async () => {
     const p = new GoogleAuthProvider();
     const res = await signInWithPopup(auth, p);
@@ -523,25 +463,16 @@ document.getElementById('googleSignInBtn').onclick = async () => {
     document.getElementById('googleSignInBtn').style.display = 'none';
     document.getElementById('reviewForm').style.display = 'block';
 };
-
 document.getElementById('submitReviewBtn').onclick = async () => {
     const text = document.getElementById('reviewText').value.trim();
     if (!text) return alert(currentLang==='ru'?'Напиши отзыв!' : 'Write a review!');
     if (!currentUser) return alert(currentLang==='ru'?'Войди через Google' : 'Sign in with Google');
-    await addDoc(collection(db, "reviews"), {
-        name: currentUser.displayName,
-        photoURL: currentUser.photoURL,
-        text,
-        rating: currentRating,
-        timestamp: serverTimestamp()
-    });
+    await addDoc(collection(db, "reviews"), { name: currentUser.displayName, photoURL: currentUser.photoURL, text, rating: currentRating, timestamp: serverTimestamp() });
     alert(currentLang==='ru'?'Спасибо!' : 'Thank you!');
     document.getElementById('reviewModal').classList.remove('show');
-    document.getElementById('reviewText').value = '';
-    currentRating = 5;
+    document.getElementById('reviewText').value = ''; currentRating = 5;
     document.getElementById('ratingInput').innerHTML = '★★★★★';
 };
-
 onAuthStateChanged(auth, u => currentUser = u);
 </script>
 </body>
