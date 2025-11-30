@@ -388,7 +388,7 @@
             box-shadow: 0 20px 60px rgba(224,30,90,0.7);
         }
         #leaveReview {
-            padding: 14px 20px; /* Сделали кнопку короче по длине (меньше padding слева/справа) */
+            padding: 14px 20px; /* Сделали кнопку короче */
             font-size: 16px;
         }
         .avatar-wrapper {
@@ -517,9 +517,14 @@
         }
         .review .rating {
             font-size: 18px;
-            color: #ffd700;
             margin-top: 10px;
             margin-bottom: 10px;
+        }
+        .review .rating .fas.fa-star {
+            color: #ffd700;
+        }
+        .review .rating .far.fa-star {
+            color: #ccc;
         }
         .review footer {
             color: var(--accent);
@@ -749,11 +754,13 @@
         }
         .stars i {
             font-size: 28px;
-            color: #ccc;
             cursor: pointer;
             transition: color .3s;
         }
-        .stars i.selected {
+        .stars .far.fa-star {
+            color: #ccc;
+        }
+        .stars .fas.fa-star {
             color: #ffd700;
         }
     </style>
@@ -814,7 +821,7 @@
                 <div class="reviews-track" id="track1"></div>
                 <div class="reviews-track" id="track2"></div>
             </div>
-            <div style="margin-top:90px; text-align:center"><div class="neon-btn" id="leaveReview">Rate Experience</div></div> <!-- Сократили текст кнопки для короче длины -->
+            <div style="margin-top:90px; text-align:center"><div class="neon-btn" id="leaveReview">Leave Review</div></div>
         </section>
     </div>
     <div id="player">
@@ -899,11 +906,11 @@
             <form id="reviewForm">
                 <textarea id="reviewText" placeholder="Write your review here..." required style="width: 100%; height: 150px; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--glass); color: #eee; font-size: 16px;"></textarea>
                 <div class="stars" id="ratingStars">
-                    <i class="fas fa-star" data-rating="1"></i>
-                    <i class="fas fa-star" data-rating="2"></i>
-                    <i class="fas fa-star" data-rating="3"></i>
-                    <i class="fas fa-star" data-rating="4"></i>
-                    <i class="fas fa-star" data-rating="5"></i>
+                    <i class="far fa-star" data-rating="1"></i>
+                    <i class="far fa-star" data-rating="2"></i>
+                    <i class="far fa-star" data-rating="3"></i>
+                    <i class="far fa-star" data-rating="4"></i>
+                    <i class="far fa-star" data-rating="5"></i>
                 </div>
                 <button type="submit" id="submitReview" style="padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; transition: .3s; margin-top: 16px;">Submit Review</button>
             </form>
@@ -1084,7 +1091,9 @@
             star.addEventListener('click', () => {
                 selectedRating = parseInt(star.dataset.rating);
                 stars.forEach(s => {
-                    s.classList.toggle('selected', parseInt(s.dataset.rating) <= selectedRating);
+                    const isSelected = parseInt(s.dataset.rating) <= selectedRating;
+                    s.classList.toggle('fas', isSelected);
+                    s.classList.toggle('far', !isSelected);
                 });
             });
         });
@@ -1103,7 +1112,10 @@
                     closeModal('reviewModal');
                     document.getElementById('reviewText').value = '';
                     selectedRating = 0;
-                    stars.forEach(s => s.classList.remove('selected'));
+                    stars.forEach(s => {
+                        s.classList.add('far');
+                        s.classList.remove('fas');
+                    });
                 }).catch(error => alert(error.message));
             } else {
                 alert("Please select a rating and write a review.");
@@ -1119,7 +1131,7 @@
             const h = r.map(x => {
                 let ratingHtml = '';
                 for (let i = 1; i <= 5; i++) {
-                    ratingHtml += `<i class="fas fa-star${i <= (x.rating || 0) ? '' : '-o'}"></i>`;
+                    ratingHtml += `<i class="${i <= (x.rating || 0) ? 'fas' : 'far'} fa-star"></i>`;
                 }
                 return `<div class="review"><img src="${x.photoURL || 'https://via.placeholder.com/70'}"><q>${x.text}</q><div class="rating">${ratingHtml}</div><footer>— ${x.name || 'Anonymous'}</footer></div>`;
             }).join('');
