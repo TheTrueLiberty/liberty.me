@@ -1,521 +1,1103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liberty — The True Liberty</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-    :root{
-        --accent:#e0204b;
-        --neon:#fff;
-        --bg:#0a0a0a;
-        --glass:rgba(20,20,35,0.7);
-        --border:rgba(224,30,90,0.4)
-    }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:#eee;overflow-x:hidden;position:relative}
-    canvas{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.88;transition:opacity .6s}
-    
-    /* ──────── НОВЫЙ МЕДИАПЛЕЕР 2025 ──────── */
-    #player{
-        position:fixed;bottom:24px;right:24px;width:360px;
-        background:linear-gradient(135deg,rgba(20,10,30,0.95),rgba(10,10,20,0.95));
-        backdrop-filter:blur(50px);border:1px solid var(--border);
-        border-radius:28px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,0.8),inset 0 0 60px rgba(224,30,90,0.15);
-        z-index:998;transition:all .5s cubic-bezier(0.22,1,0.36,1);cursor:default;overflow:hidden;
-        animation:float 5s ease-in-out infinite;
-    }
-    #player::before{
-        content:'';position:absolute;inset:-2px;background:linear-gradient(90deg,#e0204b,#ff3366,#e0204b,#ff3366);
-        border-radius:30px;z-index:-1;animation:gradientFlow 8s linear infinite;opacity:0.8;filter:blur(2px);
-    }
-    @keyframes gradientFlow{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-    
-    .drag-handle{
-        position:absolute;top:10px;left:50%;transform:translateX(-50%);
-        cursor:grab;color:#aaa;font-size:20px;z-index:10;
-    }
-    
-    .album-cover{
-        width:100%;height:200px;border-radius:24px;overflow:hidden;margin-bottom:16px;
-        box-shadow:0 15px 35px rgba(0,0,0,0.6);position:relative;transition:transform .4s;
-    }
-    .album-cover img{width:100%;height:100%;object-fit:cover;filter:brightness(1.1)}
-    #player:hover .album-cover{transform:scale(1.05)}
-    
-    .track-info{text-align:center;margin-bottom:16px}
-    .track-title{font-size:24px;font-weight:800;color:var(--neon);text-shadow:0 0 15px var(--accent);letter-spacing:1px}
-    .track-artist{font-size:14px;color:#ff6699;margin-top:4px;opacity:0.9}
-    
-    .visualizer{
-        height:50px;margin:16px 0;display:flex;align-items:end;justify-content:center;gap:3px;
-        overflow:hidden;border-radius:10px;background:rgba(255,255,255,0.04);padding:0 20px;
-    }
-    .bar{
-        width:3px;background:linear-gradient(to top,#e0204b,#ff3366);border-radius:3px;
-        animation:wave 1.2s ease-in-out infinite alternate;
-    }
-    @keyframes wave{
-        0%{height:10%;transform:scaleY(0.8)}100%{height:100%;transform:scaleY(1.2)}
-    }
-    .bar:nth-child(odd){animation-duration:1.4s}
-    .bar:nth-child(even){animation-duration:1s;animation-direction:alternate-reverse}
-    
-    .progress-container{
-        height:6px;background:rgba(255,255,255,0.08);border-radius:50px;overflow:hidden;
-        cursor:pointer;position:relative;box-shadow:inset 0 1px 5px rgba(0,0,0,0.4);
-        transition:height .3s;
-    }
-    #player:hover .progress-container{height:8px}
-    .progress{
-        height:100%;width:0%;background:linear-gradient(90deg,#e0204b,#ff3366,#e0204b);
-        box-shadow:0 0 15px #ff3366;position:relative;transition:width .2s ease;
-    }
-    .progress::after{
-        content:'';position:absolute;right:-4px;top:-5px;width:14px;height:14px;
-        background:var(--neon);border-radius:50%;box-shadow:0 0 25px var(--accent);opacity:0.9;
-    }
-    
-    .time{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:#bbb}
-    
-    .controls{
-        display:flex;align-items:center;justify-content:space-between;margin-top:20px;
-    }
-    .control-btn{
-        width:52px;height:52px;background:rgba(255,255,255,0.08);border:none;
-        border-radius:50%;color:var(--neon);font-size:20px;cursor:pointer;
-        transition:all .3s;box-shadow:0 6px 15px rgba(0,0,0,0.5);
-        backdrop-filter:blur(15px);
-    }
-    .control-btn:hover{
-        background:linear-gradient(135deg,var(--accent),#ff3366);transform:rotate(5deg) scale(1.12);
-        box-shadow:0 0 25px rgba(224,30,90,0.7);
-    }
-    #playBtn{
-        width:68px;height:68px;background:linear-gradient(135deg,var(--accent),#ff3366);
-        font-size:28px;box-shadow:0 0 35px rgba(224,30,90,0.8);
-    }
-    #playBtn:hover{transform:scale(1.08)}
-    
-    #minimizeBtn{
-        position:absolute;top:12px;right:12px;width:32px;height:32px;
-        background:rgba(0,0,0,0.4);border-radius:50%;color:#ff3366;
-        font-size:18px;display:flex;align-items:center;justify-content:center;
-        cursor:pointer;transition:.3s;
-    }
-    #minimizeBtn:hover{transform:rotate(90deg);background:var(--accent)}
-    
-    #player.minimized{
-        width:70px;height:70px;padding:0;border-radius:50%;
-        display:flex;align-items:center;justify-content:center;animation:none;
-    }
-    #player.minimized > *:not(#minimizeBtn){display:none}
-    #player.minimized::before{content:"♫";font-size:36px;color:var(--accent);animation:spin 2s linear infinite}
-    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-    
-    /* ──────── Остальные стили ──────── */
-    nav{
-        position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;
-        background:var(--glass);backdrop-filter:blur(30px);border:1px solid var(--border);
-        border-radius:50px;padding:14px 60px;display:flex;gap:50px;align-items:center;
-        font-weight:500;font-size:17px
-    }
-    nav a, nav button, nav span{color:#bbb;cursor:pointer;background:none;border:none;font:inherit;transition:.3s;text-decoration:none}
-    nav a:hover, nav button:hover, nav span:hover{color:var(--accent)}
-    #rainToggle{color:#ff6699;font-weight:600}
-    .hero{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px 40px 80px;gap:120px;flex-wrap:wrap;position:relative;z-index:2}
-    .hero-text{max-width:600px;text-align:left}
-    .tagline{font-size:18px;letter-spacing:12px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px}
-    .hero h1{font-size:clamp(56px,9vw,110px);font-weight:900;line-height:0.94;letter-spacing:-4px;margin:12px 0}
-    .desc{font-size:20px;color:#ccc;line-height:1.6;margin:24px 0}
-    .btn-group{display:flex;gap:28px;flex-wrap:wrap;margin-top:40px}
-    .neon-btn{
-        padding:20px 60px;background:transparent;border:3px solid var(--accent);
-        color:var(--neon);border-radius:60px;font-size:20px;font-weight:800;
-        position:relative;overflow:hidden;cursor:pointer;letter-spacing:1px;
-        box-shadow:0 8px 30px rgba(224,30,90,0.4);transition:all .5s ease;
-        opacity:0;transform:translateY(80px);
-    }
-    .neon-btn.appear{opacity:1;transform:translateY(0);transition:all 0.9s cubic-bezier(0.22,1,0.36,1)}
-    .neon-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transform:translateX(-100%);transition:0.8s}
-    .neon-btn:hover::before{transform:translateX(100%)}
-    .neon-btn:hover{transform:translateY(-8px) scale(1.05);border-color:#ff4d8d;box-shadow:0 20px 60px rgba(224,30,90,0.7)}
-    .avatar-wrapper{width:340px;height:340px;border-radius:50%;overflow:hidden;position:relative;border:5px solid var(--accent);box-shadow:0 0 100px rgba(224,30,90,0.9);animation:avatarPulse 5s infinite}
-    .avatar-wrapper::before{content:'';position:absolute;inset:-20px;border:8px solid transparent;border-radius:50%;box-shadow:0 0 80px 20px var(--accent),inset 0 0 80px 10px var(--accent);animation:ringGlow 4s infinite alternate}
-    @keyframes avatarPulse{0%,100%{box-shadow:0 0 100px rgba(224,30,90,0.9)}50%{box-shadow:0 0 140px rgba(224,30,90,1)}}
-    @keyframes ringGlow{0%{box-shadow:0 0 80px 20px var(--accent),inset 0 0 80px 10px var(--accent)}100%{box-shadow:0 0 120px 30px var(--accent),inset 0 0 120px 20px var(--accent)}}
-    .avatar-wrapper video{width:100%;height:100%;object-fit:cover}
-    .section{padding:180px 0 220px;text-align:center}
-    .section h2{font-size:80px;font-weight:900;background:linear-gradient(90deg,var(--accent),#ff4d8d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:120px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:50px}
-    .card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:40px;padding:50px;transition:all 0.9s cubic-bezier(0.22,1,0.36,1);opacity:0;transform:translateY(60px)}
-    .card.show{opacity:1;transform:none}
-    .card:hover{transform:translateY(-20px);border-color:var(--accent)}
-    .card strong{font-size:28px;display:block;margin-bottom:16px;color:var(--accent)}
-    .card .desc{font-size:18px;color:#ccc;line-height:1.6}
-    .card .price{font-size:32px;color:var(--accent);font-weight:900;margin-top:20px}
-    .reviews-wrapper{height:680px;overflow:hidden;position:relative;margin-top:80px}
-    .reviews-track{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;animation:scroll 60s linear infinite}
-    @keyframes scroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
-    .review{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:36px;padding:40px;transition:.5s}
-    .review:hover{transform:scale(1.03);border-color:var(--accent)}
-    .review img{width:70px;height:70px;border-radius:50%;border:4px solid var(--accent);margin-bottom:16px}
-    .review q{font-size:17px;line-height:1.6;color:#ddd}
-    .review footer{color:var(--accent);font-weight:700;margin-top:20px;font-size:19px}
-    /* МОДАЛКИ */
-    .modal{
-        position:fixed;inset:0;background:rgba(0,0,0,.94);backdrop-filter:blur(22px);
-        z-index:9999;align-items:center;justify-content:center;display:none;
-        opacity:0;visibility:hidden;transition:opacity .6s cubic-bezier(0.22,1,0.36,1)
-    }
-    .modal.active{display:flex;opacity:1;visibility:visible}
-    .modal-content{
-        background:var(--glass);backdrop-filter:blur(40px);border:2px solid var(--border);
-        border-radius:36px;padding:60px 80px;text-align:center;max-width:540px;width:90%;
-        transform:scale(0.7) translateY(40px);opacity:0;
-        transition:all .7s cubic-bezier(0.16,1,0.3,1);box-shadow:0 0 120px rgba(224,30,90,0.5); position: relative; overflow: hidden;
-    }
-    .modal.active .modal-content{transform:scale(1) translateY(0);opacity:1}
-    .modal-content::before {content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(224,30,90,0.3) 0%, transparent 70%); animation: rotateGlow 10s linear infinite;}
-    @keyframes rotateGlow {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}
-    /* Логин-модалка */
-    #loginModal .modal-content{max-width:420px;padding:70px 60px; animation: modalPulse 2s infinite alternate; position: relative;}
-    #loginModal h3{font-size:42px;margin-bottom:16px;color:var(--accent);text-shadow:0 0 40px var(--accent); animation: neonFlicker 1.5s infinite alternate;}
-    #loginModal p{font-size:18px;color:#aaa;margin-bottom:40px; text-shadow: 0 0 10px rgba(255,255,255,0.5);}
-    #googleLogin{padding:18px 60px;background:var(--accent);color:#fff;border:none;border-radius:50px;font-size:20px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:16px;box-shadow:0 15px 50px rgba(224,30,90,0.6);transition:all .4s; position: relative; overflow: hidden; animation: buttonGlow 2s infinite alternate;}
-    #googleLogin::before {content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: translateX(-100%); transition: transform 0.8s;}
-    #googleLogin:hover::before {transform: translateX(100%);}
-    #googleLogin:hover{transform:translateY(-8px) scale(1.05);box-shadow:0 25px 70px rgba(224,30,90,0.8)}
-    @keyframes modalPulse {0% {box-shadow: 0 0 120px rgba(224,30,90,0.5);} 100% {box-shadow: 0 0 180px rgba(224,30,90,0.7);}}
-    @keyframes neonFlicker {0%, 18%, 22%, 25%, 53%, 57%, 100% {text-shadow: 0 0 40px var(--accent);} 20%, 24%, 55% {text-shadow: none;}}
-    @keyframes buttonGlow {0% {box-shadow: 0 15px 50px rgba(224,30,90,0.6);} 100% {box-shadow: 0 15px 70px rgba(224,30,90,0.8);}}
-    .modal-content h3{font-size:36px;margin-bottom:34px;color:var(--accent);text-shadow:0 0 30px var(--accent)}
-    .modal-item{margin:24px 0;font-size:22px;display:flex;align-items:center;justify-content:center;gap:20px;color:#ddd;padding:16px;border-radius:20px;opacity:0;transform:translateY(50px);transition:all 0.7s cubic-bezier(0.22,1,0.36,1)}
-    .modal-item.show{opacity:1;transform:translateY(0)}
-    .modal-item:hover{background:rgba(224,30,90,.25);color:var(--neon);transform:translateY(-4px);box-shadow:0 0 35px rgba(224,30,90,.5)}
-    .modal-item i{font-size:38px;color:var(--neon);filter:drop-shadow(0 0 20px #fff);text-shadow:0 0 25px #fff;transition:transform .4s}
-    .modal-item:hover i{transform:scale(1.3) rotate(10deg)}
-    .crypto-icon, .robux-icon{width:46px;height:46px;transition:all .4s}
-    .modal-item:hover .crypto-icon, .modal-item:hover .robux-icon{transform:scale(1.3) rotate(15deg)}
-    .close{position:absolute;top:20px;right:30px;font-size:40px;color:#fff;cursor:pointer;opacity:0.7;transition:.3s}
-    .close:hover{opacity:1;transform:scale(1.3)}
-    #emailForm {display: flex; flex-direction: column; gap: 16px; margin-top: 20px;}
-    #emailForm input {padding: 12px; border-radius: 30px; border: 1px solid var(--border); background: var(--glass); color: #eee; font-size: 16px;}
-    #emailBtn {padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; transition: .3s;}
-    #emailBtn:hover {transform: scale(1.02); box-shadow: 0 0 20px var(--accent);}
-    .or-divider {text-align: center; color: #aaa; margin: 16px 0;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberty — The True Liberty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --accent: #e0204b;
+            --neon: #fff;
+            --bg: #0a0a0a;
+            --glass: rgba(20,20,35,0.7);
+            --border: rgba(224,30,90,0.4);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #eee;
+            overflow-x: hidden;
+            position: relative;
+        }
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.88;
+            transition: opacity .6s;
+        }
+
+        /* ──────── НОВЫЙ МЕДИАПЛЕЕР 2025 ──────── */
+        #player {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 360px;
+            background: linear-gradient(135deg, rgba(20,10,30,0.95), rgba(10,10,20,0.95));
+            backdrop-filter: blur(50px);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 0 60px rgba(224,30,90,0.15);
+            z-index: 998;
+            transition: all .5s cubic-bezier(0.22,1,0.36,1);
+            cursor: default;
+            overflow: hidden;
+            animation: float 5s ease-in-out infinite;
+        }
+        #player::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(90deg, #e0204b, #ff3366, #e0204b, #ff3366);
+            border-radius: 30px;
+            z-index: -1;
+            animation: gradientFlow 8s linear infinite;
+            opacity: 0.8;
+            filter: blur(2px);
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .drag-handle {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: grab;
+            color: #aaa;
+            font-size: 20px;
+            z-index: 10;
+        }
+
+        .album-cover {
+            width: 100%;
+            height: 200px;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            position: relative;
+            transition: transform .4s;
+        }
+        .album-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.1);
+        }
+        #player:hover .album-cover {
+            transform: scale(1.05);
+        }
+
+        .track-info {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .track-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--neon);
+            text-shadow: 0 0 15px var(--accent);
+            letter-spacing: 1px;
+        }
+        .track-artist {
+            font-size: 14px;
+            color: #ff6699;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
+        .visualizer {
+            height: 50px;
+            margin: 16px 0;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            gap: 3px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.04);
+            padding: 0 20px;
+        }
+        .bar {
+            width: 3px;
+            background: linear-gradient(to top, #e0204b, #ff3366);
+            border-radius: 3px;
+            animation: wave 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes wave {
+            0% { height: 10%; transform: scaleY(0.8); }
+            100% { height: 100%; transform: scaleY(1.2); }
+        }
+        .bar:nth-child(odd) {
+            animation-duration: 1.4s;
+        }
+        .bar:nth-child(even) {
+            animation-duration: 1s;
+            animation-direction: alternate-reverse;
+        }
+
+        .progress-container {
+            height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.4);
+            transition: height .3s;
+        }
+        #player:hover .progress-container {
+            height: 8px;
+        }
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e0204b, #ff3366, #e0204b);
+            box-shadow: 0 0 15px #ff3366;
+            position: relative;
+            transition: width .2s ease;
+        }
+        .progress::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: -5px;
+            width: 14px;
+            height: 14px;
+            background: var(--neon);
+            border-radius: 50%;
+            box-shadow: 0 0 25px var(--accent);
+            opacity: 0.9;
+        }
+
+        .time {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #bbb;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .control-btn {
+            width: 52px;
+            height: 52px;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            border-radius: 50%;
+            color: var(--neon);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all .3s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(15px);
+        }
+        .control-btn:hover {
+            background: linear-gradient(135deg, var(--accent), #ff3366);
+            transform: rotate(5deg) scale(1.12);
+            box-shadow: 0 0 25px rgba(224,30,90,0.7);
+        }
+        #playBtn {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, var(--accent), #ff3366);
+            font-size: 28px;
+            box-shadow: 0 0 35px rgba(224,30,90,0.8);
+        }
+        #playBtn:hover {
+            transform: scale(1.08);
+        }
+
+        #minimizeBtn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            color: #ff3366;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .3s;
+        }
+        #minimizeBtn:hover {
+            transform: rotate(90deg);
+            background: var(--accent);
+        }
+
+        #player.minimized {
+            width: 70px;
+            height: 70px;
+            padding: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: none;
+        }
+        #player.minimized > *:not(#minimizeBtn) {
+            display: none;
+        }
+        #player.minimized::before {
+            content: "♫";
+            font-size: 36px;
+            color: var(--accent);
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ──────── Остальные стили ──────── */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 14px 60px;
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            font-weight: 500;
+            font-size: 17px;
+        }
+        nav a, nav button, nav span {
+            color: #bbb;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font: inherit;
+            transition: .3s;
+            text-decoration: none;
+        }
+        nav a:hover, nav button:hover, nav span:hover {
+            color: var(--accent);
+        }
+        #rainToggle {
+            color: #ff6699;
+            font-weight: 600;
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 40px 80px;
+            gap: 120px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-text {
+            max-width: 600px;
+            text-align: left;
+        }
+        .tagline {
+            font-size: 18px;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .hero h1 {
+            font-size: clamp(56px, 9vw, 110px);
+            font-weight: 900;
+            line-height: 0.94;
+            letter-spacing: -4px;
+            margin: 12px 0;
+        }
+        .desc {
+            font-size: 20px;
+            color: #ccc;
+            line-height: 1.6;
+            margin: 24px 0;
+        }
+        .btn-group {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .neon-btn {
+            padding: 20px 60px;
+            background: transparent;
+            border: 3px solid var(--accent);
+            color: var(--neon);
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 800;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 30px rgba(224,30,90,0.4);
+            transition: all .5s ease;
+            opacity: 0;
+            transform: translateY(80px);
+        }
+        .neon-btn.appear {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.9s cubic-bezier(0.22,1,0.36,1);
+        }
+        .neon-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: 0.8s;
+        }
+        .neon-btn:hover::before {
+            transform: translateX(100%);
+        }
+        .neon-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: #ff4d8d;
+            box-shadow: 0 20px 60px rgba(224,30,90,0.7);
+        }
+        .avatar-wrapper {
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            border: 5px solid var(--accent);
+            box-shadow: 0 0 100px rgba(224,30,90,0.9);
+            animation: avatarPulse 5s infinite;
+        }
+        .avatar-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border: 8px solid transparent;
+            border-radius: 50%;
+            box-shadow: 0 0 80px 20px var(--accent), inset 0 0 80px 10px var(--accent);
+            animation: ringGlow 4s infinite alternate;
+        }
+        @keyframes avatarPulse {
+            0%, 100% { box-shadow: 0 0 100px rgba(224,30,90,0.9); }
+            50% { box-shadow: 0 0 140px rgba(224,30,90,1); }
+        }
+        @keyframes ringGlow {
+            0% { box-shadow: 0 0 80px 20px var(--accent), inset 0 0 80px 10px var(--accent); }
+            100% { box-shadow: 0 0 120px 30px var(--accent), inset 0 0 120px 20px var(--accent); }
+        }
+        .avatar-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .section {
+            padding: 180px 0 220px;
+            text-align: center;
+        }
+        .section h2 {
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--accent), #ff4d8d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 120px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 50px;
+        }
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 50px;
+            transition: all 0.9s cubic-bezier(0.22,1,0.36,1);
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        .card.show {
+            opacity: 1;
+            transform: none;
+        }
+        .card:hover {
+            transform: translateY(-20px);
+            border-color: var(--accent);
+        }
+        .card strong {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+        .card .desc {
+            font-size: 18px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        .card .price {
+            font-size: 32px;
+            color: var(--accent);
+            font-weight: 900;
+            margin-top: 20px;
+        }
+        .reviews-wrapper {
+            height: 680px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 80px;
+        }
+        .reviews-track {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            animation: scroll 60s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+        .review {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 36px;
+            padding: 40px;
+            transition: .5s;
+        }
+        .review:hover {
+            transform: scale(1.03);
+            border-color: var(--accent);
+        }
+        .review img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 4px solid var(--accent);
+            margin-bottom: 16px;
+        }
+        .review q {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+        .review footer {
+            color: var(--accent);
+            font-weight: 700;
+            margin-top: 20px;
+            font-size: 19px;
+        }
+        /* МОДАЛКИ */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.94);
+            backdrop-filter: blur(22px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .6s cubic-bezier(0.22,1,0.36,1);
+        }
+        .modal.active {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border: 2px solid var(--border);
+            border-radius: 36px;
+            padding: 60px 80px;
+            text-align: center;
+            max-width: 540px;
+            width: 90%;
+            transform: scale(0.7) translateY(40px);
+            opacity: 0;
+            transition: all .7s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 0 120px rgba(224,30,90,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(224,30,90,0.3) 0%, transparent 70%);
+            animation: rotateGlow 10s linear infinite;
+        }
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Логин-модалка */
+        #loginModal .modal-content {
+            max-width: 420px;
+            padding: 70px 60px;
+            animation: modalPulse 2s infinite alternate;
+            position: relative;
+        }
+        #loginModal h3 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            color: var(--accent);
+            text-shadow: 0 0 40px var(--accent);
+            animation: neonFlicker 1.5s infinite alternate;
+        }
+        #loginModal p {
+            font-size: 18px;
+            color: #aaa;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        #googleLogin {
+            padding: 18px 60px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 15px 50px rgba(224,30,90,0.6);
+            transition: all .4s;
+            position: relative;
+            overflow: hidden;
+            animation: buttonGlow 2s infinite alternate;
+        }
+        #googleLogin::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s;
+        }
+        #googleLogin:hover::before {
+            transform: translateX(100%);
+        }
+        #googleLogin:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 25px 70px rgba(224,30,90,0.8);
+        }
+        @keyframes modalPulse {
+            0% { box-shadow: 0 0 120px rgba(224,30,90,0.5); }
+            100% { box-shadow: 0 0 180px rgba(224,30,90,0.7); }
+        }
+        @keyframes neonFlicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { text-shadow: 0 0 40px var(--accent); }
+            20%, 24%, 55% { text-shadow: none; }
+        }
+        @keyframes buttonGlow {
+            0% { box-shadow: 0 15px 50px rgba(224,30,90,0.6); }
+            100% { box-shadow: 0 15px 70px rgba(224,30,90,0.8); }
+        }
+        .modal-content h3 {
+            font-size: 36px;
+            margin-bottom: 34px;
+            color: var(--accent);
+            text-shadow: 0 0 30px var(--accent);
+        }
+        .modal-item {
+            margin: 24px 0;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: #ddd;
+            padding: 16px;
+            border-radius: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .modal-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .modal-item:hover {
+            background: rgba(224,30,90,.25);
+            color: var(--neon);
+            transform: translateY(-4px);
+            box-shadow: 0 0 35px rgba(224,30,90,.5);
+        }
+        .modal-item i {
+            font-size: 38px;
+            color: var(--neon);
+            filter: drop-shadow(0 0 20px #fff);
+            text-shadow: 0 0 25px #fff;
+            transition: transform .4s;
+        }
+        .modal-item:hover i {
+            transform: scale(1.3) rotate(10deg);
+        }
+        .crypto-icon, .robux-icon {
+            width: 46px;
+            height: 46px;
+            transition: all .4s;
+        }
+        .modal-item:hover .crypto-icon, .modal-item:hover .robux-icon {
+            transform: scale(1.3) rotate(15deg);
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: .3s;
+        }
+        .close:hover {
+            opacity: 1;
+            transform: scale(1.3);
+        }
+        #emailForm {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        #emailForm input {
+            padding: 12px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            color: #eee;
+            font-size: 16px;
+        }
+        #emailBtn {
+            padding: 12px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .3s;
+        }
+        #emailBtn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--accent);
+        }
+        .or-divider {
+            text-align: center;
+            color: #aaa;
+            margin: 16px 0;
+        }
+    </style>
 </head>
 <body>
-<canvas id="rain"></canvas>
-<audio id="music" loop preload="auto"><source src="sound.mp3" type="audio/mpeg"></audio>
-<nav>
-    <a href="#home">Home</a>
-    <a href="#services">Services</a>
-    <a href="#reviews">Reviews</a>
-    <button id="rainToggle">Rain ON</button>
-    <span id="signupBtn" style="cursor:pointer">Sign Up</span>
-    <span id="loginBtn" style="cursor:pointer">Login</span>
-    <span id="userBtn" style="display:none;align-items:center;gap:10px">
-        <img id="userPhoto" style="width:38px;height:38px;border-radius:50%;border:3px solid var(--accent)">
-        <span id="userName" style="font-weight:600"></span>
-        <span id="logout" style="color:#ff6699;cursor:pointer">Logout</span>
-    </span>
-</nav>
-<section class="hero" id="home">
-    <div class="hero-text">
-        <div class="tagline">THE TRUE LIBERTY</div>
-        <h1>You've entered<br>my bio :P</h1>
-        <div class="desc">
-            Certified Cyber Security Analyst • Network Architect • Python Developer<br>
-            <strong>2+ years • 50+ projects</strong>
+    <canvas id="rain"></canvas>
+    <audio id="music" loop preload="auto">
+        <source src="sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#reviews">Reviews</a>
+        <button id="rainToggle">Rain ON</button>
+        <span id="signupBtn" style="cursor:pointer">Sign Up</span>
+        <span id="loginBtn" style="cursor:pointer">Login</span>
+        <span id="userBtn" style="display:none; align-items:center; gap:10px">
+            <img id="userPhoto" style="width:38px; height:38px; border-radius:50%; border:3px solid var(--accent)">
+            <span id="userName" style="font-weight:600"></span>
+            <span id="logout" style="color:#ff6699; cursor:pointer">Logout</span>
+        </span>
+    </nav>
+    <section class="hero" id="home">
+        <div class="hero-text">
+            <div class="tagline">THE TRUE LIBERTY</div>
+            <h1>You've entered<br>my bio :P</h1>
+            <div class="desc">
+                Certified Cyber Security Analyst • Network Architect • Python Developer<br>
+                <strong>2+ years • 50+ projects</strong>
+            </div>
+            <div class="btn-group">
+                <div class="neon-btn" id="openContact">HIRE ME NOW</div>
+                <div class="neon-btn" id="openPayment">Payment options</div>
+            </div>
         </div>
-        <div class="btn-group">
-            <div class="neon-btn" id="openContact">HIRE ME NOW</div>
-            <div class="neon-btn" id="openPayment">Payment options</div>
-        </div>
-    </div>
-    <div class="avatar-wrapper">
-        <video autoplay loop muted playsinline>
-            <source src="photo_2025-11-30_17-21-21.mp4" type="video/mp4">
-        </video>
-    </div>
-</section>
-<div class="container">
-    <section class="section" id="services">
-        <h2>Services</h2>
-        <div class="grid">
-            <div class="card"><strong>[01] Logo / Banner creation</strong><div class="desc">Premium branding & graphics</div><div class="price">$10+</div></div>
-            <div class="card"><strong>[02] Website Creation</strong><div class="desc">From landing page to full project</div><div class="price">From $100</div></div>
-            <div class="card"><strong>[03] Networker assistance</strong><div class="desc">Setting up your host, answer on common questions and etc.</div><div class="price">Depends on your needs</div></div>
-            <div class="card"><strong>[04] Python development</strong><div class="desc">Creating a python project like discord bot or any sort of stuff</div><div class="price">Depends on how hard it is</div></div>
-            <div class="card"><strong>[05] Liverty creation</strong><div class="desc">Detailed liveries in good quality</div><div class="price">$5 each</div></div>
+        <div class="avatar-wrapper">
+            <video autoplay loop muted playsinline>
+                <source src="photo_2025-11-30_17-21-21.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
     </section>
-    <section class="section" id="reviews">
-        <h2>Client Reviews</h2>
-        <div class="reviews-wrapper">
-            <div class="reviews-track" id="track1"></div>
-            <div class="reviews-track" id="track2"></div>
+    <div class="container">
+        <section class="section" id="services">
+            <h2>Services</h2>
+            <div class="grid">
+                <div class="card"><strong>[01] Logo / Banner creation</strong><div class="desc">Premium branding & graphics</div><div class="price">$10+</div></div>
+                <div class="card"><strong>[02] Website Creation</strong><div class="desc">From landing page to full project</div><div class="price">From $100</div></div>
+                <div class="card"><strong>[03] Networker assistance</strong><div class="desc">Setting up your host, answer on common questions and etc.</div><div class="price">Depends on your needs</div></div>
+                <div class="card"><strong>[04] Python development</strong><div class="desc">Creating a python project like discord bot or any sort of stuff</div><div class="price">Depends on how hard it is</div></div>
+                <div class="card"><strong>[05] Liverty creation</strong><div class="desc">Detailed liveries in good quality</div><div class="price">$5 each</div></div>
+            </div>
+        </section>
+        <section class="section" id="reviews">
+            <h2>Client Reviews</h2>
+            <div class="reviews-wrapper">
+                <div class="reviews-track" id="track1"></div>
+                <div class="reviews-track" id="track2"></div>
+            </div>
+            <div style="margin-top:90px; text-align:center"><div class="neon-btn" id="leaveReview">LEAVE A REVIEW</div></div>
+        </section>
+    </div>
+    <div id="player">
+        <div id="minimizeBtn">−</div>
+        <div class="drag-handle"><i class="fas fa-grip-lines"></i></div>
+        <div class="album-cover">
+            <img src="https://i1.sndcdn.com/artworks-000904625805-0p7z3q-t500x500.jpg" alt="Montell Fish - Every Night">
         </div>
-        <div style="margin-top:90px;text-align:center"><div class="neon-btn" id="leaveReview">LEAVE A REVIEW</div></div>
-    </section>
-</div>
-<div id="player">
-    <div id="minimizeBtn">−</div>
-    <div class="drag-handle"><i class="fas fa-grip-lines"></i></div>
-    <div class="album-cover">
-        <img src="https://i1.sndcdn.com/artworks-000904625805-0p7z3q-t500x500.jpg" alt="Montell Fish - Every Night">
-    </div>
-    <div class="track-info">
-        <div class="track-title">Every Night</div>
-        <div class="track-artist">MONTELL FISH</div>
-    </div>
-    <div class="visualizer">
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    </div>
-    <div class="progress-container"><div class="progress" id="progress"></div></div>
-    <div class="time"><span id="current">0:00</span> <span id="total">0:00</span></div>
-    <div class="controls">
-        <button class="control-btn"><i class="fas fa-backward"></i></button>
-        <button id="playBtn" class="control-btn"><i class="fas fa-play"></i></button>
-        <button class="control-btn"><i class="fas fa-forward"></i></button>
-    </div>
-</div>
-<!-- МОДАЛКА ЛОГИНА -->
-<div id="loginModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeLogin">×</span>
-        <h3 id="modalTitle">Welcome Back to Liberty!</h3>
-        <p id="modalDesc">Unlock the true liberty - sign in with Google to share your reviews and experiences.</p>
-        <button id="googleLogin">
-            <svg width="26" height="26" viewBox="0 0 24 24">
-                <path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 5.93l3.66-2.84z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Continue with Google
-        </button>
-        <div class="or-divider">or</div>
-        <form id="emailForm">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit" id="emailBtn">Sign In</button>
-        </form>
-        <p id="switchLink">Don't have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign Up</span></p>
-    </div>
-</div>
-<div id="contactModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeContact">×</span>
-        <h3>Contact Me</h3>
-        <div class="modal-item"><i class="fab fa-discord"></i> <strong>TheTrueLiberty</strong></div>
-        <div class="modal-item"><i class="fas fa-envelope"></i> <strong>interpoldis@gmail.com</strong></div>
-        <div class="modal-item"><i class="fab fa-telegram"></i> <strong>@TheresNoMoreLiberty</strong></div>
-    </div>
-</div>
-<div id="paymentModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closePayment">×</span>
-        <h3>Payment Options</h3>
-        <div class="modal-item"><i class="fab fa-ethereum"></i> <strong>ETH</strong></div>
-        <div class="modal-item"><i class="fab fa-bitcoin"></i> <strong>BTC</strong></div>
-        <div class="modal-item"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" class="crypto-icon"> <strong>USDT TRC20</strong></div>
-        <div class="modal-item"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON" class="crypto-icon"> <strong>TON</strong></div>
-        <div class="modal-item"><i class="fab fa-steam-symbol"></i> <strong>Steam Gift Cards</strong></div>
-        <div class="modal-item"><i class="fas fa-university"></i> <strong>EU Bank Transfer (not accepting)</strong></div>
-        <div class="modal-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Robux_2019_Logo_gold.svg/640px-Robux_2019_Logo_gold.svg.png" alt="Robux" class="robux-icon">
-            <strong>Robux (if I need)</strong>
+        <div class="track-info">
+            <div class="track-title">Every Night</div>
+            <div class="track-artist">MONTELL FISH</div>
+        </div>
+        <div class="visualizer">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+        <div class="progress-container"><div class="progress" id="progress"></div></div>
+        <div class="time"><span id="current">0:00</span> <span id="total">0:00</span></div>
+        <div class="controls">
+            <button class="control-btn"><i class="fas fa-backward"></i></button>
+            <button id="playBtn" class="control-btn"><i class="fas fa-play"></i></button>
+            <button class="control-btn"><i class="fas fa-forward"></i></button>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1/bundled/lenis.min.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = {
-    apiKey:"AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
-    authDomain:"liberty-bio.firebaseapp.com",
-    projectId:"liberty-bio",
-    storageBucket:"liberty-bio.firebasestorage.app",
-    messagingSenderId:"498591653250",
-    appId:"1:498591653250:web:e634097c5fe0034212839b"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const lenis = new Lenis({lerp:0.08});
-function raf(t){lenis.raf(t);requestAnimationFrame(raf)}
-requestAnimationFrame(raf);
-// Дождь
-const canvas = document.getElementById('rain');
-let rainOn = true;
-document.getElementById('rainToggle').onclick = () => {
-    rainOn = !rainOn;
-    canvas.style.opacity = rainOn ? '0.88' : '0';
-    document.getElementById('rainToggle').textContent = rainOn ? 'Rain ON' : 'Rain OFF';
-};
-const ctx = canvas.getContext('2d');
-canvas.width = innerWidth; canvas.height = innerHeight;
-const drops = [];
-for(let i=0;i<360;i++) drops.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,len:Math.random()*35+20,ys:Math.random()*12+9,w:Math.random()*1+0.4});
-function rain(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    drops.forEach(d=>{
-        ctx.lineWidth=d.w; ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.shadowBlur=22; ctx.shadowColor='#fff';
-        ctx.beginPath(); ctx.moveTo(d.x,d.y); ctx.lineTo(d.x,d.y+d.len); ctx.stroke();
-        d.y+=d.ys; if(d.y>canvas.height) d.y=-50;
-    });
-    requestAnimationFrame(rain);
-}
-rain();
-// Анимация кнопок hero
-const heroButtons = document.querySelectorAll('.hero .neon-btn');
-const heroObserver = new IntersectionObserver((e)=>{if(e[0].isIntersecting){heroButtons.forEach((b,i)=>setTimeout(()=>b.classList.add('appear'),400+i*300));heroObserver.unobserve(e[0].target)}}, {threshold:0.7});
-heroObserver.observe(document.querySelector('.hero'));
-// Анимация карточек
-const cards = document.querySelectorAll('.card');
-const cardObs = new IntersectionObserver(e=>e.forEach(en=>en.isIntersecting&&en.target.classList.add('show')), {threshold:0.1});
-cards.forEach(c=>cardObs.observe(c));
-// Модалки
-let authMode = 'login';
-function openModal(id, mode = 'login') {
-    authMode = mode;
-    const modal = document.getElementById(id);
-    modal.style.display = "flex";
-    requestAnimationFrame(() => {
-        modal.classList.add('active');
-        setAuthMode(mode);
-        setTimeout(() => {
-            modal.querySelectorAll('.modal-item').forEach((item, i) => {
-                setTimeout(() => item.classList.add('show'), i * 120);
+    <!-- МОДАЛКА ЛОГИНА -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogin">×</span>
+            <h3 id="modalTitle">Welcome Back to Liberty!</h3>
+            <p id="modalDesc">Unlock the true liberty - sign in with Google to share your reviews and experiences.</p>
+            <button id="googleLogin">
+                <svg width="26" height="26" viewBox="0 0 24 24">
+                    <path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 5.93l3.66-2.84z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continue with Google
+            </button>
+            <div class="or-divider">or</div>
+            <form id="emailForm">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" id="emailBtn">Sign In</button>
+            </form>
+            <p id="switchLink">Don't have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign Up</span></p>
+        </div>
+    </div>
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeContact">×</span>
+            <h3>Contact Me</h3>
+            <div class="modal-item"><i class="fab fa-discord"></i> <strong>TheTrueLiberty</strong></div>
+            <div class="modal-item"><i class="fas fa-envelope"></i> <strong>interpoldis@gmail.com</strong></div>
+            <div class="modal-item"><i class="fab fa-telegram"></i> <strong>@TheresNoMoreLiberty</strong></div>
+        </div>
+    </div>
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closePayment">×</span>
+            <h3>Payment Options</h3>
+            <div class="modal-item"><i class="fab fa-ethereum"></i> <strong>ETH</strong></div>
+            <div class="modal-item"><i class="fab fa-bitcoin"></i> <strong>BTC</strong></div>
+            <div class="modal-item"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" class="crypto-icon"> <strong>USDT TRC20</strong></div>
+            <div class="modal-item"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON" class="crypto-icon"> <strong>TON</strong></div>
+            <div class="modal-item"><i class="fab fa-steam-symbol"></i> <strong>Steam Gift Cards</strong></div>
+            <div class="modal-item"><i class="fas fa-university"></i> <strong>EU Bank Transfer (not accepting)</strong></div>
+            <div class="modal-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Robux_2019_Logo_gold.svg/640px-Robux_2019_Logo_gold.svg.png" alt="Robux" class="robux-icon">
+                <strong>Robux (if I need)</strong>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1/bundled/lenis.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
+            authDomain: "liberty-bio.firebaseapp.com",
+            projectId: "liberty-bio",
+            storageBucket: "liberty-bio.firebasestorage.app",
+            messagingSenderId: "498591653250",
+            appId: "1:498591653250:web:e634097c5fe0034212839b"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const lenis = new Lenis({lerp: 0.08});
+        function raf(t) {
+            lenis.raf(t);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        // Дождь
+        const canvas = document.getElementById('rain');
+        let rainOn = true;
+        document.getElementById('rainToggle').onclick = () => {
+            rainOn = !rainOn;
+            canvas.style.opacity = rainOn ? '0.88' : '0';
+            document.getElementById('rainToggle').textContent = rainOn ? 'Rain ON' : 'Rain OFF';
+        };
+        const ctx = canvas.getContext('2d');
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        const drops = [];
+        for (let i = 0; i < 360; i++) drops.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, len: Math.random() * 35 + 20, ys: Math.random() * 12 + 9, w: Math.random() * 1 + 0.4 });
+        function rain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drops.forEach(d => {
+                ctx.lineWidth = d.w;
+                ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+                ctx.shadowBlur = 22;
+                ctx.shadowColor = '#fff';
+                ctx.beginPath();
+                ctx.moveTo(d.x, d.y);
+                ctx.lineTo(d.x, d.y + d.len);
+                ctx.stroke();
+                d.y += d.ys;
+                if (d.y > canvas.height) d.y = -50;
             });
-        }, 200);
-    });
-}
-function closeModal(id) {
-    const modal = document.getElementById(id);
-    modal.classList.remove('active');
-    setTimeout(() => modal.style.display = "none", 700);
-}
-document.getElementById('openContact').onclick = () => openModal('contactModal');
-document.getElementById('openPayment').onclick = () => openModal('paymentModal');
-document.getElementById('closeContact').onclick = () => closeModal('contactModal');
-document.getElementById('closePayment').onclick = () => closeModal('paymentModal');
-document.getElementById('closeLogin').onclick = () => closeModal('loginModal');
-window.onclick = e => {if(e.target.classList.contains('modal')) closeModal(e.target.id)};
-// Плавный скролл
-document.querySelectorAll('nav a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-        e.preventDefault();
-        lenis.scrollTo(a.getAttribute('href'), {offset: -100, duration: 1.6});
-    });
-});
-// ЛОГИН + ОТЗЫВЫ
-document.getElementById('signupBtn').onclick = () => openModal('loginModal', 'signup');
-document.getElementById('loginBtn').onclick = () => openModal('loginModal', 'login');
-document.getElementById('googleLogin').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(error => alert(error.message));
-function setAuthMode(mode) {
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDesc');
-    const emailBtn = document.getElementById('emailBtn');
-    const switchLink = document.getElementById('switchLink');
-    const switchMode = document.getElementById('switchMode');
-    authMode = mode;
-    if (mode === 'login') {
-        modalTitle.textContent = 'Welcome Back to Liberty!';
-        modalDesc.textContent = 'Sign in to share your reviews and experiences.';
-        emailBtn.textContent = 'Sign In';
-        switchLink.innerHTML = 'Don\'t have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign Up</span>';
-        switchMode.onclick = () => setAuthMode('signup');
-    } else {
-        modalTitle.textContent = 'Join Liberty!';
-        modalDesc.textContent = 'Create an account to share your reviews and experiences.';
-        emailBtn.textContent = 'Sign Up';
-        switchLink.innerHTML = 'Already have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign In</span>';
-        switchMode.onclick = () => setAuthMode('login');
-    }
-}
-document.getElementById('emailForm').onsubmit = (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    if (authMode === 'login') {
-        signInWithEmailAndPassword(auth, email, password)
-            .then(() => closeModal('loginModal'))
-            .catch(error => alert(error.message));
-    } else {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(() => closeModal('loginModal'))
-            .catch(error => alert(error.message));
-    }
-};
-onAuthStateChanged(auth, user => {
-    document.getElementById('loginBtn').style.display = user ? 'none' : 'block';
-    document.getElementById('signupBtn').style.display = user ? 'none' : 'block';
-    document.getElementById('userBtn').style.display = user ? 'flex' : 'none';
-    if(user){
-        document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/38';
-        document.getElementById('userName').textContent = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
-    }
-});
-document.getElementById('logout').onclick = () => signOut(auth);
-document.getElementById('leaveReview').onclick = () => {
-    if(!auth.currentUser){
-        openModal('loginModal');
-        return;
-    }
-    const text = prompt("Write your review:");
-    if(text && text.trim()){
-        addDoc(collection(db,"reviews"),{
-            name: auth.currentUser.displayName || auth.currentUser.email,
-            photoURL: auth.currentUser.photoURL || 'https://via.placeholder.com/70',
-            text: text.trim(),
-            timestamp: serverTimestamp()
+            requestAnimationFrame(rain);
+        }
+        rain();
+        // Анимация кнопок hero
+        const heroButtons = document.querySelectorAll('.hero .neon-btn');
+        const heroObserver = new IntersectionObserver((e) => {
+            if (e[0].isIntersecting) {
+                heroButtons.forEach((b, i) => setTimeout(() => b.classList.add('appear'), 400 + i * 300));
+                heroObserver.unobserve(e[0].target);
+            }
+        }, { threshold: 0.7 });
+        heroObserver.observe(document.querySelector('.hero'));
+        // Анимация карточек
+        const cards = document.querySelectorAll('.card');
+        const cardObs = new IntersectionObserver(e => e.forEach(en => en.isIntersecting && en.target.classList.add('show')), { threshold: 0.1 });
+        cards.forEach(c => cardObs.observe(c));
+        // Модалки
+        let authMode = 'login';
+        function openModal(id, mode = 'login') {
+            authMode = mode;
+            const modal = document.getElementById(id);
+            modal.style.display = "flex";
+            requestAnimationFrame(() => {
+                modal.classList.add('active');
+                setAuthMode(mode);
+                setTimeout(() => {
+                    modal.querySelectorAll('.modal-item').forEach((item, i) => {
+                        setTimeout(() => item.classList.add('show'), i * 120);
+                    });
+                }, 200);
+            });
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = "none", 700);
+        }
+        document.getElementById('openContact').onclick = () => openModal('contactModal');
+        document.getElementById('openPayment').onclick = () => openModal('paymentModal');
+        document.getElementById('closeContact').onclick = () => closeModal('contactModal');
+        document.getElementById('closePayment').onclick = () => closeModal('paymentModal');
+        document.getElementById('closeLogin').onclick = () => closeModal('loginModal');
+        window.onclick = e => { if (e.target.classList.contains('modal')) closeModal(e.target.id) };
+        // Плавный скролл
+        document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                lenis.scrollTo(a.getAttribute('href'), { offset: -100, duration: 1.6 });
+            });
         });
-        alert("Thanks for the review!");
-    }
-};
-// Отзывы из Firebase
-const track1 = document.getElementById('track1'), track2 = document.getElementById('track2');
-onSnapshot(query(collection(db,"reviews"),orderBy("timestamp","desc")), snap => {
-    let r = []; snap.forEach(d => r.push(d.data()));
-    if(!r.length) r=[{text:"No reviews yet :(",name:""}];
-    while(r.length<18) r=[...r,...r];
-    const h = r.map(x=>`<div class="review"><img src="${x.photoURL||'https://via.placeholder.com/70'}"><q>${x.text}</q><footer>— ${x.name||'Anonymous'}</footer></div>`).join('');
-    track1.innerHTML = track2.innerHTML = h;
-});
-// Плеер
-const music = document.getElementById('music'), player = document.getElementById('player'), playBtn = document.getElementById('playBtn'),
-      progress = document.getElementById('progress'), current = document.getElementById('current'), total = document.getElementById('total');
-function fmt(t){const m=Math.floor(t/60),s=Math.floor(t%60);return `${m}:${s<10?'0':''}${s}`}
-music.addEventListener('loadedmetadata',()=>{total.textContent=fmt(music.duration)});
-music.addEventListener('timeupdate',()=>{progress.style.width=(music.currentTime/music.duration)*100+'%';current.textContent=fmt(music.currentTime)});
-playBtn.onclick = () => {music.paused?music.play():music.pause(); playBtn.innerHTML = music.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';};
-document.querySelector('.progress-container').onclick = e => {
-    const w = e.currentTarget.clientWidth;
-    music.currentTime = (e.offsetX/w)*music.duration;
-};
-let dragging=false,ox,oy;
-const dragHandle = document.querySelector('.drag-handle');
-if (dragHandle) {
-    dragHandle.onmousedown = e => {
-        if(player.classList.contains('minimized')) return;
-        dragging=true; ox=e.clientX-player.getBoundingClientRect().left; oy=e.clientY-player.getBoundingClientRect().top;
-    };
-}
-document.onmousemove = e => {if(dragging){player.style.right='auto';player.style.bottom='auto';player.style.transform=`translate(${e.clientX-ox}px,${e.clientY-oy}px)`}};
-document.onmouseup = () => dragging=false;
-document.getElementById('minimizeBtn').onclick = e => {e.stopPropagation(); player.classList.toggle('minimized')};
-document.body.onclick = () => {music.play().catch(()=>{}); document.body.onclick=null};
-</script>
+        // ЛОГИН + ОТЗЫВЫ
+        document.getElementById('signupBtn').onclick = () => openModal('loginModal', 'signup');
+        document.getElementById('loginBtn').onclick = () => openModal('loginModal', 'login');
+        document.getElementById('googleLogin').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(error => alert(error.message));
+        function setAuthMode(mode) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDesc');
+            const emailBtn = document.getElementById('emailBtn');
+            const switchLink = document.getElementById('switchLink');
+            const switchMode = document.getElementById('switchMode');
+            authMode = mode;
+            if (mode === 'login') {
+                modalTitle.textContent = 'Welcome Back to Liberty!';
+                modalDesc.textContent = 'Sign in to share your reviews and experiences.';
+                emailBtn.textContent = 'Sign In';
+                switchLink.innerHTML = 'Don\'t have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign Up</span>';
+                switchMode.onclick = () => setAuthMode('signup');
+            } else {
+                modalTitle.textContent = 'Join Liberty!';
+                modalDesc.textContent = 'Create an account to share your reviews and experiences.';
+                emailBtn.textContent = 'Sign Up';
+                switchLink.innerHTML = 'Already have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign In</span>';
+                switchMode.onclick = () => setAuthMode('login');
+            }
+        }
+        document.getElementById('emailForm').onsubmit = (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (authMode === 'login') {
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(() => closeModal('loginModal'))
+                    .catch(error => alert(error.message));
+            } else {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then(() => closeModal('loginModal'))
+                    .catch(error => alert(error.message));
+            }
+        };
+        onAuthStateChanged(auth, user => {
+            document.getElementById('loginBtn').style.display = user ? 'none' : 'block';
+            document.getElementById('signupBtn').style.display = user ? 'none' : 'block';
+            document.getElementById('userBtn').style.display = user ? 'flex' : 'none';
+            if (user) {
+                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/38';
+                document.getElementById('userName').textContent = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
+            }
+        });
+        document.getElementById('logout').onclick = () => signOut(auth);
+        document.getElementById('leaveReview').onclick = () => {
+            if (!auth.currentUser) {
+                openModal('loginModal');
+                return;
+            }
+            const text = prompt("Write your review:");
+            if (text && text.trim()) {
+                addDoc(collection(db, "reviews"), {
+                    name: auth.currentUser.displayName || auth.currentUser.email,
+                    photoURL: auth.currentUser.photoURL || 'https://via.placeholder.com/70',
+                    text: text.trim(),
+                    timestamp: serverTimestamp()
+                });
+                alert("Thanks for the review!");
+            }
+        };
+        // Отзывы из Firebase
+        const track1 = document.getElementById('track1'), track2 = document.getElementById('track2');
+        onSnapshot(query(collection(db, "reviews"), orderBy("timestamp", "desc")), snap => {
+            let r = [];
+            snap.forEach(d => r.push(d.data()));
+            if (!r.length) r = [{ text: "No reviews yet :(", name: "" }];
+            while (r.length < 18) r = [...r, ...r];
+            const h = r.map(x => `<div class="review"><img src="${x.photoURL || 'https://via.placeholder.com/70'}"><q>${x.text}</q><footer>— ${x.name || 'Anonymous'}</footer></div>`).join('');
+            track1.innerHTML = track2.innerHTML = h;
+        });
+        // Плеер
+        const music = document.getElementById('music');
+        const player = document.getElementById('player');
+        const playBtn = document.getElementById('playBtn');
+        const progress = document.getElementById('progress');
+        const current = document.getElementById('current');
+        const total = document.getElementById('total');
+
+        function fmt(t) {
+            const m = Math.floor(t / 60), s = Math.floor(t % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        music.addEventListener('loadedmetadata', () => { total.textContent = fmt(music.duration); });
+        music.addEventListener('timeupdate', () => { progress.style.width = (music.currentTime / music.duration) * 100 + '%'; current.textContent = fmt(music.currentTime); });
+        music.addEventListener('error', (e) => { console.error('Ошибка загрузки аудио:', e); alert('Не удалось загрузить sound.mp3. Проверьте файл и сервер.'); });
+
+        playBtn.onclick = () => {
+            if (music.paused) {
+                music.play().catch(err => console.error('Ошибка воспроизведения:', err));
+            } else {
+                music.pause();
+            }
+            playBtn.innerHTML = music.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+        };
+
+        document.querySelector('.progress-container').onclick = e => {
+            const w = e.currentTarget.clientWidth;
+            music.currentTime = (e.offsetX / w) * music.duration;
+        };
+
+        let dragging = false, ox, oy;
+        const dragHandle = document.querySelector('.drag-handle');
+        if (dragHandle) {
+            dragHandle.onmousedown = e => {
+                if (player.classList.contains('minimized')) return;
+                dragging = true;
+                ox = e.clientX - player.getBoundingClientRect().left;
+                oy = e.clientY - player.getBoundingClientRect().top;
+            };
+        }
+        document.onmousemove = e => {
+            if (dragging) {
+                player.style.right = 'auto';
+                player.style.bottom = 'auto';
+                player.style.transform = `translate(${e.clientX - ox}px, ${e.clientY - oy}px)`;
+            }
+        };
+        document.onmouseup = () => dragging = false;
+        document.getElementById('minimizeBtn').onclick = e => { e.stopPropagation(); player.classList.toggle('minimized'); };
+
+        document.body.onclick = () => {
+            music.play().catch(err => console.error('Автоплей заблокирован:', err));
+            document.body.onclick = null;
+        };
+
+        // Для видео аватарки
+        const avatarVideo = document.querySelector('.avatar-wrapper video');
+        avatarVideo.addEventListener('error', (e) => { console.error('Ошибка загрузки видео:', e); alert('Не удалось загрузить photo_2025-11-30_17-21-21.mp4. Проверьте файл и сервер.'); });
+    </script>
 </body>
 </html>
