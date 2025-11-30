@@ -51,7 +51,7 @@
             transition: all .5s cubic-bezier(0.22,1,0.36,1);
             cursor: default;
             overflow: hidden;
-            animation: float 5s ease-in-out infinite;
+            /* Убрана анимация float */
         }
         #player::before {
             content: '';
@@ -69,10 +69,6 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0 50%; }
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
 
         .drag-handle {
             position: absolute;
@@ -82,7 +78,7 @@
             cursor: grab;
             color: #aaa;
             font-size: 20px;
-            z-index: 10;
+            z-index: 11; /* Выше видео */
         }
 
         .album-cover {
@@ -94,6 +90,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             position: relative;
             transition: transform .4s;
+            z-index: 1; /* Ниже кнопок */
         }
         .album-cover video {
             width: 100%;
@@ -245,6 +242,7 @@
             justify-content: center;
             cursor: pointer;
             transition: .3s;
+            z-index: 10; /* Выше видео */
         }
         #minimizeBtn:hover {
             transform: rotate(90deg);
@@ -736,6 +734,10 @@
 </head>
 <body>
     <canvas id="rain"></canvas>
+    <audio id="music" loop preload="auto">
+        <source src="sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <nav>
         <a href="#home">Home</a>
         <a href="#services">Services</a>
@@ -793,14 +795,14 @@
         <div id="minimizeBtn">−</div>
         <div class="drag-handle"><i class="fas fa-grip-lines"></i></div>
         <div class="album-cover">
-            <video id="videoPlayer" loop muted playsinline preload="auto">
+            <video id="coverVideo" loop muted playsinline preload="auto">
                 <source src="bg.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
         <div class="track-info">
-            <div class="track-title">Background Video</div>
-            <div class="track-artist">Custom Video</div>
+            <div class="track-title">Every Night</div>
+            <div class="track-artist">MONTELL FISH</div>
         </div>
         <div class="visualizer">
             <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
@@ -1038,8 +1040,9 @@
             const h = r.map(x => `<div class="review"><img src="${x.photoURL || 'https://via.placeholder.com/70'}"><q>${x.text}</q><footer>— ${x.name || 'Anonymous'}</footer></div>`).join('');
             track1.innerHTML = track2.innerHTML = h;
         });
-        // Плеер (теперь для видео)
-        const video = document.getElementById('videoPlayer');
+        // Плеер с аудио и видео в обложке
+        const music = document.getElementById('music');
+        const coverVideo = document.getElementById('coverVideo');
         const player = document.getElementById('player');
         const playBtn = document.getElementById('playBtn');
         const progress = document.getElementById('progress');
@@ -1051,22 +1054,27 @@
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
-        video.addEventListener('loadedmetadata', () => { total.textContent = fmt(video.duration); });
-        video.addEventListener('timeupdate', () => { progress.style.width = (video.currentTime / video.duration) * 100 + '%'; current.textContent = fmt(video.currentTime); });
-        video.addEventListener('error', (e) => { console.error('Ошибка загрузки видео:', e); alert('Не удалось загрузить bg.mp4. Проверьте файл и сервер.'); });
+        music.addEventListener('loadedmetadata', () => { total.textContent = fmt(music.duration); });
+        music.addEventListener('timeupdate', () => { progress.style.width = (music.currentTime / music.duration) * 100 + '%'; current.textContent = fmt(music.currentTime); });
+        music.addEventListener('error', (e) => { console.error('Ошибка загрузки аудио:', e); alert('Не удалось загрузить sound.mp3. Проверьте файл и сервер.'); });
+
+        coverVideo.addEventListener('error', (e) => { console.error('Ошибка загрузки видео:', e); alert('Не удалось загрузить bg.mp4. Проверьте файл и сервер.'); });
 
         playBtn.onclick = () => {
-            if (video.paused) {
-                video.play().catch(err => console.error('Ошибка воспроизведения:', err));
+            if (music.paused) {
+                music.play().catch(err => console.error('Ошибка воспроизведения аудио:', err));
+                coverVideo.play().catch(err => console.error('Ошибка воспроизведения видео:', err));
             } else {
-                video.pause();
+                music.pause();
+                coverVideo.pause();
             }
-            playBtn.innerHTML = video.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
+            playBtn.innerHTML = music.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>';
         };
 
         document.querySelector('.progress-container').onclick = e => {
             const w = e.currentTarget.clientWidth;
-            video.currentTime = (e.offsetX / w) * video.duration;
+            music.currentTime = (e.offsetX / w) * music.duration;
+            coverVideo.currentTime = music.currentTime; // Синхронизация видео с аудио, если нужно
         };
 
         let dragging = false, ox, oy;
@@ -1083,14 +1091,17 @@
             if (dragging) {
                 player.style.right = 'auto';
                 player.style.bottom = 'auto';
-                player.style.transform = `translate(${e.clientX - ox}px, ${e.clientY - oy}px)`;
+                player.style.left = `${e.clientX - ox}px`;
+                player.style.top = `${e.clientY - oy}px`;
+                player.style.transform = 'none'; // Убрать transform для drag
             }
         };
         document.onmouseup = () => dragging = false;
         document.getElementById('minimizeBtn').onclick = e => { e.stopPropagation(); player.classList.toggle('minimized'); };
 
         document.body.onclick = () => {
-            video.play().catch(err => console.error('Автоплей заблокирован:', err));
+            music.play().catch(err => console.error('Автоплей аудио заблокирован:', err));
+            coverVideo.play().catch(err => console.error('Автоплей видео заблокирован:', err));
             document.body.onclick = null;
         };
 
