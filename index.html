@@ -387,6 +387,10 @@
             border-color: #ff4d8d;
             box-shadow: 0 20px 60px rgba(224,30,90,0.7);
         }
+        #leaveReview {
+            padding: 14px 24px;
+            font-size: 16px;
+        }
         .avatar-wrapper {
             width: 340px;
             height: 340px;
@@ -941,6 +945,17 @@
         const cards = document.querySelectorAll('.card');
         const cardObs = new IntersectionObserver(e => e.forEach(en => en.isIntersecting && en.target.classList.add('show')), { threshold: 0.1 });
         cards.forEach(c => cardObs.observe(c));
+        // Анимация кнопки отзывов
+        const reviewBtn = document.getElementById('leaveReview');
+        if (reviewBtn) {
+            const reviewObserver = new IntersectionObserver((e) => {
+                if (e[0].isIntersecting) {
+                    reviewBtn.classList.add('appear');
+                    reviewObserver.unobserve(e[0].target);
+                }
+            }, { threshold: 0.3 });
+            reviewObserver.observe(document.querySelector('#reviews'));
+        }
         // Модалки
         let authMode = 'login';
         function openModal(id, mode = 'login') {
