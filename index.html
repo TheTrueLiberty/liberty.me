@@ -1050,21 +1050,19 @@
             const modalDesc = document.getElementById('modalDesc');
             const emailBtn = document.getElementById('emailBtn');
             const switchLink = document.getElementById('switchLink');
-            const switchMode = document.getElementById('switchMode');
             authMode = mode;
             if (mode === 'login') {
                 modalTitle.textContent = 'Welcome Back to Liberty!';
                 modalDesc.textContent = 'Sign in to share your reviews and experiences.';
                 emailBtn.textContent = 'Sign In';
                 switchLink.innerHTML = 'Don\'t have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign Up</span>';
-                switchMode.onclick = () => setAuthMode('signup');
             } else {
                 modalTitle.textContent = 'Join Liberty!';
                 modalDesc.textContent = 'Create an account to share your reviews and experiences.';
                 emailBtn.textContent = 'Sign Up';
                 switchLink.innerHTML = 'Already have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign In</span>';
-                switchMode.onclick = () => setAuthMode('login');
             }
+            document.getElementById('switchMode').onclick = () => setAuthMode(mode === 'login' ? 'signup' : 'login');
         }
         document.getElementById('emailForm').onsubmit = (e) => {
             e.preventDefault();
