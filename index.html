@@ -579,6 +579,8 @@
             height: 200%;
             background: radial-gradient(circle, rgba(224,30,90,0.3) 0%, transparent 70%);
             animation: rotateGlow 10s linear infinite;
+            pointer-events: none;   /* ← главное */
+            z-index: -1;            /* ← дополнительно */
         }
         @keyframes rotateGlow {
             0% { transform: rotate(0deg); }
