@@ -921,23 +921,19 @@
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1/bundled/lenis.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, push, query, orderByChild, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         const firebaseConfig = {
             apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
             authDomain: "liberty-bio.firebaseapp.com",
-            databaseURL: "https://liberty-bio-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "liberty-bio",
             storageBucket: "liberty-bio.firebasestorage.app",
             messagingSenderId: "498591653250",
-            appId: "1:498591653250:web:e634097c5fe0034212839b",
-            measurementId: "G-3W98LCQK1X"
+            appId: "1:498591653250:web:e634097c5fe0034212839b"
         };
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
-        const db = getDatabase(app);
+        const db = getFirestore(app);
         const lenis = new Lenis({lerp: 0.08});
         function raf(t) {
             lenis.raf(t);
@@ -1118,7 +1114,7 @@
             e.preventDefault();
             const text = document.getElementById('reviewText').value.trim();
             if (text && selectedRating > 0) {
-                push(ref(db, "reviews"), {
+                addDoc(collection(db, "reviews"), {
                     name: auth.currentUser.displayName || auth.currentUser.email,
                     photoURL: auth.currentUser.photoURL || 'https://via.placeholder.com/70',
                     text: text,
@@ -1133,22 +1129,16 @@
                         s.classList.add('fa-regular');
                         s.classList.remove('fa-solid');
                     });
-                }).catch(error => {
-                    console.error('Error submitting review:', error);
-                    alert('Error: ' + error.message + '\n\nTo fix PERMISSION_DENIED, go to Firebase Console > Realtime Database > Rules and set:\n{\n  "rules": {\n    ".read": "auth != null",\n    ".write": "auth != null"\n  }\n}\nFor development only; make more secure for production.');
-                });
+                }).catch(error => alert(error.message));
             } else {
                 alert("Please select a rating and write a review.");
             }
         };
-        // Отзывы из Firebase RTDB
+        // Отзывы из Firebase
         const track1 = document.getElementById('track1'), track2 = document.getElementById('track2');
-        const reviewsRef = ref(db, "reviews");
-        onValue(query(reviewsRef, orderByChild("timestamp")), snap => {
+        onSnapshot(query(collection(db, "reviews"), orderBy("timestamp", "desc")), snap => {
             let r = [];
-            snap.forEach(child => {
-                r.unshift(child.val()); // Добавляем в начало для desc order
-            });
+            snap.forEach(d => r.push(d.data()));
             if (!r.length) r = [{ text: "No reviews yet :(", name: "", rating: 0 }];
             while (r.length < 18) r = [...r, ...r];
             const h = r.map(x => {
