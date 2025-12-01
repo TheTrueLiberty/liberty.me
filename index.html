@@ -325,6 +325,16 @@
             line-height: 0.94;
             letter-spacing: -4px;
             margin: 12px 0;
+            background: linear-gradient(90deg, var(--neon), var(--accent), var(--neon));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 4s linear infinite;
+        }
+        @keyframes textGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .desc {
             font-size: 20px;
@@ -683,6 +693,9 @@
             width: 46px;
             height: 46px;
             transition: all .4s;
+            filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--neon));
+            border: 2px solid var(--accent);
+            border-radius: 50%;
         }
         .modal-item:hover .crypto-icon, .modal-item:hover .robux-icon {
             transform: scale(1.3) rotate(15deg);
@@ -878,8 +891,8 @@
             <h3>Payment Options</h3>
             <div class="modal-item"><i class="fa-brands fa-ethereum"></i> <strong>ETH</strong></div>
             <div class="modal-item"><i class="fa-brands fa-bitcoin"></i> <strong>BTC</strong></div>
-            <div class="modal-item"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" class="crypto-icon"> <strong>USDT TRC20</strong></div>
-            <div class="modal-item"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON" class="crypto-icon"> <strong>TON</strong></div>
+            <div class="modal-item"><img src="https://e7.pngegg.com/pngimages/202/402/png-clipart-tether-cryptocurrency-price-market-capitalization-computer-icons-others-white-logo.png" alt="USDT" class="crypto-icon"> <strong>USDT TRC20</strong></div>
+            <div class="modal-item"><img src="https://thumbs.dreamstime.com/b/ton-logo-black-background-cryptocurrency-telegrams-open-network-159670648.jpg" alt="TON" class="crypto-icon"> <strong>TON</strong></div>
             <div class="modal-item"><i class="fa-brands fa-steam-symbol"></i> <strong>Steam Gift Cards</strong></div>
             <div class="modal-item"><i class="fa-solid fa-university"></i> <strong>EU Bank Transfer (not accepting)</strong></div>
             <div class="modal-item">
