@@ -767,6 +767,143 @@
         .stars .fa-solid.fa-star {
             color: #ffd700;
         }
+
+        /* Адаптация под мобильные устройства */
+        @media (max-width: 768px) {
+            nav {
+                padding: 10px 20px;
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                font-size: 15px;
+            }
+            .hero {
+                flex-direction: column;
+                gap: 40px;
+                padding: 20px;
+                min-height: auto;
+            }
+            .hero-text {
+                max-width: 100%;
+                text-align: center;
+            }
+            .avatar-wrapper {
+                width: 250px;
+                height: 250px;
+            }
+            .section {
+                padding: 80px 20px;
+            }
+            .section h2 {
+                font-size: 50px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .card {
+                padding: 30px;
+            }
+            .reviews-wrapper {
+                height: auto;
+            }
+            .reviews-track {
+                grid-template-columns: 1fr;
+                animation: none;
+            }
+            #player {
+                width: 300px;
+                padding: 15px;
+                bottom: 10px;
+                right: 10px;
+            }
+            .album-cover {
+                height: 150px;
+            }
+            .track-title {
+                font-size: 20px;
+            }
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            #playBtn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            .modal-content {
+                padding: 40px 40px;
+            }
+            #loginModal .modal-content {
+                padding: 50px 30px;
+            }
+            #googleLogin {
+                padding: 14px 40px;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 10px;
+                gap: 10px;
+                font-size: 14px;
+            }
+            .hero h1 {
+                font-size: 48px;
+            }
+            .desc {
+                font-size: 16px;
+            }
+            .neon-btn {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+            .section h2 {
+                font-size: 40px;
+            }
+            .card strong {
+                font-size: 24px;
+            }
+            .card .desc {
+                font-size: 16px;
+            }
+            .card .price {
+                font-size: 28px;
+            }
+            .review {
+                padding: 20px;
+            }
+            .review q {
+                font-size: 15px;
+            }
+            #player {
+                width: 100%;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 28px 28px 0 0;
+                padding: 15px;
+            }
+            .album-cover {
+                height: 120px;
+            }
+            .visualizer {
+                height: 30px;
+            }
+            .modal-content {
+                padding: 30px 20px;
+            }
+            #loginModal .modal-content {
+                padding: 40px 20px;
+            }
+            #googleLogin {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -871,7 +1008,6 @@
             </button>
             <div class="or-divider">or</div>
             <form id="emailForm">
-                <input type="text" id="username" placeholder="Username" required style="display: none;">
                 <input type="email" id="email" placeholder="Email" required>
                 <input type="password" id="password" placeholder="Password" required>
                 <button type="submit" id="emailBtn">Sign In</button>
@@ -924,7 +1060,7 @@
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1/bundled/lenis.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         const firebaseConfig = {
             apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
@@ -1053,22 +1189,17 @@
             const modalDesc = document.getElementById('modalDesc');
             const emailBtn = document.getElementById('emailBtn');
             const switchLink = document.getElementById('switchLink');
-            const usernameInput = document.getElementById('username');
             authMode = mode;
             if (mode === 'login') {
                 modalTitle.textContent = 'Welcome Back to Liberty!';
                 modalDesc.textContent = 'Sign in to share your reviews and experiences.';
                 emailBtn.textContent = 'Sign In';
                 switchLink.innerHTML = 'Don\'t have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign Up</span>';
-                usernameInput.style.display = 'none';
-                usernameInput.required = false;
             } else {
                 modalTitle.textContent = 'Join Liberty!';
                 modalDesc.textContent = 'Create an account to share your reviews and experiences.';
                 emailBtn.textContent = 'Sign Up';
                 switchLink.innerHTML = 'Already have an account? <span id="switchMode" style="color:var(--accent);cursor:pointer">Sign In</span>';
-                usernameInput.style.display = 'block';
-                usernameInput.required = true;
             }
             document.getElementById('switchMode').onclick = () => setAuthMode(mode === 'login' ? 'signup' : 'login');
         }
@@ -1076,7 +1207,6 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const username = document.getElementById('username').value;
             if (authMode === 'login') {
                 signInWithEmailAndPassword(auth, email, password)
                     .then(() => closeModal('loginModal'))
