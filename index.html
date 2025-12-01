@@ -891,8 +891,8 @@
             <h3>Payment Options</h3>
             <div class="modal-item"><i class="fa-brands fa-ethereum"></i> <strong>ETH</strong></div>
             <div class="modal-item"><i class="fa-brands fa-bitcoin"></i> <strong>BTC</strong></div>
-            <div class="modal-item"><img src="https://e7.pngegg.com/pngimages/202/402/png-clipart-tether-cryptocurrency-price-market-capitalization-computer-icons-others-white-logo.png" alt="USDT" class="crypto-icon"> <strong>USDT TRC20</strong></div>
-            <div class="modal-item"><img src="https://thumbs.dreamstime.com/b/ton-logo-black-background-cryptocurrency-telegrams-open-network-159670648.jpg" alt="TON" class="crypto-icon"> <strong>TON</strong></div>
+            <div class="modal-item"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" class="crypto-icon"> <strong>USDT TRC20</strong></div>
+            <div class="modal-item"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON" class="crypto-icon"> <strong>TON</strong></div>
             <div class="modal-item"><i class="fa-brands fa-steam-symbol"></i> <strong>Steam Gift Cards</strong></div>
             <div class="modal-item"><i class="fa-solid fa-university"></i> <strong>EU Bank Transfer (not accepting)</strong></div>
             <div class="modal-item">
@@ -906,15 +906,15 @@
             <span class="close" id="closeReview">×</span>
             <h3>Leave Your Review</h3>
             <form id="reviewForm">
-                <textarea id="reviewText" placeholder="Write your review here..." required style="width: 100%; height: 150px; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--glass); color: #eee; font-size: 16px;"></textarea>
-                <div class="stars" id="ratingStars">
+                <textarea id="reviewText" class="modal-item" placeholder="Write your review here..." required style="width: 100%; height: 150px; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--glass); color: #eee; font-size: 16px;"></textarea>
+                <div class="stars modal-item" id="ratingStars">
                     <i class="fa-regular fa-star" data-rating="1"></i>
                     <i class="fa-regular fa-star" data-rating="2"></i>
                     <i class="fa-regular fa-star" data-rating="3"></i>
                     <i class="fa-regular fa-star" data-rating="4"></i>
                     <i class="fa-regular fa-star" data-rating="5"></i>
                 </div>
-                <button type="submit" id="submitReview" style="padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; transition: .3s; margin-top: 16px;">Submit Review</button>
+                <button type="submit" class="modal-item" id="submitReview" style="padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; transition: .3s; margin-top: 16px;">Submit Review</button>
             </form>
         </div>
     </div>
@@ -922,18 +922,20 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getDatabase, ref, onValue, push, query, orderByChild, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         const firebaseConfig = {
             apiKey: "AIzaSyDwsbb_tGMjr-s3NXmkkh1iEXkxKr9fDIQ",
             authDomain: "liberty-bio.firebaseapp.com",
+            databaseURL: "https://liberty-bio-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "liberty-bio",
             storageBucket: "liberty-bio.firebasestorage.app",
             messagingSenderId: "498591653250",
-            appId: "1:498591653250:web:e634097c5fe0034212839b"
+            appId: "1:498591653250:web:e634097c5fe0034212839b",
+            measurementId: "G-3W98LCQK1X"
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const db = getDatabase(app);
         const lenis = new Lenis({lerp: 0.08});
         function raf(t) {
             lenis.raf(t);
@@ -1114,7 +1116,7 @@
             e.preventDefault();
             const text = document.getElementById('reviewText').value.trim();
             if (text && selectedRating > 0) {
-                addDoc(collection(db, "reviews"), {
+                push(ref(db, "reviews"), {
                     name: auth.currentUser.displayName || auth.currentUser.email,
                     photoURL: auth.currentUser.photoURL || 'https://via.placeholder.com/70',
                     text: text,
@@ -1134,11 +1136,14 @@
                 alert("Please select a rating and write a review.");
             }
         };
-        // Отзывы из Firebase
+        // Отзывы из Firebase RTDB
         const track1 = document.getElementById('track1'), track2 = document.getElementById('track2');
-        onSnapshot(query(collection(db, "reviews"), orderBy("timestamp", "desc")), snap => {
+        const reviewsRef = ref(db, "reviews");
+        onValue(query(reviewsRef, orderByChild("timestamp")), snap => {
             let r = [];
-            snap.forEach(d => r.push(d.data()));
+            snap.forEach(child => {
+                r.unshift(child.val()); // Добавляем в начало для desc order
+            });
             if (!r.length) r = [{ text: "No reviews yet :(", name: "", rating: 0 }];
             while (r.length < 18) r = [...r, ...r];
             const h = r.map(x => {
