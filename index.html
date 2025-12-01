@@ -1133,7 +1133,10 @@
                         s.classList.add('fa-regular');
                         s.classList.remove('fa-solid');
                     });
-                }).catch(error => alert(error.message));
+                }).catch(error => {
+                    console.error('Error submitting review:', error);
+                    alert('Error: ' + error.message + '\n\nTo fix PERMISSION_DENIED, go to Firebase Console > Realtime Database > Rules and set:\n{\n  "rules": {\n    ".read": "auth != null",\n    ".write": "auth != null"\n  }\n}\nFor development only; make more secure for production.');
+                });
             } else {
                 alert("Please select a rating and write a review.");
             }
